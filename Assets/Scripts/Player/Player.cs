@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 
     private float drowsiness = 100;
 
+    private flot size = 0;
 
     private void Awake()
     {
