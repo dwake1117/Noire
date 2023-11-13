@@ -39,9 +39,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.2
-  m_TransitionOffset: 0
-  m_ExitTime: 0.5
+  m_TransitionDuration: 0.19999999
+  m_TransitionOffset: 0.014480884
+  m_ExitTime: 0.81592524
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -305,7 +305,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PlayerRun
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5777594889910389556}
@@ -333,7 +333,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack1
-  m_Speed: 2
+  m_Speed: 2.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3912035918141434506}
@@ -398,7 +398,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d16f9d605d570264182df5842f6d81b6, type: 2}
+  m_Motion: {fileID: 7400000, guid: 2d486a8a0e7b71a4397bc0a159fc1dc4, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -503,7 +503,7 @@ AnimatorStateMachine:
     m_Position: {x: 50, y: 520, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2147766465035750590}
-    m_Position: {x: -30, y: 80, z: 0}
+    m_Position: {x: -20, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2311960518498313848}
     m_Position: {x: -260, y: 80, z: 0}

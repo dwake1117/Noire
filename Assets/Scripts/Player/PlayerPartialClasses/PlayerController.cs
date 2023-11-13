@@ -27,7 +27,7 @@ public partial class Player
 
         float dist = Vector3.Distance(transform.forward, moveDir);
         if(dist > 1.3f)
-            transform.forward = Vector3.Lerp(transform.forward, moveDir, 2 * turnSpeed * Time.deltaTime);
+            transform.forward = Vector3.Lerp(transform.forward, moveDir, 1.6f * turnSpeed * Time.deltaTime);
         else
             transform.forward = Vector3.Lerp(transform.forward, moveDir, turnSpeed * Time.deltaTime);
     }
