@@ -295,12 +295,12 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     // called after attacks
     public void HandleAttackOnHitEffects()
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(weapon.GetAttackPoint().position, weapon.GetAttackRadius(), weapon.GetEnemyLayer());
-        foreach (Collider enemy in hitEnemies)
-        {
-            enemy.GetComponent<BasicEnemy>()?.OnHit();
-            enemy.GetComponent<Enemy>()?.OnHit();
-        }
+        // Collider[] hitEnemies = Physics.OverlapSphere(weapon.GetAttackPoint().position, weapon.GetAttackRadius(), weapon.GetEnemyLayer());
+        // foreach (Collider enemy in hitEnemies)
+        // {
+        //     enemy.GetComponent<BasicEnemy>()?.OnHit();
+        //     enemy.GetComponent<Enemy>()?.OnHit();
+        // }
     }
 
     // called on every frame for buffer regen
