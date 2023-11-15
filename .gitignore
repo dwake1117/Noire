@@ -97,5 +97,6 @@ fmod_editor.log
 /NoireFM/.cache
 
 .DS_Store
-/Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset
+/Assets/Plugins/FMOD/Cache/*
 /Assets/StreamingAssets/build_info
+Assets/StreamingAssets/build_info.meta
