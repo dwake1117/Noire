@@ -15,8 +15,8 @@ MonoBehaviour:
   abilityID: 1
   abilityAnimationTrigger: Dash
   cooldown: 0.5
-  staminaCost: 40
+  staminaCost: 30
   applicableDreamStates: 0000000001000000
   playerMovableDuringCast: 0
-  dashSpeed: 15
-  dashTime: 0.5
+  dashSpeed: 25
+  dashTime: 0.3

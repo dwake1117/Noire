@@ -26,14 +26,9 @@ public class PlayerDashAbilitySO : AbilitySO
 
     private IEnumerator Dash()
     {
-        float dashTimeCounter = dashTime;
         Player.Instance.invulnerableTimer = 1f;
-        while(dashTimeCounter > 0)
-        {
-            dashTimeCounter -= Time.deltaTime;
-            Player.Instance.Move(dashSpeed);
-            yield return null;
-        }
+        Player.Instance.MoveFor(dashSpeed, dashTime);
+        yield return new WaitForSeconds(dashTime);
         Finish();
     }
 }

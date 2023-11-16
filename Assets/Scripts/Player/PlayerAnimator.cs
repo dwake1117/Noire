@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private ParticleSystemBase inkSlash;
-    [SerializeField] private Vector3 inkSlashOffset = new(0f, 2.3f, 0f);
+    [SerializeField] private Vector3 inkSlashOffset = new(0f, 2.3f, -1.9f);
+    [SerializeField] private VisualEffect dashSmokePuff;
+    [SerializeField] private Vector3 dashSmokePuffOffset = new(0f, 0.89f, -2.07f);
 
     private Animator animator;
     private const string WALK = "PlayerWalk";
@@ -44,12 +47,22 @@ public class PlayerAnimator : MonoBehaviour
         return AnimatorIsPlaying(layer) && animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
     }
 
-    private void AnimationStartedTrigger()
+    private void Swing1AnimationStartedTrigger()
     {
         var playerTransform = Player.Instance.transform;
         
         inkSlash.transform.position = playerTransform.position + inkSlashOffset;
         inkSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
         inkSlash.Restart();
+    }
+    
+    private void DashAnimationStartedTrigger()
+    {
+        var playerTransform = Player.Instance.transform;
+        
+        dashSmokePuff.transform.position = playerTransform.position + dashSmokePuffOffset;
+        dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 143, 0));
+        
+        dashSmokePuff.Play();
     }
 }

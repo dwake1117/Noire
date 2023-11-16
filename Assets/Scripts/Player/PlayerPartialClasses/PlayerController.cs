@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 public partial class Player
@@ -17,6 +18,15 @@ public partial class Player
     private readonly float fallingThreshold = 1.3f;
     
     private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(0, 90, 0));
+
+    private void Turn(Vector3 direction)
+    {
+        float dist = Vector3.Distance(transform.forward, direction);
+        if(dist > 1.3f)
+            transform.forward = Vector3.Lerp(transform.forward, direction, 1.6f * turnSpeed * Time.deltaTime);
+        else
+            transform.forward = Vector3.Lerp(transform.forward, direction, turnSpeed * Time.deltaTime);
+    }
     
     // move towards `moveDir` with speed
     public void Move(float speed)
@@ -25,11 +35,54 @@ public partial class Player
         velocity.y = -gravity;
         controller.Move(velocity);
 
-        float dist = Vector3.Distance(transform.forward, moveDir);
-        if(dist > 1.3f)
-            transform.forward = Vector3.Lerp(transform.forward, moveDir, 1.6f * turnSpeed * Time.deltaTime);
-        else
-            transform.forward = Vector3.Lerp(transform.forward, moveDir, turnSpeed * Time.deltaTime);
+        Turn(moveDir);
+    }
+
+    // Coroutine for move for a certain period of time with `speed`
+    private IEnumerator MoveForCoroutine(float speed, float time)
+    {
+        float t = 0;
+        while (t < time)
+        {
+            t += Time.deltaTime;
+            Move(speed);
+            yield return null;
+        }
+    }
+
+    // overload of MoveFor, specifying a direction `dir`
+    private IEnumerator MoveForCoroutine(float speed, float time, Vector3 dir)
+    {
+        float t = 0;
+        while (t < time)
+        {
+            t += Time.deltaTime;
+            Move(speed, dir);
+            yield return null;
+        }
+    }
+    
+    // the actual public function to move the player for a certain time period
+    public void MoveFor(float speed, float time)
+    {
+        StartCoroutine(MoveForCoroutine(speed, time));
+    }
+
+    // overload for `MoveFor`, specifying a direction `dir`
+    public void MoveFor(float speed, float time, Vector3 dir)
+    {
+        StartCoroutine(MoveForCoroutine(speed, time, dir));
+    }
+    
+    
+    // overload of Move with moveDirection
+    public void Move(float speed, Vector3 moveDirection)
+    {
+        Vector3 velocity = speed * Time.deltaTime * moveDirection;
+        velocity.y = -gravity;
+        controller.Move(velocity);
+
+        Turn(moveDirection);
     }
 
     private void HandleFall()

@@ -1035,7 +1035,7 @@ GameObject:
   - component: {fileID: 932215222}
   - component: {fileID: 932215221}
   m_Layer: 0
-  m_Name: vfxgraph_StylizedSmoke
+  m_Name: SmokePuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
