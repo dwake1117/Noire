@@ -81,11 +81,12 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
         
         playerInventory.Init();
 
-        playerAbilitiesList = Resources.LoadAll<AbilitySO>("Player/Abilities");
+        InitializeAbilitiesAndCombos();
         
         // set initial material for weapon
         weaponFabricRenderer.material = originalWeaponFabricMaterial;
         cloakRenderer.material = cloakOriginalMaterial;
+        CacheOnHitAnimationVariables();
     }
 
     private void Start()
@@ -121,6 +122,7 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
         
         HandleStamina();
         HandleAbilityCast();
+        HandleComboCooldowns();
         
         if (!IsCasting())
         {

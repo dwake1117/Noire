@@ -37,15 +37,15 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetBool(RUN_ID, Player.Instance.IsRunning());
     }
 
-    public bool AnimatorIsPlaying(int layer)
-    {
-        return animator.GetCurrentAnimatorStateInfo(layer).length > animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
-    }
-
-    public bool AnimatorIsPlaying(int layer, string stateName)
-    {
-        return AnimatorIsPlaying(layer) && animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
-    }
+    // public bool AnimatorIsPlaying(int layer)
+    // {
+    //     return animator.GetCurrentAnimatorStateInfo(layer).length > animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
+    // }
+    //
+    // public bool AnimatorIsPlaying(int layer, string stateName)
+    // {
+    //     return AnimatorIsPlaying(layer) && animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
+    // }
 
     private void Swing1AnimationStartedTrigger()
     {

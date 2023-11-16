@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50db8b4e458f42698cc301f5cff9f4d7, type: 3}
+  m_Name: Attack1Combo
+  m_EditorClassIdentifier: 
+  abilities:
+  - {fileID: 11400000, guid: 2472705c088bb8c40a714fcfaffbb215, type: 2}
+  - {fileID: 11400000, guid: 2472705c088bb8c40a714fcfaffbb215, type: 2}
+  - {fileID: 11400000, guid: 2472705c088bb8c40a714fcfaffbb215, type: 2}
+  animations:
+  - {fileID: 22100000, guid: dff3f23b14a202a4c9a18aeecd844d1c, type: 2}
+  - {fileID: 22100000, guid: 294ebaea7bdd266478b41529da43d6f1, type: 2}
+  - {fileID: 22100000, guid: dff3f23b14a202a4c9a18aeecd844d1c, type: 2}

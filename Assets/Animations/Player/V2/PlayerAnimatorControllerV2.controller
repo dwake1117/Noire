@@ -41,7 +41,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0.19999999
   m_TransitionOffset: 0.014480884
-  m_ExitTime: 0.81592524
+  m_ExitTime: 0.8
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -332,7 +332,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack1
+  m_Name: Attack1_swing1
   m_Speed: 2.2
   m_CycleOffset: 0
   m_Transitions:
@@ -503,7 +503,7 @@ AnimatorStateMachine:
     m_Position: {x: 50, y: 520, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2147766465035750590}
-    m_Position: {x: -20, y: 80, z: 0}
+    m_Position: {x: 0, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2311960518498313848}
     m_Position: {x: -260, y: 80, z: 0}
@@ -528,7 +528,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -120, y: -90, z: 0}
+  m_AnyStatePosition: {x: -120, y: -140, z: 0}
   m_EntryPosition: {x: -630, y: 530, z: 0}
   m_ExitPosition: {x: 530, y: 360, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

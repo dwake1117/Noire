@@ -36,18 +36,18 @@ public abstract class AbilitySO : ScriptableObject
     protected abstract void Initialize();
     
     // called when the ability is activated
-    // returns true if successfully casted the ability. false otherwise
-    public bool Activate()
+    // returns true if successfully casted the ability. False iff the ability is not ready
+    public void Activate()
     {
-        if (state == AbilityState.Ready)
-        {
-            state = AbilityState.Active;
-            cooldownCounter = cooldown;
-            Initialize();
-            Cast();
-            return true;
-        }
-        return false;
+        state = AbilityState.Active;
+        cooldownCounter = cooldown;
+        Initialize();
+        Cast();
+    }
+
+    public bool CanActivate()
+    {
+        return state == AbilityState.Ready;
     }
     
     // called on each frame during which the ability is activated
