@@ -26,7 +26,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHA_USEDISSOLVE
+  - _ALPHA_USEALPHAFADE
   - _BLENDBETWEENMASK_MULTIPLY
   - _BUILTIN_ALPHATEST_ON
   - _BUILTIN_AlphaClip
@@ -128,7 +128,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ALPHA: 1
+    - _ALPHA: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _BLENDBETWEENMASK: 0
@@ -157,22 +157,22 @@ Material:
     - _Dissolve_Falloff: 0.1
     - _Dissolve_Tex_Oneminus: 0
     - _DstBlend: 1
-    - _EdgeWidth: 0
+    - _EdgeWidth: 1
     - _Emission: 1
     - _EnvironmentReflections: 1
-    - _FlipUV_Horizontal: 0
+    - _FlipUV_Horizontal: 1
     - _FlipUV_Vertical: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _GradientMaskPower: 0
     - _MainTexRotation: 0
-    - _MaskPower: 1
+    - _MaskPower: 0.5
     - _MaskTexRot: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OneMinus: 0
-    - _Opacity: 2
+    - _Opacity: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -184,15 +184,15 @@ Material:
     - _SoftParticlePow: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 5
-    - _StylizeAmount: 0.624
-    - _StylizedValue: 0.77
+    - _StylizeAmount: 0.01
+    - _StylizedValue: 0.7
     - _SubmaskRot: 180
     - _Surface: 1
     - _UseAlphaChannel: 0
     - _UseCustomdataOffset: 1
     - _UseCustomdata_Color: 1
     - _UseSoftParticle: 0
-    - _Use_Dissolve_Tex: 1
+    - _Use_Dissolve_Tex: 0
     - _Use_Gradient_Mask: 0
     - _WorkflowMode: 1
     - _ZTest: 4

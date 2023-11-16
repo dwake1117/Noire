@@ -15,7 +15,6 @@ public partial class Player
     // [Header("Abilities")]
     private AbilitySO[] playerAbilitiesList;  // up to three abilities is currently supported by input
     private Dictionary<int, AbilitySO> playerAbilities; // the available abilities we currently have given a dreamstate
-    private float lastAbilityTime; // when is the last ability finished?
     
     [Header("On Hit Materials")]
     [SerializeField] private Renderer cloakRenderer;
@@ -28,7 +27,7 @@ public partial class Player
     [SerializeField] private Material originalWeaponFabricMaterial;
     [SerializeField] private Material onAttackWeaponFabricMaterial;
     [SerializeField] private ParticleSystemBase glowSwordEndParticles;
-    private Coroutine glowswordCoroutine;
+    private Coroutine glowSwordCoroutine;
     
     // NOTE: the current combo system CANNOT overwrite the CDs of current abilities 
     [Header("Combo")]
@@ -82,11 +81,13 @@ public partial class Player
         // if we are not in a combo, start a new combo
         else
         {
-            currentCombo = playerCombos[abilityId];
-            comboCounter = 0;
-            animator.runtimeAnimatorController = currentCombo.animations[comboCounter];
-            
-            comboTimer = comboTimerMax;
+            playerCombos.TryGetValue(abilityId, out currentCombo);
+            if (currentCombo)
+            {
+                comboCounter = 0;
+                animator.runtimeAnimatorController = currentCombo.animations[comboCounter];
+                comboTimer = comboTimerMax;
+            }
         }
 
         // if we have reached the end of the combo, we terminate it
@@ -97,8 +98,9 @@ public partial class Player
         }
     }
     
-    private void OnAbilityCast(int abilityId)
+    private void OnAbilityCast(int abilityId, short status)
     {
+        Debug.Log($"Ability Status = {status}");
         var ability = CanCastAbility(abilityId);
         if (ability != null)
         {
@@ -125,12 +127,12 @@ public partial class Player
 
     public void GlowSwordAnimation()
     {
-        if(glowswordCoroutine == null)
+        if(glowSwordCoroutine == null)
             weaponFabricRenderer.material = onAttackWeaponFabricMaterial;
         else
-            StopCoroutine(glowswordCoroutine);
+            StopCoroutine(glowSwordCoroutine);
         
-        glowswordCoroutine = StartCoroutine(OnAttackFinished());
+        glowSwordCoroutine = StartCoroutine(OnAttackFinished());
     }
 
     IEnumerator OnAttackFinished()
@@ -140,7 +142,7 @@ public partial class Player
         glowSwordEndParticles.Restart();
         weaponFabricRenderer.material = originalWeaponFabricMaterial;
         
-        glowswordCoroutine = null;
+        glowSwordCoroutine = null;
     }
     
     // called when taking any damage

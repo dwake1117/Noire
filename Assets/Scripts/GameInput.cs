@@ -10,7 +10,9 @@ public class GameInput : MonoBehaviour
     public event Action OnPlayerMenuToggle;
     public event Action OnPauseToggle;
     public event Action OnInteract;
-    public event Action<int> OnAbilityCast;
+    
+    // the short is for status of charged abilities: 0 for started, 1 for performed, -1 for canceled
+    public event Action<int, short> OnAbilityCast;
     public event Action OnDebugConsoleToggle;
     public event Action OnDebugConsoleExecute;
     
@@ -65,10 +67,13 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.CameraLeft.performed += CameraLeft_performed;
         
         gameInputActions.Player.LightAttack.performed += Attack1_performed;
-        
+        gameInputActions.Player.ChargedAttack.started += ChargedAttack_started;
+        gameInputActions.Player.ChargedAttack.performed += ChargedAttack_performed;
+        gameInputActions.Player.ChargedAttack.canceled += ChargedAttack_canceled;
+            
         gameInputActions.Player.Interact.performed += Interact_performed;
-        
         gameInputActions.Player.Dash.performed += Dash_performed;
+        
         gameInputActions.Player.Ability1.performed += Ability1_performed;
         gameInputActions.Player.Ability2.performed += Ability2_performed;
         gameInputActions.Player.Ability3.performed += Ability3_performed;
@@ -96,8 +101,13 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.CameraLeft.performed -= CameraLeft_performed;
         
         gameInputActions.Player.LightAttack.performed -= Attack1_performed;
+        gameInputActions.Player.ChargedAttack.started -= ChargedAttack_started;
+        gameInputActions.Player.ChargedAttack.performed -= ChargedAttack_performed;
+        gameInputActions.Player.ChargedAttack.canceled -= ChargedAttack_canceled;
+        
         gameInputActions.Player.Interact.performed -= Interact_performed;
         gameInputActions.Player.Dash.performed -= Dash_performed;
+        
         gameInputActions.Player.Ability1.performed -= Ability1_performed;
         gameInputActions.Player.Ability2.performed -= Ability2_performed;
         gameInputActions.Player.Ability3.performed -= Ability3_performed;
@@ -209,28 +219,45 @@ public class GameInput : MonoBehaviour
     
     private void Attack1_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(0);
+        OnAbilityCast?.Invoke(0, -1);
     }
     
     private void Dash_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(1);
+        OnAbilityCast?.Invoke(1, -1);
     }
 
     private void Ability1_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(2);
+        OnAbilityCast?.Invoke(2, -1);
     }
     
     private void Ability2_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(3);
+        OnAbilityCast?.Invoke(3, -1);
     }
     
     private void Ability3_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(4);
+        OnAbilityCast?.Invoke(4, -1);
     }
+
+
+    private void ChargedAttack_started(InputAction.CallbackContext obj)
+    {
+        OnAbilityCast?.Invoke(5, 0);
+    }
+
+    private void ChargedAttack_performed(InputAction.CallbackContext obj)
+    {
+        OnAbilityCast?.Invoke(5, 1);
+    }
+
+    private void ChargedAttack_canceled(InputAction.CallbackContext obj)
+    {
+        OnAbilityCast?.Invoke(5, -1);
+    }
+    
     
     public float GetZoomVal()
     {
@@ -247,6 +274,7 @@ public class GameInput : MonoBehaviour
     {
         return gameInputActions.Player.ShiftModifier.IsPressed();
     }
+    
     
     #endregion
 

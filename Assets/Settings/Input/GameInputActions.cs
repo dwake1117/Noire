@@ -134,6 +134,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChargedAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""fdb30c73-6329-435e-91c5-4131601dedb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=3)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +321,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ShiftModifier"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""940b98ea-b9ef-453b-ad7f-e6564e0dadeb"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChargedAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -436,6 +456,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_Ability2 = m_Player.FindAction("Ability2", throwIfNotFound: true);
         m_Player_Ability3 = m_Player.FindAction("Ability3", throwIfNotFound: true);
         m_Player_ShiftModifier = m_Player.FindAction("ShiftModifier", throwIfNotFound: true);
+        m_Player_ChargedAttack = m_Player.FindAction("ChargedAttack", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Pause = m_Menu.FindAction("Pause", throwIfNotFound: true);
@@ -519,6 +540,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ability2;
     private readonly InputAction m_Player_Ability3;
     private readonly InputAction m_Player_ShiftModifier;
+    private readonly InputAction m_Player_ChargedAttack;
     public struct PlayerActions
     {
         private @GameInputActions m_Wrapper;
@@ -535,6 +557,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @Ability2 => m_Wrapper.m_Player_Ability2;
         public InputAction @Ability3 => m_Wrapper.m_Player_Ability3;
         public InputAction @ShiftModifier => m_Wrapper.m_Player_ShiftModifier;
+        public InputAction @ChargedAttack => m_Wrapper.m_Player_ChargedAttack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -580,6 +603,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ShiftModifier.started += instance.OnShiftModifier;
             @ShiftModifier.performed += instance.OnShiftModifier;
             @ShiftModifier.canceled += instance.OnShiftModifier;
+            @ChargedAttack.started += instance.OnChargedAttack;
+            @ChargedAttack.performed += instance.OnChargedAttack;
+            @ChargedAttack.canceled += instance.OnChargedAttack;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -620,6 +646,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ShiftModifier.started -= instance.OnShiftModifier;
             @ShiftModifier.performed -= instance.OnShiftModifier;
             @ShiftModifier.canceled -= instance.OnShiftModifier;
+            @ChargedAttack.started -= instance.OnChargedAttack;
+            @ChargedAttack.performed -= instance.OnChargedAttack;
+            @ChargedAttack.canceled -= instance.OnChargedAttack;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -797,6 +826,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnAbility2(InputAction.CallbackContext context);
         void OnAbility3(InputAction.CallbackContext context);
         void OnShiftModifier(InputAction.CallbackContext context);
+        void OnChargedAttack(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

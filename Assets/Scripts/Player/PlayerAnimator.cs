@@ -56,6 +56,16 @@ public class PlayerAnimator : MonoBehaviour
         inkSlash.Restart();
     }
     
+    // the reverse swing
+    private void Swing2AnimationStartedTrigger()
+    {
+        var playerTransform = Player.Instance.transform;
+        
+        inkSlash.transform.position = playerTransform.position + inkSlashOffset;
+        inkSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 0));
+        inkSlash.Restart();
+    }
+    
     private void DashAnimationStartedTrigger()
     {
         var playerTransform = Player.Instance.transform;
