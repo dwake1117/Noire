@@ -1,3 +1,4 @@
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -43,11 +44,11 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     {
         bool hasAbility = playerAbilities.TryGetValue(abilityId, out AbilitySO ability);
         
-        if ((IsIdle() || IsWalking() || IsRunning())
-            && hasAbility
-            && playerStaminaSO.CurrentStamina >= ability.staminaCost)
+        if (hasAbility 
+            && playerStaminaSO.CurrentStamina >= ability.staminaCost
+            && (ability.interruptable || IsIdle() || IsWalking() || IsRunning()))
         {
-            return ability;
+                return ability;
         }
 
         return null;
@@ -172,8 +173,6 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     // called after ability for state transition
     public void ResetStateAfterAction()
     {
-        SetAnimatorTrigger("Reset");
-        
         bool isMoving = GameInput.Instance.GetMovementVectorNormalized() != Vector3.zero;
         if (!isMoving)
         {
@@ -186,11 +185,24 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
             state = PlayerState.Running;
         else
             state = PlayerState.Walking;
+
+        currentAbility = null;
+    }
+
+    public IEnumerator WaitForAndReset(float time)
+    {
+        yield return new WaitForSeconds(time);
+        ResetStateAfterAction();
     }
 
     public void SetAnimatorTrigger(string triggerName)
     {
         animator.SetTrigger(triggerName);
+    }
+
+    public void ResetAnimationTrigger(string triggerName)
+    {
+        animator.ResetTrigger(triggerName);
     }
     
     #endregion

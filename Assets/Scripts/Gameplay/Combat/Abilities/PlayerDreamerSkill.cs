@@ -22,13 +22,9 @@ public class PlayerDreamerSkill : AbilitySO
         originalBloomIntensity = PostProcessingManager.Instance.GetBloomIntensity();
     }
     
-    protected override void Initialize()
-    {
-        Player.Instance.StartCoroutine(ExpandRealm());
-    }
-    
     protected override void Cast()
     {
+        Player.Instance.StartCoroutine(ExpandRealm());
         Player.Instance.StartCoroutine(WaitEndOfAction(skillDuration));
     }
     

@@ -5,16 +5,12 @@ public class PlayerLightAttack : AbilitySO
 {
     [SerializeField] private float attackDuration = 0.4f;
     
-    protected override void Initialize()
-    {
-        Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
-    }
-    
     protected override void Cast()
     {
+        Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
         Player.Instance.MoveFor(10f, 0.2f, Player.Instance.transform.forward);
         Player.Instance.HandleAttackOnHitEffects();
-        Player.Instance.GlowSwordAnimation();
+        Player.Instance.GlowSwordAnimation(0);
         Player.Instance.StartCoroutine(WaitEndOfAction(attackDuration));
     }
     

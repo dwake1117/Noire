@@ -3,11 +3,18 @@ using UnityEngine.VFX;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    [SerializeField] private ParticleSystemBase inkSlash;
-    [SerializeField] private Vector3 inkSlashOffset = new(0f, 2.3f, -1.9f);
+    [Header("Splash Effects")]
+    [SerializeField] private ParticleSystemBase normalSlash;
+    [SerializeField] private Vector3 normalSlashOffset = new(0f, 2.3f, -1.9f);
+    [SerializeField] private ParticleSystemBase chargedSlash;
+    [SerializeField] private Vector3 chargedSlashOffset = new(0f, 2.3f, -3f);
+    [SerializeField] private ParticleSystemBase particleOutwardSplash;
+    
+    [Header("Dash Effects")]
     [SerializeField] private VisualEffect dashSmokePuff;
     [SerializeField] private Vector3 dashSmokePuffOffset = new(0f, 0.89f, -2.07f);
-
+    
+    
     private Animator animator;
     private const string WALK = "PlayerWalk";
     private const string IDLE = "PlayerIdle";
@@ -51,9 +58,9 @@ public class PlayerAnimator : MonoBehaviour
     {
         var playerTransform = Player.Instance.transform;
         
-        inkSlash.transform.position = playerTransform.position + inkSlashOffset;
-        inkSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
-        inkSlash.Restart();
+        normalSlash.transform.position = playerTransform.position + normalSlashOffset;
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
+        normalSlash.Restart();
     }
     
     // the reverse swing
@@ -61,9 +68,23 @@ public class PlayerAnimator : MonoBehaviour
     {
         var playerTransform = Player.Instance.transform;
         
-        inkSlash.transform.position = playerTransform.position + inkSlashOffset;
-        inkSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 0));
-        inkSlash.Restart();
+        normalSlash.transform.position = playerTransform.position + normalSlashOffset;
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 0));
+        normalSlash.Restart();
+    }
+    
+    private void ChargedSwingAnimationStartedTrigger()
+    {
+        var playerTransform = Player.Instance.transform;
+
+        particleOutwardSplash.transform.position = playerTransform.position;
+        particleOutwardSplash.Restart();
+        CameraManager.Instance.CameraShake(.2f, 4f);
+        PostProcessingManager.Instance.CAImpulse();
+        
+        chargedSlash.transform.position = playerTransform.position + chargedSlashOffset;
+        chargedSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
+        chargedSlash.Restart();
     }
     
     private void DashAnimationStartedTrigger()

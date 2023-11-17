@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public partial class Player
 {
     [Header("Player Controller")]
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 10f;
-    [SerializeField] private float gravity = .1f;
+    [SerializeField] private float gravity = 1f;
+    
     [SerializeField] private float turnSpeed = 30f;
     [SerializeField] private LayerMask raycastHit;
 
@@ -31,13 +31,29 @@ public partial class Player
     // move towards `moveDir` with speed
     public void Move(float speed)
     {
-        Vector3 velocity = speed * Time.deltaTime * moveDir;
+        Vector3 velocity = Vector3.zero;
+        if(speed != 0)
+            velocity = speed * Time.deltaTime * moveDir;
+        
         velocity.y = -gravity;
         controller.Move(velocity);
 
         Turn(moveDir);
     }
 
+    // overload of Move with moveDirection
+    public void Move(float speed, Vector3 moveDirection)
+    {
+        Vector3 velocity = Vector3.zero;
+        if(speed != 0)
+            velocity = speed * Time.deltaTime * moveDirection;
+            
+        velocity.y = -gravity;
+        controller.Move(velocity);
+
+        Turn(moveDirection);
+    }
+    
     // Coroutine for move for a certain period of time with `speed`
     private IEnumerator MoveForCoroutine(float speed, float time)
     {
@@ -75,28 +91,23 @@ public partial class Player
     }
     
     
-    // overload of Move with moveDirection
-    public void Move(float speed, Vector3 moveDirection)
-    {
-        Vector3 velocity = speed * Time.deltaTime * moveDirection;
-        velocity.y = -gravity;
-        controller.Move(velocity);
-
-        Turn(moveDirection);
-    }
 
     private void HandleFall()
     {
-        if (Physics.Raycast(transform.position + raycastOffset, Vector3.down, out RaycastHit hit, Mathf.Infinity, raycastHit)) 
+        Move(0);
+        
+        if (Physics.Raycast(transform.position + raycastOffset, Vector3.down, out RaycastHit hit, Mathf.Infinity,
+                raycastHit)
+            && hit.distance > fallingThreshold)
         {
-            if (hit.distance > fallingThreshold)
+            if (!IsFalling())
             {
                 state = PlayerState.Falling;
             }
-            else
-            {
-                ResetStateAfterAction();
-            }
+        }
+        else if(IsFalling())
+        {
+            ResetStateAfterAction();
         }
     }
     
@@ -106,8 +117,8 @@ public partial class Player
         Vector3 inputVector = GameInput.Instance.GetMovementVectorNormalized();
         if (inputVector == Vector3.zero)
         {
-            Move(0); // handle fall
-            state = PlayerState.Idle;
+            if(!IsFalling())
+                state = PlayerState.Idle;
             return;
         }
         

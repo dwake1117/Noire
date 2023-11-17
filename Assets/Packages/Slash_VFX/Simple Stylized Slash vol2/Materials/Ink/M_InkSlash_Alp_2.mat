@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4528089509423436770
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 0
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_InkSlash_Add
+  m_Name: M_InkSlash_Alp_2
   m_Shader: {fileID: -6465566751694194690, guid: c3b6dd7519323cc4bb41c71f8be5bfa0,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHA_USEALPHAFADE
+  - _ALPHA_USEDISSOLVE
   - _BLENDBETWEENMASK_MULTIPLY
   - _BUILTIN_ALPHATEST_ON
   - _BUILTIN_AlphaClip
@@ -47,7 +34,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_3df04dddeab4420c8fa2aaeef72bcb87:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 2b0c96194bde5894daac68b584fbed55, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -111,7 +98,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SubmaskTex:
-        m_Texture: {fileID: 2800000, guid: 492aabb2c8d78b249afcb1c8cf77cf3f, type: 3}
+        m_Texture: {fileID: 2800000, guid: b4d498f8448ccbe42927a9c7c9ee0829, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -128,7 +115,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ALPHA: 0
+    - _ALPHA: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _BLENDBETWEENMASK: 0
@@ -143,7 +130,7 @@ Material:
     - _BUILTIN_ZTest: 8
     - _BUILTIN_ZWrite: 0
     - _BUILTIN_ZWriteControl: 0
-    - _Blend: 2
+    - _Blend: 0
     - _BumpScale: 1
     - _CastShadows: 0
     - _ClearCoatMask: 0
@@ -154,11 +141,11 @@ Material:
     - _DetailNormalMapScale: 1
     - _DissolveStr: 1
     - _DissolveTexRot: 0
-    - _Dissolve_Falloff: 0.1
+    - _Dissolve_Falloff: 0.2
     - _Dissolve_Tex_Oneminus: 0
-    - _DstBlend: 1
-    - _EdgeWidth: 1
-    - _Emission: 1
+    - _DstBlend: 10
+    - _EdgeWidth: 0
+    - _Emission: 0
     - _EnvironmentReflections: 1
     - _FlipUV_Horizontal: 1
     - _FlipUV_Vertical: 1
@@ -167,32 +154,32 @@ Material:
     - _GlossyReflections: 0
     - _GradientMaskPower: 0
     - _MainTexRotation: 0
-    - _MaskPower: 0.3
+    - _MaskPower: 0
     - _MaskTexRot: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OneMinus: 0
-    - _Opacity: 1
+    - _Opacity: 3
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Rotation: 0
-    - _Simple_Noise_Scale: 1
+    - _Simple_Noise_Scale: 30
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SoftParticlePow: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 5
-    - _StylizeAmount: 0.1
+    - _StylizeAmount: 0.004
     - _StylizedValue: 1
-    - _SubmaskRot: 180
+    - _SubmaskRot: 0
     - _Surface: 1
     - _UseAlphaChannel: 0
     - _UseCustomdataOffset: 1
     - _UseCustomdata_Color: 1
     - _UseSoftParticle: 0
-    - _Use_Dissolve_Tex: 0
+    - _Use_Dissolve_Tex: 1
     - _Use_Gradient_Mask: 0
     - _WorkflowMode: 1
     - _ZTest: 4
@@ -211,10 +198,10 @@ Material:
     - _MainTexTiling: {r: 1, g: 1, b: 0, a: 0}
     - _MaskScroll: {r: 0, g: 0, b: 0, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Scroll: {r: 0, g: 0, b: 0, a: 0}
+    - _Scroll: {r: 0.28, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SubmaskOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _SubmaskScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _SubmaskScroll: {r: 0.75, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1186082359087045227
 MonoBehaviour:
@@ -229,3 +216,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 7
+--- !u!114 &8887111232069501876
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 0

@@ -219,27 +219,27 @@ public class GameInput : MonoBehaviour
     
     private void Attack1_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(0, -1);
+        OnAbilityCast?.Invoke(0, 0);
     }
     
     private void Dash_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(1, -1);
+        OnAbilityCast?.Invoke(1, 0);
     }
 
     private void Ability1_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(2, -1);
+        OnAbilityCast?.Invoke(2, 0);
     }
     
     private void Ability2_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(3, -1);
+        OnAbilityCast?.Invoke(3, 0);
     }
     
     private void Ability3_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(4, -1);
+        OnAbilityCast?.Invoke(4, 0);
     }
 
 

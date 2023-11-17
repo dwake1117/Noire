@@ -15,6 +15,7 @@ public partial class Player
     // [Header("Abilities")]
     private AbilitySO[] playerAbilitiesList;  // up to three abilities is currently supported by input
     private Dictionary<int, AbilitySO> playerAbilities; // the available abilities we currently have given a dreamstate
+    private AbilitySO currentAbility;
     
     [Header("On Hit Materials")]
     [SerializeField] private Renderer cloakRenderer;
@@ -26,7 +27,9 @@ public partial class Player
     [SerializeField] private Renderer weaponFabricRenderer;
     [SerializeField] private Material originalWeaponFabricMaterial;
     [SerializeField] private Material onAttackWeaponFabricMaterial;
+    [SerializeField] private Material onChargeWeaponFabricMaterial;
     [SerializeField] private ParticleSystemBase glowSwordEndParticles;
+    [SerializeField] private ParticleSystemBase chargingParticles;
     private Coroutine glowSwordCoroutine;
     
     // NOTE: the current combo system CANNOT overwrite the CDs of current abilities 
@@ -100,38 +103,41 @@ public partial class Player
     
     private void OnAbilityCast(int abilityId, short status)
     {
-        Debug.Log($"Ability Status = {status}");
+        Debug.Log($"{abilityId}, {status}");
         var ability = CanCastAbility(abilityId);
         if (ability != null)
         {
-            if(!ability.CanActivate())
+            if(!ability.CanActivate(status))
                 Debug.Log($"Ability {abilityId} not available, either on cooldown or locked");
             else
             {
                 TryContinueOrStartCombo(abilityId);
-                
-                ability.Activate();
-                
-                if(!ability.playerMovableDuringCast)
-                    state = PlayerState.Casting;
-                
-                playerStaminaSO.UseStamina(ability.staminaCost);
-                GameEventsManager.Instance.PlayerEvents.UpdateStaminaBar();
+                currentAbility = ability;
+                if (ability.Activate(status))
+                {
+                    if(!ability.playerMovableDuringCast)
+                        state = PlayerState.Casting;
+                    
+                    playerStaminaSO.UseStamina(ability.staminaCost);
+                    GameEventsManager.Instance.PlayerEvents.UpdateStaminaBar();
+                }
             }
         }
         else
         {
-            Debug.Log($"Ability cast {abilityId} failed, either already casting or not enough stamina");
+            Debug.Log($"Ability cast {abilityId} failed: Already casting, not enough stamina, or ability not found");
         }
     }
 
-    public void GlowSwordAnimation()
+    public void GlowSwordAnimation(short glowingMaterial)
     {
-        if(glowSwordCoroutine == null)
+        if(glowingMaterial == 0)
             weaponFabricRenderer.material = onAttackWeaponFabricMaterial;
-        else
+        if(glowingMaterial == 1)
+            weaponFabricRenderer.material = onChargeWeaponFabricMaterial;
+
+        if (glowSwordCoroutine != null)
             StopCoroutine(glowSwordCoroutine);
-        
         glowSwordCoroutine = StartCoroutine(OnAttackFinished());
     }
 
@@ -143,6 +149,27 @@ public partial class Player
         weaponFabricRenderer.material = originalWeaponFabricMaterial;
         
         glowSwordCoroutine = null;
+    }
+    
+    public void ChargeSwordAnimation()
+    {
+        chargingParticles.Restart();
+        StartCoroutine(ChargeOneStackAnimationCoroutine());
+    }
+
+    public void StopChargeSwordAnimation()
+    {
+        chargingParticles.Stop();
+    }
+
+    private IEnumerator ChargeOneStackAnimationCoroutine()
+    {
+        yield return new WaitForSeconds(1); // as specified in release threshold in HeavyAttackSO
+        if (IsCasting() && currentAbility.abilityID == 5) // we are in the charged attack state
+        {
+            PostProcessingManager.Instance.CAImpulse();
+            GlowSwordAnimation(1);
+        }
     }
     
     // called when taking any damage

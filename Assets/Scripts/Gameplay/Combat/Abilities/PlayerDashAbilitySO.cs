@@ -8,13 +8,12 @@ public class PlayerDashAbilitySO : AbilitySO
     [SerializeField] private float dashSpeed = 30;
     [SerializeField] private float dashTime = 1;
 
-    protected override void Initialize()
-    {
-        Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
-    }
-
     protected override void Cast()
     {
+        Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
+        Player.Instance.invulnerableTimer = 1f;
+        Player.Instance.MoveFor(dashSpeed, dashTime);
+        
         Player.Instance.StartCoroutine(Dash());
     }
     
@@ -26,8 +25,6 @@ public class PlayerDashAbilitySO : AbilitySO
 
     private IEnumerator Dash()
     {
-        Player.Instance.invulnerableTimer = 1f;
-        Player.Instance.MoveFor(dashSpeed, dashTime);
         yield return new WaitForSeconds(dashTime);
         Finish();
     }

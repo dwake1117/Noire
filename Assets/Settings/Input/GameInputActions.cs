@@ -141,7 +141,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""fdb30c73-6329-435e-91c5-4131601dedb0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=3)"",
+                    ""interactions"": ""Hold(duration=2,pressPoint=1)"",
                     ""initialStateCheck"": false
                 }
             ],

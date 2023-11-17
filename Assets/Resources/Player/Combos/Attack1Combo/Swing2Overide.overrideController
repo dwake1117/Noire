@@ -9,5 +9,5 @@ AnimatorOverrideController:
   m_Name: Swing2Overide
   m_Controller: {fileID: 9100000, guid: eae4c66b1ffb2a143a0272b9017dd795, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 678411ccad7c60148be2cb8e40b75a43, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: d16f9d605d570264182df5842f6d81b6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 397dac5ee197b2f4aa37ed9ce34c6720, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 64711ca982920a949b4830e367e8e970, type: 2}

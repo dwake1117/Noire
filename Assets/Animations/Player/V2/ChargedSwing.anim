@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Swing1
+  m_Name: ChargedSwing
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -17357,7 +17357,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.16666667
-    functionName: Swing1AnimationStartedTrigger
+    functionName: ChargedSwingAnimationStartedTrigger
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

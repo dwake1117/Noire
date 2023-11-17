@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -45,4 +46,48 @@ public class PostProcessingManager : MonoBehaviour
     public float GetChromaticAberrationIntensity() => chromaticAberration.intensity.value;
     
     public float GetBloomIntensity() => bloom.intensity.value;
+
+    private IEnumerator CAImpulseCoroutine(float animationTime, float magnitude)
+    {
+        float time = 0;
+        while (time < animationTime)
+        {
+            float eval = time / animationTime;
+            
+            SetChromaticAberrationIntensity(
+                Mathf.Lerp(0, magnitude, StaticInfoObjects.Instance.CA_QUICK_IMPULSE.Evaluate(eval)));
+            
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        SetChromaticAberrationIntensity(0);
+    }
+    
+    public void CAImpulse(float animationTime=0.2f, float magnitude=0.4f)
+    {
+        StartCoroutine(CAImpulseCoroutine(animationTime, magnitude));
+    }
+
+    private IEnumerator LDImpulseCoroutine(float animationTime, float magnitude)
+    {
+        float time = 0;
+        while (time < animationTime)
+        {
+            float eval = time / animationTime;
+            
+            SetLensDistortionIntensity(
+                Mathf.Lerp(0, magnitude, StaticInfoObjects.Instance.LD_QUICK_IMPULSE.Evaluate(eval)));
+            
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        SetLensDistortionIntensity(0);
+    }
+    
+    public void LDImpulse(float animationTime, float magnitude)
+    {
+        StartCoroutine(LDImpulseCoroutine(animationTime, magnitude));
+    }
 }
