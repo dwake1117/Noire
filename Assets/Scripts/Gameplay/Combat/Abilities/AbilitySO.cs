@@ -37,7 +37,7 @@ public abstract class AbilitySO : ScriptableObject
 
     // when finished, should make state = AbilityState.OnCooldown
     // IMPORTANT: must call Player.Instance.ResetStateAfterAction() otherwise the ability is stuck forever
-    protected abstract void Finish();
+    protected virtual void Finish() { }
 
     // called when ability is activated and if `interruptable` flag is true
     protected virtual void Interrupt() { }
@@ -88,10 +88,5 @@ public abstract class AbilitySO : ScriptableObject
     {
         yield return new WaitForSeconds(waitTime);
         Finish();
-    }
-    
-    protected IEnumerator WaitFor(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
     }
 }

@@ -18,4 +18,5 @@ MonoBehaviour:
   staminaCost: 20
   applicableDreamStates: 000000000200000001000000
   playerMovableDuringCast: 0
+  interruptable: 0
   attackDuration: 0.3

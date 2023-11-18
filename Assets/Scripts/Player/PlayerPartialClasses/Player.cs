@@ -173,6 +173,8 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     // called after ability for state transition
     public void ResetStateAfterAction()
     {
+        currentAbility = null;
+        
         bool isMoving = GameInput.Instance.GetMovementVectorNormalized() != Vector3.zero;
         if (!isMoving)
         {
@@ -185,8 +187,6 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
             state = PlayerState.Running;
         else
             state = PlayerState.Walking;
-
-        currentAbility = null;
     }
 
     public IEnumerator WaitForAndReset(float time)

@@ -67,7 +67,6 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.CameraLeft.performed += CameraLeft_performed;
         
         gameInputActions.Player.LightAttack.performed += Attack1_performed;
-        gameInputActions.Player.ChargedAttack.started += ChargedAttack_started;
         gameInputActions.Player.ChargedAttack.performed += ChargedAttack_performed;
         gameInputActions.Player.ChargedAttack.canceled += ChargedAttack_canceled;
             
@@ -101,7 +100,6 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.CameraLeft.performed -= CameraLeft_performed;
         
         gameInputActions.Player.LightAttack.performed -= Attack1_performed;
-        gameInputActions.Player.ChargedAttack.started -= ChargedAttack_started;
         gameInputActions.Player.ChargedAttack.performed -= ChargedAttack_performed;
         gameInputActions.Player.ChargedAttack.canceled -= ChargedAttack_canceled;
         
@@ -242,15 +240,9 @@ public class GameInput : MonoBehaviour
         OnAbilityCast?.Invoke(4, 0);
     }
 
-
-    private void ChargedAttack_started(InputAction.CallbackContext obj)
-    {
-        OnAbilityCast?.Invoke(5, 0);
-    }
-
     private void ChargedAttack_performed(InputAction.CallbackContext obj)
     {
-        OnAbilityCast?.Invoke(5, 1);
+        OnAbilityCast?.Invoke(5, 0);
     }
 
     private void ChargedAttack_canceled(InputAction.CallbackContext obj)

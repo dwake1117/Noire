@@ -31,6 +31,7 @@ public partial class Player
     [SerializeField] private ParticleSystemBase glowSwordEndParticles;
     [SerializeField] private ParticleSystemBase chargingParticles;
     private Coroutine glowSwordCoroutine;
+    private Coroutine chargeSwordCoroutine;
     
     // NOTE: the current combo system CANNOT overwrite the CDs of current abilities 
     [Header("Combo")]
@@ -154,12 +155,17 @@ public partial class Player
     public void ChargeSwordAnimation()
     {
         chargingParticles.Restart();
-        StartCoroutine(ChargeOneStackAnimationCoroutine());
+        
+        if(chargeSwordCoroutine != null)
+            StopCoroutine(chargeSwordCoroutine);
+        chargeSwordCoroutine = StartCoroutine(ChargeOneStackAnimationCoroutine());
     }
 
     public void StopChargeSwordAnimation()
     {
         chargingParticles.Stop();
+        if(chargeSwordCoroutine != null)
+            StopCoroutine(chargeSwordCoroutine);
     }
 
     private IEnumerator ChargeOneStackAnimationCoroutine()
@@ -170,6 +176,8 @@ public partial class Player
             PostProcessingManager.Instance.CAImpulse();
             GlowSwordAnimation(1);
         }
+
+        chargeSwordCoroutine = null;
     }
     
     // called when taking any damage
