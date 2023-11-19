@@ -9,6 +9,7 @@ using UnityEditor;
 
 public class LanternFlyIk : MonoBehaviour
 {
+    public LayerMask terrainLayers;
     public Transform[] footTransforms;
     public CCDIK[] ccdiks;
     public Vector3[] footVectors;
@@ -28,6 +29,9 @@ public class LanternFlyIk : MonoBehaviour
         new int[] { 1, 2, 5 }
     };
 
+    public float idleScaler = 0.25f;
+    public float idleSpeedScaler = 4f;
+
     public Transform NavmeshParent;
     public bool footMoving = false;
     private void OnDrawGizmos()
@@ -35,7 +39,7 @@ public class LanternFlyIk : MonoBehaviour
         Gizmos.color = Color.red;
         foreach (Vector3 vector in footVectors)
         {
-            Gizmos.DrawSphere(transform.position - vector, 0.5f);
+            Gizmos.DrawSphere(transform.position - (vector.x * transform.right + vector.y * transform.up + vector.z * transform.forward), 0.5f);
         }
         // Draws a blue sphere with a radius of 0.5 units
     }
@@ -48,18 +52,25 @@ public class LanternFlyIk : MonoBehaviour
         originalOffset = transform.position.y - CalcAverageY();
     }
 
+    void RotateAroundAxis(Vector3 axis)
+    {
+        float angle = 0.1f;
+        for(int i = 0; i< 6; i++)
+            FootMarkers[i].RotateAround(transform.position, axis, angle);
+    }
     void Update()
     {
         transform.forward = NavmeshParent.forward;
-        lanterflyParent.forward = NavmeshParent.forward;
+        if (footMoving) 
+            RotateAroundAxis(Vector3.up);
         averageY = CalcAverageY() + originalOffset;
         transform.position = Vector3.Lerp(transform.position,
-            new Vector3(NavmeshParent.position.x, averageY, NavmeshParent.position.z), VerticalSpeed * Time.deltaTime);
+            new Vector3(NavmeshParent.position.x, averageY - Mathf.Abs(Mathf.Sin(Time.time * idleSpeedScaler)) * idleScaler, NavmeshParent.position.z), VerticalSpeed * Time.deltaTime);
         Vector3 NormalAverage = Vector3.zero;
         RaycastHit hit;
         for (int i = 0; i < 6; i++)
         {
-            if (Physics.Raycast(FootMarkers[i].position + transform.up * 20, -transform.up, out hit, 100f))
+            if (Physics.Raycast(FootMarkers[i].position + transform.up * 20, -transform.up, out hit, terrainLayers))
             {
                 NormalAverage += hit.normal;
             }
@@ -97,6 +108,7 @@ public class LanternFlyIk : MonoBehaviour
         yield return new WaitForSeconds(alternateFootDelay);
         StartCoroutine(MoveFoot(transform.position -  (footVectors[setIndices[i][1]].x * transform.right + footVectors[setIndices[i][1]].y * transform.up + footVectors[setIndices[i][1]].z * transform.forward), FootMarkers[setIndices[i][1]]));
         yield return new WaitForSeconds(alternateFootDelay);
+        //lanterflyParent.position = new Vector3(transform.position.x, lanterflyParent.position.y, transform.position.z);
         footMoving = false;
     }
 private float CalcAverageY()
@@ -114,7 +126,7 @@ private float CalcAverageY()
         // raycast down and find grounded foot position
         
         RaycastHit hit;
-        if (Physics.Raycast(currentFootPos + transform.up * 20, -transform.up, out hit, 100f))
+        if (Physics.Raycast(currentFootPos + transform.up * 20, -transform.up, out hit, 100f, terrainLayers))
         { 
             currentFootPos = hit.point;
         }
