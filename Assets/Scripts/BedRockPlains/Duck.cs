@@ -8,7 +8,7 @@ public class Duck : InteractableObject
     public override void Interact()
     {
         interactionsOccured++;
-        firefliesBurst.Play();
-        FinishInteract();
+        firefliesBurst.Restart();
+        interactableIndicator.Stop();
     }
 }

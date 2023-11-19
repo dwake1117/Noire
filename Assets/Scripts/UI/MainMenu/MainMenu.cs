@@ -7,7 +7,7 @@ public class MainMenu : UI
     
     [Header("Menu Navigation")]
     [SerializeField] private SaveSlotsMenu saveSlotsMenu;
-
+    
     [Header("Menu Buttons")]
     [SerializeField] private ButtonUI newGameButton;
     [SerializeField] private ButtonUI continueGameButton;
@@ -28,15 +28,6 @@ public class MainMenu : UI
         quitGameButton.AddListener(OnQuitGameClicked);
         
         Show();
-    }
-
-    private void Refresh()
-    {
-        if (!DataPersistenceManager.Instance.HasGameData()) 
-        {
-            continueGameButton.Disable();
-            loadGameButton.Disable();
-        }
     }
 
     private void ToggleButtons(bool val)
@@ -81,9 +72,14 @@ public class MainMenu : UI
         ToggleButtons(false);
         Application.Quit();
     }
-
+    
+    // UI baseclass
     protected override void Activate()
     {
-        Refresh();
+        if (!DataPersistenceManager.Instance.HasGameData()) 
+        {
+            continueGameButton.Disable();
+            loadGameButton.Disable();
+        }
     }
 }

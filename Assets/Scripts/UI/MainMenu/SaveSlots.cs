@@ -12,6 +12,8 @@ public class SaveSlot : UI
     [SerializeField] private ButtonUI clearButton;
     [SerializeField] private TextMeshProUGUI percentageCompletedText;
     [SerializeField] private TextMeshProUGUI currentAreaText;
+    [SerializeField] private TextMeshProUGUI shardsText;
+    [SerializeField] private GameObject shardsIcon;
 
     private bool hasData = false;
 
@@ -110,6 +112,7 @@ public class SaveSlot : UI
             saveSlotButton.SetText(data.ProfileName);
             percentageCompletedText.text = data.PercentageComplete + "% Complete";
             currentAreaText.text = data.CurrentScene.SplitCamelCase();
+            shardsText.text = data.DreamShards.ToString();
         }
     }
 
@@ -129,5 +132,7 @@ public class SaveSlot : UI
         }
         percentageCompletedText.gameObject.SetActive(interactable);
         currentAreaText.gameObject.SetActive(interactable);
+        shardsIcon.SetActive(interactable);
+        shardsText.gameObject.SetActive(interactable);
     }
 }
