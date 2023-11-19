@@ -61,7 +61,9 @@ public class RangedEnemy : Enemy
     [Tooltip("Time for the warning effect before an attack.")]
     public float WarningTime = 0.5f;
 
-    [Header("Laser Direction and Speed")]
+    [Header("Laser Direction and Speed")] 
+    [Tooltip("If the laser does not hit anything, how far should it go?")]
+    public float noHitLaserDistance = 100f;
     [Tooltip("Rotation speed of the laser.")]
     public float rotationSpeed = 2f;
     [SerializeField] [Tooltip("Initial direction of the laser.")]
@@ -245,6 +247,7 @@ public class RangedEnemy : Enemy
     }
         private IEnumerator PeekAndAttack()
         {
+            FaceTarget();
             AttackStarted = true;
             RaycastHit hit;
             Physics.Linecast(transform.position, TargetPlayer.position, out hit);
@@ -258,16 +261,28 @@ public class RangedEnemy : Enemy
             }
             Agent.isStopped = true;
             anim.SetTrigger("Attack");
-            yield return new WaitForSeconds(0.75f);
+            float timer = 0;
+            while (timer < 0.75f)
+            {
+                FaceTarget();
+                timer += Time.deltaTime;
+                yield return null;
+            }
             Vector3 updatedDirection = (TargetPlayer.position - transform.position).normalized;
-            yield return new WaitForSeconds(0.25f);
+            timer = 0;
+            while (timer < 0.25f)
+            {
+                FaceTarget();
+                timer += Time.deltaTime;
+                yield return null;
+            }
             impactParticleSystem.Play();
             // Enable the main attack laser and perform the attack
             //Attack Audio Play
             FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballAttack", transform.position);
             LaserLineRenderer.enabled = true;
             CameraManager.Instance.CameraShake(WarningTime, 5f);
-            float timer = 0;
+            timer = 0;
             while(timer < WarningTime)
             {
                 FaceTarget();
@@ -312,13 +327,20 @@ public class RangedEnemy : Enemy
                 {
                     impactParticleSystem.transform.position = hit.point;
                     impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
-                    if (hit.collider.gameObject == TargetPlayer.gameObject)
+                    if (hit.collider.gameObject == TargetPlayer.parent.gameObject)
                     {
+                        
                         GameEventsManager.Instance.PlayerEvents.TakeDamage((int)damage, transform.position);
                     }
                 
                     LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
                     LaserLineRenderer.SetPosition(1, hit.point);
+                }
+                else
+                {
+                    impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
+                    LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
+                    LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
                 }
             }
             else
@@ -329,6 +351,12 @@ public class RangedEnemy : Enemy
                     impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
                     LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
                     LaserLineRenderer.SetPosition(1, hit.point);
+                }
+                else
+                {
+                    impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
+                    LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
+                    LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
                 }
             }
             
