@@ -12,6 +12,7 @@ public class PostProcessingManager : MonoBehaviour
     private LensDistortion lensDistortion;
     private ChromaticAberration chromaticAberration;
     private Bloom bloom;
+    private Vignette vignette;
     
     public Volume GetVolume() => volume;
 
@@ -33,6 +34,8 @@ public class PostProcessingManager : MonoBehaviour
             Debug.LogError("Did not find a chromatic aberration in PostEffects");
         if(!volume.profile.TryGet(out bloom))
             Debug.LogError("Did not find a bloom effect in PostEffects");
+        if(!volume.profile.TryGet(out vignette))
+            Debug.LogError("Did not find a vignette effect in PostEffects");
     }
     
     public void SetLensDistortionIntensity(float val) => lensDistortion.intensity.value = val;
@@ -44,6 +47,8 @@ public class PostProcessingManager : MonoBehaviour
     public float GetLensDistortionIntensity() => lensDistortion.intensity.value;
 
     public float GetChromaticAberrationIntensity() => chromaticAberration.intensity.value;
+
+    public void SetVignetteIntensity(float val) => vignette.intensity.value = val;
     
     public float GetBloomIntensity() => bloom.intensity.value;
 
@@ -90,4 +95,6 @@ public class PostProcessingManager : MonoBehaviour
     {
         StartCoroutine(LDImpulseCoroutine(animationTime, magnitude));
     }
+    
+    
 }

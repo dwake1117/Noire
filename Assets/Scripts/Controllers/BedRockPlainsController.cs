@@ -8,6 +8,7 @@ public class BedRockPlainsController : SceneController, IDataPersistence
 {
     [Header("Opening Lights Animation (Lantern Interact)")]
     [SerializeField] private Light mainLight;
+    [SerializeField] private GameObject streetlampLight;
     [SerializeField] private float finalIntensity;
     [SerializeField] private AnimationCurve openLightsIntensityCurve;
     [SerializeField] private float animationTime = 3;
@@ -16,6 +17,8 @@ public class BedRockPlainsController : SceneController, IDataPersistence
     
     [Header("Particle Effects")]
     [SerializeField] private ParticleSystemBase dustParticles;
+    [SerializeField] private ParticleSystemBase fireflies;
+    
     [Header("Audio Manager")]
     [SerializeField] private AudioManager audioManager;
     
@@ -24,7 +27,8 @@ public class BedRockPlainsController : SceneController, IDataPersistence
     protected override void Init()
     {
         audioManager.ChangeGlobalParaByName("Walking Surfaces", 1);
-        mainLight.intensity = 0;
+        mainLight.intensity = 0.01f;
+        streetlampLight.gameObject.SetActive(false);
         ScriptableRendererFeatureManager.Instance.EnableOnlyOneFog(fogIndex);
     }
 
@@ -32,10 +36,12 @@ public class BedRockPlainsController : SceneController, IDataPersistence
     {
         if (lightsOpened)
         {
+            PostProcessingManager.Instance.SetVignetteIntensity(0);
             Begin();
         }
         else
         {
+            PostProcessingManager.Instance.SetVignetteIntensity(1);
             GameEventsManager.Instance.BedrockPlainsEvents.OnLampInteract += OpenLights;
             ToggleAllInteractables(false);
         }
@@ -47,21 +53,23 @@ public class BedRockPlainsController : SceneController, IDataPersistence
         SceneManager.sceneLoaded -= FindAllInteractables;
     }
     
-
+    // if light is opened
     private void Begin()
-    {  
-        audioManager.ChangeGlobalParaByName("Walking Surfaces", 1);
+    {
         mainLight.intensity = finalIntensity;
         bgmAudio.PlayBgmAudio();
         dustParticles.Play();
+        fireflies.Play();
         ToggleAllInteractables(true);
     }
     
     private void OpenLights()
     {
         lightsOpened = true;
+        streetlampLight.gameObject.SetActive(true);
         DataPersistenceManager.Instance.SaveGame();
         StartCoroutine(PlayOpeningLightsAnimation());
+        StartCoroutine(UnObscureSight());
     }
 
     private IEnumerator PlayOpeningLightsAnimation()
@@ -80,6 +88,22 @@ public class BedRockPlainsController : SceneController, IDataPersistence
         }
 
         Begin();
+    }
+
+    // turns the vignette to desired level
+    private IEnumerator UnObscureSight()
+    {
+        float time = 0;
+        while (time < 1)
+        {
+            PostProcessingManager.Instance.SetVignetteIntensity(Mathf.Lerp(
+                1, 
+                0, 
+                openLightsIntensityCurve.Evaluate(time)
+            ));
+            time += Time.deltaTime / animationTime;
+            yield return null;
+        }
     }
 
     #region IDataPersistence
