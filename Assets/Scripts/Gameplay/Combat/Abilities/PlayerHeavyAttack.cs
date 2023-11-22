@@ -8,6 +8,7 @@ public class PlayerHeavyAttack : AbilitySO
     [SerializeField] private float overChargeDuration = 3f;
     [SerializeField] private string releaseAnimationTrigger;
     private float initialTimer;
+    private bool charging;
     
     protected override void Cast()
     {
@@ -17,6 +18,8 @@ public class PlayerHeavyAttack : AbilitySO
         Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
         Player.Instance.ChargeSwordAnimation();
         Player.Instance.StartCoroutine(OverCharge());
+
+        charging = true;
     }
 
     private void Release()
@@ -28,26 +31,32 @@ public class PlayerHeavyAttack : AbilitySO
 
     protected override void Interrupt()
     {
-        state = AbilityState.OnCooldown;
         Player.Instance.StopChargeSwordAnimation();
         
         float charge = Time.time - initialTimer;
         if (charge >= 1)
         {
+            state = AbilityState.OnCooldown;
             Player.Instance.StartCoroutine(Player.Instance.WaitForAndReset(attackDuration));
             Release();
         }
         else
         {
+            state = AbilityState.Ready;
+            cooldownCounter = cooldown;
             Player.Instance.ResetStateAfterAction();
         }
+        charging = false;
     }
 
     private IEnumerator OverCharge()
     {
         yield return new WaitForSeconds(overChargeDuration);
-        state = AbilityState.OnCooldown;
-        Player.Instance.StopChargeSwordAnimation();
-        Player.Instance.ResetStateAfterAction();
+        if (charging)
+        {
+            state = AbilityState.OnCooldown;
+            Player.Instance.StopChargeSwordAnimation();
+            Player.Instance.ResetStateAfterAction();
+        }
     }
 }

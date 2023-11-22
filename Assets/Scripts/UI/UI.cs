@@ -5,10 +5,21 @@ using UnityEngine.Events;
 
 
 /// <summary>
-/// THE UI baseclass.
-/// Inheritors have access to Show(), Hide(), and Init().
-/// Inheritors should selectively implement the following event methods:
+/// THE UI baseclass. Provides useful functions for transitioning.
+/// <remarks>Only use this on parent MonoBehaviours that needs to fade in/out!
+/// Otherwise it will come with unnecessary overhead</remarks>
 /// 
+/// Inheritors have access to
+/// <code>Show()</code>
+/// Calls Activate() on the object, enables it, (or the container object if alternativeGameObject is toggled on),
+/// and begins the Fade transition.
+/// 
+/// <code>Hide()</code>
+/// Calls Deactivate() on the object, disables it, and begins the Fade out transition
+/// <code>Init()</code>
+/// Obtains the canvasGroup and rectTransform components from the gameObject.
+/// 
+/// NOTE: Inheritors should selectively implement the following event methods:
 /// <code>Activate</code> Called before Show()'s fade transitions
 /// <code>Deactivate</code> Called before Hide()'s fade transitions
 /// <code>LateActivate</code> Called after Show()'s fade transitions

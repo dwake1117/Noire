@@ -26,4 +26,7 @@ public class PlayerEvents
     
     public event Action OnUpdateStaminaBar;
     public void UpdateStaminaBar() => OnUpdateStaminaBar?.Invoke();
+
+    public event Action<int, AbilitySO> OnUpdateAbility;
+    public void UpdateAbility(int idx, AbilitySO ability) => OnUpdateAbility?.Invoke(idx, ability);
 }

@@ -3,7 +3,7 @@ using Common.Extensions;
 using TMPro;
 using UnityEngine;
 
-public class SaveSlot : UI
+public class SaveSlot : MonoBehaviour
 {
     [Header("Profile")]
     [SerializeField] private string profileId = "default";
@@ -16,11 +16,6 @@ public class SaveSlot : UI
     [SerializeField] private GameObject shardsIcon;
 
     private bool hasData = false;
-
-    private void Awake() 
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
 
     private void Start()
     {

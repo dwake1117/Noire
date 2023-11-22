@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class AbilitySO : ScriptableObject
 {
     [SerializeField] public int abilityID;
+    [SerializeField] public Sprite sprite;
     [SerializeField] protected string abilityAnimationTrigger;
     [SerializeField] protected float cooldown = 1;
     [SerializeField] public float staminaCost = 10f;
@@ -12,20 +13,26 @@ public abstract class AbilitySO : ScriptableObject
     
     // if an ability is interruptable, Activate() can be called multiple times (be careful with this!)
     [SerializeField] public bool interruptable;
+    
+    [Header("Equippable Slots")]
+    [SerializeField] public bool equippable;
 
-    private float cooldownCounter;
+    // AbilityTypes:
+    // 0: Enhancing
+    // 1: Protective
+    // 2: Special
+    [SerializeField] public short abilityType;
     
-    // IMPORTANT: -1 for canceled, 0 for started. Use other numbers accordingly!
-    protected short abilityStatus; // the status of the ability, updated in Activate()
+    public float cooldownCounter { get; protected set; }
     
-    protected enum AbilityState
+    public enum AbilityState
     {
         Ready,
         Active,
         OnCooldown
     }
 
-    protected AbilityState state;
+    public AbilityState state { get; protected set; }
     
     // this is called on game awake
     public virtual void Ready() => state = AbilityState.Ready;
@@ -48,14 +55,12 @@ public abstract class AbilitySO : ScriptableObject
     {
         if (state == AbilityState.Ready && status == 0)
         {
-            abilityStatus = status;
             state = AbilityState.Active;
             cooldownCounter = cooldown;
             Cast();
         }
         else if (state == AbilityState.Active && interruptable)
         {
-            abilityStatus = status;
             Interrupt();
             return false;
         }

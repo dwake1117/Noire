@@ -69,6 +69,13 @@ public partial class Player
         }
     }
     
+    // called every frame to decrease cooldown and handle ability states
+    private void HandleAbilityCooldowns()
+    {
+        foreach (AbilitySO ability in playerAbilities.Values)
+            ability.DecreaseCooldown();
+    }
+    
     private void TryContinueOrStartCombo(int abilityId)
     {
         // if we are currently in a combo, try to continue the combo, or terminate if the combo fails
@@ -252,6 +259,7 @@ public partial class Player
         onHitCoroutine = null;
     }
     
+    // updates abilities according to dream states
     private void UpdateAbilities()
     {
         playerAbilities = new Dictionary<int, AbilitySO>();
@@ -260,6 +268,8 @@ public partial class Player
             if (Array.Exists(ability.applicableDreamStates, elem => elem == DreamState))
             {
                 playerAbilities.Add(ability.abilityID, ability);
+                if(ability.equippable)
+                    GameEventsManager.Instance.PlayerEvents.UpdateAbility(ability.abilityType, ability);
                 ability.Ready();
             }
         }

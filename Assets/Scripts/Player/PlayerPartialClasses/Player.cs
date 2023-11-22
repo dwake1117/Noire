@@ -122,7 +122,7 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
             return;
         
         HandleStamina();
-        HandleAbilityCast();
+        HandleAbilityCooldowns();
         HandleComboCooldowns();
         
         if (!IsCasting())
@@ -208,13 +208,6 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     #endregion
     
     #region HANDLE FUNCTIONS
-    
-    // called every frame to decrease cooldown and handle ability states
-    private void HandleAbilityCast()
-    {
-        foreach (AbilitySO ability in playerAbilities.Values)
-            ability.DecreaseCooldown();
-    }
 
     // called on every frame for buffer regen
     private void HandleStamina()
