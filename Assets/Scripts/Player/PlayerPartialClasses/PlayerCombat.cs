@@ -37,7 +37,6 @@ public partial class Player
     [Header("Combo")]
     [SerializeField] private float comboTimerMax = 2.5f; // the time that you can continue the combo
     private float comboTimer;
-    
     private ComboSO[] playerComboList; // list of combos
     private Dictionary<int, ComboSO> playerCombos; // the available combos for EACH abilityID
     private ComboSO currentCombo; // the current comboSO
@@ -109,11 +108,38 @@ public partial class Player
         }
     }
     
+    // returns an AbilitySO if can cast `abilityId`, NULL otherwise
+    public AbilitySO CanCastAbility(int abilityId)
+    {
+        if (!playerAbilities.TryGetValue(abilityId, out AbilitySO ability))
+            return null;
+        
+        if ((ability.interruptable && currentAbility && abilityId == currentAbility.abilityID)
+            || (playerStaminaSO.CurrentStamina >= ability.staminaCost && (IsIdle() || IsWalking() || IsRunning())))
+        {
+            return ability;
+        }
+
+        return null;
+    }
+
+    public void UseStamina(float val)
+    {
+        playerStaminaSO.UseStamina(val);
+        GameEventsManager.Instance.PlayerEvents.UpdateStaminaBar();
+    }
+    
     private void OnAbilityCast(int abilityId, short status)
     {
-        Debug.Log($"{abilityId}, {status}");
-        var ability = CanCastAbility(abilityId);
-        if (ability != null)
+        AbilitySO ability = CanCastAbility(abilityId);
+        
+        if (ability == null)
+        {
+            currentAbility = null;
+            Debug.Log($"Ability cast {abilityId} failed: " +
+                      "Already casting, not enough stamina, or ability not found");
+        }
+        else 
         {
             if(!ability.CanActivate(status))
                 Debug.Log($"Ability {abilityId} not available, either on cooldown or locked");
@@ -121,19 +147,13 @@ public partial class Player
             {
                 TryContinueOrStartCombo(abilityId);
                 currentAbility = ability;
-                if (ability.Activate(status))
+                
+                // here we activate the ability at last!
+                if (ability.Activate(status) && !ability.playerMovableDuringCast)
                 {
-                    if(!ability.playerMovableDuringCast)
-                        state = PlayerState.Casting;
-                    
-                    playerStaminaSO.UseStamina(ability.staminaCost);
-                    GameEventsManager.Instance.PlayerEvents.UpdateStaminaBar();
+                    state = PlayerState.Casting;
                 }
             }
-        }
-        else
-        {
-            Debug.Log($"Ability cast {abilityId} failed: Already casting, not enough stamina, or ability not found");
         }
     }
 

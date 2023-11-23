@@ -39,20 +39,6 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     public bool IsDead() => state == PlayerState.Dead;
     public bool IsFalling() => state == PlayerState.Falling;
     public bool IsRunning() => state == PlayerState.Running;
-
-    public AbilitySO CanCastAbility(int abilityId)
-    {
-        bool hasAbility = playerAbilities.TryGetValue(abilityId, out AbilitySO ability);
-        
-        if (hasAbility 
-            && playerStaminaSO.CurrentStamina >= ability.staminaCost
-            && (ability.interruptable || IsIdle() || IsWalking() || IsRunning()))
-        {
-                return ability;
-        }
-
-        return null;
-    }
     public float GetPlayerHitBoxHeight() => playerHitBoxHeight;
     public Weapon GetWeapon() => weapon;
     public bool AddItem(CollectableItemSO item) => playerInventory.Add(item);

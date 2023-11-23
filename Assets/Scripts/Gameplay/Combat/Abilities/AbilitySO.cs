@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Assertions;
 
 public abstract class AbilitySO : ScriptableObject
 {
@@ -51,27 +52,26 @@ public abstract class AbilitySO : ScriptableObject
 
     // called whenever the ability is activated
     // returns true if the activation is NOT a interrupt, false if it is
+    // REQUIRES: CanActivate(status)
     public bool Activate(short status)
     {
         if (state == AbilityState.Ready && status == 0)
         {
             state = AbilityState.Active;
             cooldownCounter = cooldown;
+            Player.Instance.UseStamina(staminaCost);
             Cast();
+            return true;
         }
-        else if (state == AbilityState.Active && interruptable)
-        {
-            Interrupt();
-            return false;
-        }
-
-        return true;
+        
+        Interrupt();
+        return false;
     }
 
     public bool CanActivate(short status)
     {
-        return (state == AbilityState.Ready && status == 0) 
-               || (state == AbilityState.Active && interruptable);
+        return (state == AbilityState.Ready && status == 0) || 
+               (state == AbilityState.Active && interruptable && status == -1);
     }
     
     // called on each frame during which the ability is activated

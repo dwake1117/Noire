@@ -9,16 +9,21 @@ public class PlayerHeavyAttack : AbilitySO
     [SerializeField] private string releaseAnimationTrigger;
     private float initialTimer;
     private bool charging;
+    private Coroutine overchargeCoroutine;
     
     protected override void Cast()
     {
         initialTimer = Time.time;
         
+        if(overchargeCoroutine != null) 
+            Player.Instance.StopCoroutine(overchargeCoroutine);
+        
         Player.Instance.ResetAnimationTrigger(releaseAnimationTrigger);
         Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
         Player.Instance.ChargeSwordAnimation();
-        Player.Instance.StartCoroutine(OverCharge());
-
+        
+        overchargeCoroutine = Player.Instance.StartCoroutine(OverCharge());
+        
         charging = true;
     }
 
@@ -32,7 +37,7 @@ public class PlayerHeavyAttack : AbilitySO
     protected override void Interrupt()
     {
         Player.Instance.StopChargeSwordAnimation();
-        
+        Debug.Log("Interupt");
         float charge = Time.time - initialTimer;
         if (charge >= 1)
         {
@@ -42,6 +47,7 @@ public class PlayerHeavyAttack : AbilitySO
         }
         else
         {
+            // cancel!
             state = AbilityState.Ready;
             cooldownCounter = cooldown;
             Player.Instance.ResetStateAfterAction();
@@ -58,5 +64,7 @@ public class PlayerHeavyAttack : AbilitySO
             Player.Instance.StopChargeSwordAnimation();
             Player.Instance.ResetStateAfterAction();
         }
+
+        overchargeCoroutine = null;
     }
 }

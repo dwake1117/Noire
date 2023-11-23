@@ -10,9 +10,6 @@ public interface IPlayer
     bool IsDead();
     bool IsFalling();
     bool IsRunning();
-    
-    // returns the AbilitySO if can cast, null otherwise
-    AbilitySO CanCastAbility(int abilityId);
     float GetPlayerHitBoxHeight();
     Weapon GetWeapon();
     bool AddItem(CollectableItemSO item);
