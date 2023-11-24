@@ -11,11 +11,10 @@ public class GameData
     [Key(2)] public float PercentageComplete;
     
     // player fields
-    [Key(3)] public float AttackDamage;
-    [Key(4)] public float DreamShards;
-    [Key(5)] public float DreamThreads;
-    [Key(6)] public Vector3 Position;
-    [Key(10)] public Dictionary<string, int> Inventory;
+    [Key(3)] public float DreamShards;
+    [Key(4)] public float DreamThreads;
+    [Key(5)] public Vector3 Position;
+    [Key(6)] public Dictionary<string, int> Inventory;
     
     // game states
     [Key(7)] public string CurrentScene;
@@ -27,7 +26,6 @@ public class GameData
     [SerializationConstructor]
     public GameData(string profileId)
     {
-        AttackDamage = 5;
         DreamShards = 0;
         DreamThreads = 0;
         Position = new Vector3();

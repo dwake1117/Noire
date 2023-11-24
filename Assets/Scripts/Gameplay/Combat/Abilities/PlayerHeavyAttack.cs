@@ -37,7 +37,6 @@ public class PlayerHeavyAttack : AbilitySO
     protected override void Interrupt()
     {
         Player.Instance.StopChargeSwordAnimation();
-        Debug.Log("Interupt");
         float charge = Time.time - initialTimer;
         if (charge >= 1)
         {

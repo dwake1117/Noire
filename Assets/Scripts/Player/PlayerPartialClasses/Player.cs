@@ -52,7 +52,13 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     
     private void Awake()
     {
+        if (Instance != null) 
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
         
         state = PlayerState.Idle;
         DreamState = DreamState.Neutral;
@@ -104,6 +110,8 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     
     private void Update()
     {
+        if (SceneManager.GetActiveScene().name == "LoadingScene")
+            return;
         if (IsDead())
             return;
         
@@ -252,12 +260,15 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     
     public void LoadData(GameData data)
     {
-        // data.currentScene should have already been loaded.
-        
-        dreamShardsSO.SetCurrencyCount(data.DreamShards);
-        dreamThreadsSO.SetCurrencyCount(data.DreamThreads);
-        transform.position = data.Position;
-        playerInventory.FromSerializedInventory(data.Inventory);
+        if (Instance && Instance == this)
+        {
+            UpdateAbilities();
+            
+            dreamShardsSO.SetCurrencyCount(data.DreamShards);
+            dreamThreadsSO.SetCurrencyCount(data.DreamThreads);
+            transform.position = data.Position;
+            playerInventory.FromSerializedInventory(data.Inventory);
+        }
     }
 
     public void SaveData(GameData data)

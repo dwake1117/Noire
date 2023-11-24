@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
+    
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
     [Header("Camera zoom/pan")]
@@ -25,8 +26,6 @@ public class CameraManager : MonoBehaviour
     private Coroutine shakeCoroutine;
     private CinemachineBasicMultiChannelPerlin shakeNoise;
     
-    public Transform LookAt;
-    
     private const float EPS = .1f;
 
     private float targetFOV;
@@ -35,7 +34,15 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+        
         cameraPosition = 0;
 
         shakeNoise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ using MessagePack;
 
 public class DataPersistenceManager : MonoBehaviour
 {
+    public static DataPersistenceManager Instance { get; private set; }
+    
     [Header("Debugging")]
     [SerializeField] private bool disableDataPersistence = false;
     [SerializeField] private bool initializeDataIfNull = false;
@@ -17,15 +20,13 @@ public class DataPersistenceManager : MonoBehaviour
     // other fields
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
+    private List<IDataPersistence> dataPersistenceObjectsParent;
     private GameStateFileIO fileHandler;
 
-    private string selectedProfileId = "";
+    private string selectedProfileId;
     
-    public static DataPersistenceManager Instance { get; private set; }
-
     private void Awake() 
     {
-        // destroys duplicates for scene loading persistence
         if (Instance != null) 
         {
             Destroy(gameObject);
@@ -42,7 +43,7 @@ public class DataPersistenceManager : MonoBehaviour
         fileHandler = new GameStateFileIO(Application.persistentDataPath, fileName);
         InitializeSelectedProfileId();
     }
-
+    
     private void OnEnable() 
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -55,8 +56,22 @@ public class DataPersistenceManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
     {
-        dataPersistenceObjects = FindAllDataPersistenceObjects();
-        LoadGame();
+        switch (StaticInfoObjects.Instance.GetSceneType(scene.name))
+        {
+            case SceneType.Single:
+                dataPersistenceObjects = FindAllDataPersistenceObjects();
+                LoadGame();
+                break;
+            case SceneType.Parent:
+                dataPersistenceObjectsParent = FindAllDataPersistenceObjects();;
+                break;
+            case SceneType.Child:
+                dataPersistenceObjects = new();
+                dataPersistenceObjects.AddRange(dataPersistenceObjectsParent);
+                dataPersistenceObjects.AddRange(FindAllDataPersistenceObjects());
+                LoadGame();
+                break;
+        }
     }
 
     public void ChangeSelectedProfileId(string newProfileId) 
@@ -94,7 +109,7 @@ public class DataPersistenceManager : MonoBehaviour
             dataPersistenceObj.SaveData(gameData);
 
         // timestamp the data
-        gameData.LastUpdated = System.DateTime.Now.ToBinary();
+        gameData.LastUpdated = DateTime.Now.ToBinary();
 
         fileHandler.Save(gameData, selectedProfileId);
     }

@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using FlatKit;
-using UnityEngine.Rendering.Universal;
 
-public class ValleyOfSoluraController : SceneController
+public class SoluraBaseController : ParentSceneController
 {
     [SerializeField] private int fogIndex;
     

@@ -13,7 +13,7 @@ public class LoaderCallback : MonoBehaviour
     {
         var info = Loader.TargetSceneInfoObj;
         yield return new WaitForSeconds(1.6f);
-
+        
         switch (info.Type)
         {
             case SceneType.Single:

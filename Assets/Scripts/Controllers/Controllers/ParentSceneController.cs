@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 /// <summary>
-/// A scene controller supports virtual implementations of the following functions:
+/// A parent scene controller supports virtual implementations of the following functions:
 /// <code>Init</code> Called in Awake()
 /// <code>LateInit</code> Called in Start(), This is called after DataPersistence!
 /// </summary>
 
-public class SceneController : MonoBehaviour
+public class ParentSceneController : MonoBehaviour
 {
     [Header("Interactable Objects")]
     [SerializeField] protected InteractableObject[] unaffectedInteractableObjects;
@@ -50,10 +48,7 @@ public class SceneController : MonoBehaviour
 
     protected virtual void Init() { }
 
-    protected virtual void LateInit()
-    {
-        StartCoroutine(DisplaySceneName());
-    }
+    protected virtual void LateInit() { }
 
     private IEnumerator DisplaySceneName()
     {

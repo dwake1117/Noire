@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// class for storing all CONST fields such as static dictionaries,
-/// animation curves, etc
+/// class for storing all CONST fields such as static dictionaries, animation curves, etc
+///
+/// Also provides useful access functions to them
 /// </summary>
 
 
@@ -69,4 +70,9 @@ public class StaticInfoObjects : MonoBehaviour
         { DreamState.Lucid, Color.cyan },
         { DreamState.Deep, Color.magenta },
     };
+
+    public SceneType GetSceneType(string scene)
+    {
+        return LOADING_INFO[GAMESCENES[scene]].Type;
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
-public class BedRockPlainsController : SceneController, IDataPersistence
+public class BedRockPlainsController : ParentSceneController, IDataPersistence
 {
     [Header("Opening Lights Animation (Lantern Interact)")]
     [SerializeField] private Light mainLight;
@@ -50,7 +50,6 @@ public class BedRockPlainsController : SceneController, IDataPersistence
     private void OnDisable()
     {
         GameEventsManager.Instance.BedrockPlainsEvents.OnLampInteract -= OpenLights;
-        SceneManager.sceneLoaded -= FindAllInteractables;
     }
     
     // if light is opened

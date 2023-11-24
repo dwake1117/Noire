@@ -137,11 +137,8 @@ public class SceneTransitioner : MonoBehaviour
 
     private void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
-        var gameScene = StaticInfoObjects.Instance.GAMESCENES[scene.name];
-        var info = StaticInfoObjects.Instance.LOADING_INFO[gameScene];
-        
         // never enters scene transition when loading a parent (since the child always will be loaded as well)
-        if(info.Type == SceneType.Single || info.Type == SceneType.Child)
+        if(StaticInfoObjects.Instance.GetSceneType(scene.name) != SceneType.Parent)
             StartCoroutine(Enter(lastTransition));
     }
 }

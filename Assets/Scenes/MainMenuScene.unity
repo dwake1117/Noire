@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc7b4bf2106ede4da5e33b6c41fdfb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableDataPersistence: 1
+  disableDataPersistence: 0
   initializeDataIfNull: 0
   fileName: data.game
 --- !u!4 &67096520
