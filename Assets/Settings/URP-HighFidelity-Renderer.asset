@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770acbaed70db4ad696458511aa3f084, type: 3}
   m_Name: Blue Yellow Fog
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings: {fileID: 11400000, guid: 318f7bb7ad019804590d6bd7d7f1a9c8, type: 2}
   _effectMaterial: {fileID: 0}
 --- !u!114 &11400000
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770acbaed70db4ad696458511aa3f084, type: 3}
   m_Name: Pink Fog
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings: {fileID: 11400000, guid: a4b62fd46b1ce844cb8dab6b23d5de00, type: 2}
   _effectMaterial: {fileID: 0}
 --- !u!114 &4861608501604974159

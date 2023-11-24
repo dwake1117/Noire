@@ -8,11 +8,20 @@ public class LoaderCallback : MonoBehaviour
     {
         StartCoroutine(LoadLevelAsync());
     }
-
+    
     private IEnumerator LoadLevelAsync()
     {
-        yield return new WaitForSeconds(2);
-        SceneTransitioner.Instance.LoadScene(Loader.TargetScene, Loader.TargetSceneInfoObj.LoadMode);
+        var info = Loader.TargetSceneInfoObj;
+        yield return new WaitForSeconds(1.6f);
+
+        switch (info.Type)
+        {
+            case SceneType.Single:
+                SceneTransitioner.Instance.LoadSceneSingle(Loader.TargetScene);
+                break;
+            case SceneType.Parent:
+                SceneTransitioner.Instance.LoadSceneParent(Loader.TargetScene);
+                break;
+        }
     }
-    
 }

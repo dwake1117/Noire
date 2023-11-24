@@ -7,11 +7,25 @@ public class AbilitiesSprite : MonoBehaviour
     [SerializeField] private AbilitySO ability;
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI cooldownText;
-
+    [SerializeField] private Color spriteNaColor;
+    private bool isAvailable = true;
+    
     private void Update()
     {
         if (!ability)
+        {
+            if (isAvailable)
+            {
+                cooldownText.text = "N/A";
+                image.color = spriteNaColor;
+                isAvailable = false;
+            }
+
             return;
+        }
+
+        isAvailable = true;
+
         switch (ability.state)
         {
             case AbilitySO.AbilityState.Active:

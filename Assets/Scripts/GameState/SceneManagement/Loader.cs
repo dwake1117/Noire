@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class Loader {
+public static class Loader 
+{
     private static string LoadScene = GameScene.LoadingScene.ToString();
     public const GameScene FirstScene = GameScene.BedrockPlains;
-    
+
     public static SceneInfo TargetSceneInfoObj;
-    
     public static string TargetScene;
     
     // THE function to call to load any scene. Returns true upon successful loading.
@@ -15,16 +15,16 @@ public static class Loader {
         TargetScene = nextScene.ToString();
         TargetSceneInfoObj = StaticInfoObjects.Instance.LOADING_INFO[nextScene];
         
-        switch (TargetSceneInfoObj.LoadType)
+        switch (TargetSceneInfoObj.Type)
         {
-            case SceneLoadType.Fast:
-                return SceneTransitioner.Instance.LoadScene(TargetScene, TargetSceneInfoObj.LoadMode);
-            case SceneLoadType.Normal:
-                return SceneTransitioner.Instance.LoadScene(LoadScene);
-            case SceneLoadType.None:
-                return SceneTransitioner.Instance.LoadScene(TargetScene);
+            case SceneType.Single:
+                return SceneTransitioner.Instance.LoadSceneSingle(LoadScene);
+            case SceneType.Parent:
+                return SceneTransitioner.Instance.LoadSceneSingle(LoadScene);
+            case SceneType.Child:
+                return SceneTransitioner.Instance.LoadSceneChild(TargetScene);
             default:
-                return SceneTransitioner.Instance.LoadScene(TargetScene);
+                return false;
         }
     }
     

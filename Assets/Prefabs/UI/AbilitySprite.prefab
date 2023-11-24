@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.25490198}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.007843138}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -93,6 +93,7 @@ MonoBehaviour:
   ability: {fileID: 0}
   image: {fileID: 5330705369669818165}
   cooldownText: {fileID: 463196609209289755}
+  spriteNaColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.007843138}
 --- !u!1 &4102581838602520031
 GameObject:
   m_ObjectHideFlags: 0

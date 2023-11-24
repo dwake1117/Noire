@@ -7,7 +7,7 @@ public class AbilitiesMenu : UI
 {
     [SerializeField] private AbilitiesSprite[] abilitiesSprites;
 
-    private void Start()
+    private void Awake()
     {
         GameEventsManager.Instance.PlayerEvents.OnUpdateAbility += PlayerEventsOnOnUpdateAbility;
     }

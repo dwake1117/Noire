@@ -4,6 +4,8 @@
     DeathScene,
     LoadingScene,
     BedrockPlains,
-    ValleyofSolura,
+    SoluraBase,
+    SoluraEntry,
+    SoluraCliffHouses,
     TheShorelines,
 }

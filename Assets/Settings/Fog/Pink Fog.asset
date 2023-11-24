@@ -49,7 +49,7 @@ MonoBehaviour:
   useHeight: 1
   heightGradient:
     serializedVersion: 2
-    key0: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0}
     key1: {r: 0.3584906, g: 0.22456391, b: 0.30770126, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0.75686276}
     key3: {r: 0, g: 0, b: 0, a: 0}

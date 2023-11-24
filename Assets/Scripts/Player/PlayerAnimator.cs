@@ -1,8 +1,16 @@
 using UnityEngine;
 using UnityEngine.VFX;
 
+/// <summary>
+/// The Player Animator class. Attached to a Player instance.
+/// Controls animation and VFXs. 
+/// </summary>
+
+[RequireComponent(typeof(Player))]
 public class PlayerAnimator : MonoBehaviour
 {
+    public static PlayerAnimator Instance { get; private set; }
+    
     [Header("Splash Effects")]
     [SerializeField] private ParticleSystemBase normalSlash;
     [SerializeField] private Vector3 normalSlashOffset = new(0f, 2.3f, -1.9f);
@@ -13,7 +21,8 @@ public class PlayerAnimator : MonoBehaviour
     [Header("Dash Effects")]
     [SerializeField] private VisualEffect dashSmokePuff;
     [SerializeField] private Vector3 dashSmokePuffOffset = new(0f, 0.89f, -2.07f);
-    
+    [SerializeField] private VisualEffect runSmokePuff;
+    [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
     
     private Animator animator;
     private const string WALK = "PlayerWalk";
@@ -25,7 +34,6 @@ public class PlayerAnimator : MonoBehaviour
     private int FALL_ID;
     private int RUN_ID;
     
-    public static PlayerAnimator Instance { get; private set; }
     
     private void Awake()
     {
@@ -95,5 +103,17 @@ public class PlayerAnimator : MonoBehaviour
         dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 143, 0));
         
         dashSmokePuff.Play();
+    }
+
+    private void RunOneStepTrigger()
+    {
+        var playerTransform = Player.Instance.transform;
+        
+        runSmokePuff.transform.position = playerTransform.position + runSmokePuffOffset;
+        runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 90, 0));
+        
+        runSmokePuff.Play();
+        
+        // TODO: play sound of one step
     }
 }

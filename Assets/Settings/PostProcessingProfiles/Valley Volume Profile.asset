@@ -43,13 +43,13 @@ MonoBehaviour:
   active: 1
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.38679248, g: 0.31892136, b: 0.3741129, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.267
+    m_Value: 0.296
   smoothness:
     m_OverrideState: 1
     m_Value: 0.282
@@ -136,7 +136,7 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9560173, z: 0.90897095, w: 0.003067441}
+    m_Value: {x: 1, y: 0.9123765, z: 0.8931812, w: 0.003067441}
   gamma:
     m_OverrideState: 1
     m_Value: {x: 0.8924609, y: 0.89189905, z: 1, w: 0}
@@ -161,18 +161,18 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.8
   intensity:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 2.5
   scatter:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.3
   clamp:
     m_OverrideState: 0
     m_Value: 0.25
   tint:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0.84948534, g: 0.8679245, b: 0.741011, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
@@ -239,13 +239,13 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 230
+    m_Value: 240
   aperture:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 1
   focalLength:
     m_OverrideState: 1
-    m_Value: 300
+    m_Value: 200
   bladeCount:
     m_OverrideState: 0
     m_Value: 5

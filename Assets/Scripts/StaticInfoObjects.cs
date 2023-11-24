@@ -35,11 +35,17 @@ public class StaticInfoObjects : MonoBehaviour
     // maps scene -> (load type, load mode, initial position)
     public readonly Dictionary<GameScene, SceneInfo> LOADING_INFO = new()
     {
-        { GameScene.MainMenuScene, new SceneInfo(SceneLoadType.Fast, LoadSceneMode.Single, Vector3.zero) },
-        { GameScene.DeathScene, new SceneInfo(SceneLoadType.Fast, LoadSceneMode.Single, Vector3.zero) },
-        { GameScene.ValleyofSolura, new SceneInfo(SceneLoadType.Normal, LoadSceneMode.Single, new Vector3(44.5f, 10f, 26f)) },
-        { GameScene.BedrockPlains, new SceneInfo(SceneLoadType.Normal, LoadSceneMode.Single, Vector3.zero) },
-        { GameScene.TheShorelines, new SceneInfo(SceneLoadType.Normal, LoadSceneMode.Single, Vector3.zero) },
+        { GameScene.MainMenuScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        { GameScene.DeathScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        { GameScene.LoadingScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        
+        { GameScene.SoluraBase, new SceneInfo(SceneType.Parent, GameScene.SoluraEntry, new Vector3(0, 10, 0)) },
+        { GameScene.SoluraEntry, new SceneInfo(SceneType.Child, GameScene.SoluraBase, new Vector3(0, 10, 0)) },
+        { GameScene.SoluraCliffHouses, new SceneInfo(SceneType.Child, GameScene.SoluraBase, Vector3.zero) },
+        
+        { GameScene.BedrockPlains, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        
+        { GameScene.TheShorelines, new SceneInfo(SceneType.Single, null, Vector3.zero) },
     };
     
     public readonly Dictionary<string, GameScene> GAMESCENES = new()
@@ -47,8 +53,13 @@ public class StaticInfoObjects : MonoBehaviour
         { "MainMenuScene", GameScene.MainMenuScene },
         { "DeathScene", GameScene.DeathScene },
         { "LoadingScene", GameScene.LoadingScene },
+        
         { "BedrockPlains", GameScene.BedrockPlains },
-        { "ValleyofSolura", GameScene.ValleyofSolura },
+        
+        { "SoluraBase", GameScene.SoluraBase },
+        { "SoluraEntry", GameScene.SoluraEntry },
+        { "SoluraCliffHouses", GameScene.SoluraCliffHouses },
+        
         { "TheShorelines", GameScene.TheShorelines },
     };
 

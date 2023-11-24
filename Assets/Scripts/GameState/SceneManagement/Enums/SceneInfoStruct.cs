@@ -2,15 +2,18 @@
 using UnityEngine.SceneManagement;
 public struct SceneInfo
 {
-    public SceneLoadType LoadType {get; private set;}
-    public LoadSceneMode LoadMode {get; private set;}
+    public SceneType Type {get; private set;}
+    
+    // each child scene should specify a parent. If parent is null, the scene is a standalone scene.
+    // We also need to specify a default child if the scene is of Type = Parent
+    public GameScene? ParentOrDefaultChild { get; private set; }
     
     public Vector3 InitialPosition {get; private set;}
 
-    public SceneInfo(SceneLoadType loadType, LoadSceneMode loadMode, Vector3 initialPosition)
+    public SceneInfo(SceneType type, GameScene? parentOrDefaultChild, Vector3 initialPosition)
     {
-        LoadType = loadType;
-        LoadMode = loadMode;
+        Type = type;
+        ParentOrDefaultChild = parentOrDefaultChild;
         InitialPosition = initialPosition;
     }
 }

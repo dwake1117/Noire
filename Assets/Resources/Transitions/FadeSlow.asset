@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf4888634af3416f95ab02d10e677b8c, type: 3}
-  m_Name: Fade
+  m_Name: FadeSlow
   m_EditorClassIdentifier: 
   intensityCurve:
     serializedVersion: 2
@@ -36,4 +36,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationTime: 2
+  animationTime: 1.5

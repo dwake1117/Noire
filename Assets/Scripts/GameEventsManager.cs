@@ -1,6 +1,10 @@
 using UnityEngine;
+
 /// <summary>
 /// Handles all NON-INPUT events. Classes should subscribe/unsubscribe from events here.
+/// 
+/// IMPORTANT: this has high priority in script execution order! So you can legally call
+/// Instance.someEvents.eventName += Your Delegate in Awake() in any MonoBehaviors!
 /// </summary>
 public class GameEventsManager : MonoBehaviour
 {

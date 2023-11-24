@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc7b4bf2106ede4da5e33b6c41fdfb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableDataPersistence: 0
+  disableDataPersistence: 1
   initializeDataIfNull: 0
   fileName: data.game
 --- !u!4 &67096520
@@ -5487,7 +5487,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e3448659ad4eb48944eea2c9813ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeTransition: {fileID: 11400000, guid: d77e4ce5730c60246a160e6963a306e2, type: 2}
+  fadeTransitionSlow: {fileID: 11400000, guid: d77e4ce5730c60246a160e6963a306e2, type: 2}
+  fadeTransitionFast: {fileID: 11400000, guid: e40c674e74152054688b0d0ef5ae33db, type: 2}
 --- !u!1 &2525280680042191930
 GameObject:
   m_ObjectHideFlags: 0

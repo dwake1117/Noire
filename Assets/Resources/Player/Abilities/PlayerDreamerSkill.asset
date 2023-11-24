@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: PlayerDreamerSkill
   m_EditorClassIdentifier: 
   abilityID: 2
+  sprite: {fileID: 0}
   abilityAnimationTrigger: 
   cooldown: 3
   staminaCost: 80
   applicableDreamStates: 00000000
   playerMovableDuringCast: 1
+  interruptable: 0
+  equippable: 1
+  abilityType: 2
   SphereDepthSample: {fileID: 4493709772433381691, guid: 35ab07982ea2945efbfd70aac99e8297,
     type: 3}
   playerSilhouetteFeature: {fileID: 8014490324881951954, guid: c40be3174f62c4acf8c1216858c64956,

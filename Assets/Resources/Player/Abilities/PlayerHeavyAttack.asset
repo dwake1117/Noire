@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: PlayerHeavyAttack
   m_EditorClassIdentifier: 
   abilityID: 5
+  sprite: {fileID: 0}
   abilityAnimationTrigger: Charging
   cooldown: 2
   staminaCost: 40
   applicableDreamStates: 000000000100000002000000
   playerMovableDuringCast: 0
   interruptable: 1
+  equippable: 1
+  abilityType: 0
   attackDuration: 0.4
+  overChargeDuration: 3
   releaseAnimationTrigger: ChargedAttack
-  cancelAnimationTrigger: CancelCharging

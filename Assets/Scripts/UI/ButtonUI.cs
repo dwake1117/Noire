@@ -15,9 +15,10 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private CanvasGroup leftIndicator;
     [SerializeField] private CanvasGroup rightIndicator;
     private float scaleAmount = 1.05f;
-    private float animationTime = .2f;
+    private float animationTime = .3f;
     private Vector3 initialScale;
     private Button button;
+    private Coroutine animateOnSelect;
 
     private void Awake()
     {
@@ -64,6 +65,7 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
+            FMODUnity.RuntimeManager.PlayOneShot("event:/MainMenu/Select", transform.position);
             SetIndicatorAlphas(1);
 
             Vector3 endScale = initialScale * scaleAmount;
@@ -79,9 +81,11 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 yield return null;
             }   
         }
+
+        animateOnSelect = null;
     }
 
-    public void PlayOnClick()
+    private void PlayOnClick()
     {
         FMODUnity.RuntimeManager.PlayOneShot("event:/MainMenu/Click", transform.position);
     }
@@ -98,14 +102,17 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnSelect(BaseEventData eventData)
     {
-        StartCoroutine(AnimateSelection(true));
-        FMODUnity.RuntimeManager.PlayOneShot("event:/MainMenu/Select", transform.position);
-        
+        if (animateOnSelect != null)
+            StopCoroutine(animateOnSelect);
+
+        animateOnSelect = StartCoroutine(AnimateSelection(true));
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        StartCoroutine(AnimateSelection(false));
+        if(animateOnSelect != null)
+            StopCoroutine(animateOnSelect);
+        animateOnSelect = StartCoroutine(AnimateSelection(false));
     }
 
     private void SetIndicatorAlphas(float alpha)
