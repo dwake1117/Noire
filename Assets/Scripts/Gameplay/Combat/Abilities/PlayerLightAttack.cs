@@ -9,7 +9,7 @@ public class PlayerLightAttack : AbilitySO
     {
         Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
         Player.Instance.MoveFor(10f, 0.2f, Player.Instance.transform.forward);
-        Player.Instance.HandleAttackOnHitEffects();
+        Player.Instance.HandleAttackOnHitEffects(abilityDamage);
         Player.Instance.GlowSwordAnimation(0);
         Player.Instance.StartCoroutine(WaitEndOfAction(attackDuration));
     }

@@ -6,9 +6,11 @@ using UnityEngine;
 public partial class Player
 {
     [Header("Player Combat")]
-    [SerializeField] private Weapon weapon;
     [SerializeField] private float invulnerableTimerMax = .5f;
     [SerializeField] private ParticleSystemBase onHitParticleEffects;
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] public Transform attackPoint;
+    [SerializeField] private float attackRadius = 3;
     public float invulnerableTimer;
     private readonly float playerHitBoxHeight = 1f;
     
@@ -221,10 +223,11 @@ public partial class Player
         playerHealthSO.InflictDamage(dmg);
         GameEventsManager.Instance.PlayerEvents.UpdateHealthBar();
         
-        // play on-hit effects (material change + animation)
+        // play on-hit effects (material change + animation + slow time)
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
+        TimeManager.Instance.DoSlowMotion(.4f);
         
         // handle effects
         HandleDreamState();
@@ -296,9 +299,14 @@ public partial class Player
     }
     
     // called after attacks
-    public void HandleAttackOnHitEffects()
+    public void HandleAttackOnHitEffects(int dmg)
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(weapon.GetAttackPoint().position, weapon.GetAttackRadius(), weapon.GetEnemyLayer());
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRadius, enemyLayer);
+        
+        if(hitEnemies.Length > 0)
+            TimeManager.Instance.DoSlowMotionWithDelay(.25f);
+        
+        // TODO: change enemy .OnHit() to take in dmg as parameter
         foreach (Collider enemy in hitEnemies)
         {
             enemy.GetComponent<BasicEnemy>()?.OnHit();

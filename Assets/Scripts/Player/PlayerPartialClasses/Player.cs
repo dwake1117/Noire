@@ -40,7 +40,6 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
     public bool IsFalling() => state == PlayerState.Falling;
     public bool IsRunning() => state == PlayerState.Running;
     public float GetPlayerHitBoxHeight() => playerHitBoxHeight;
-    public Weapon GetWeapon() => weapon;
     public bool AddItem(CollectableItemSO item) => playerInventory.Add(item);
     public bool RemoveItem(CollectableItemSO item) => playerInventory.Remove(item);
     public void SetMaxHP(int x) => playerHealthSO.SetMaxHP(x);

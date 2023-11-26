@@ -9,6 +9,7 @@ public abstract class AbilitySO : ScriptableObject
     [SerializeField] protected string abilityAnimationTrigger;
     [SerializeField] protected float cooldown = 1;
     [SerializeField] public float staminaCost = 10f;
+    [SerializeField] public int abilityDamage = 1;
     [SerializeField] public DreamState[] applicableDreamStates;
     [SerializeField] public bool playerMovableDuringCast;
     

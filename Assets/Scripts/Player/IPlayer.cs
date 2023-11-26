@@ -11,7 +11,6 @@ public interface IPlayer
     bool IsFalling();
     bool IsRunning();
     float GetPlayerHitBoxHeight();
-    Weapon GetWeapon();
     bool AddItem(CollectableItemSO item);
     bool RemoveItem(CollectableItemSO item);
     void SetMaxHP(int x);
