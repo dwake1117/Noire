@@ -50,7 +50,7 @@ MonoBehaviour:
   heightGradient:
     serializedVersion: 2
     key0: {r: 0.15678178, g: 0.20006736, b: 0.2264151, a: 1}
-    key1: {r: 0.91847634, g: 1, b: 0.61698115, a: 1}
+    key1: {r: 1, g: 0.6666666, b: 0.96993464, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
     ctime6: 0
     ctime7: 0
     atime0: 193
-    atime1: 43754
+    atime1: 51850
     atime2: 65535
     atime3: 0
     atime4: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   low: -100
-  high: 2
+  high: 1
   heightFogIntensity: 1
   cameraRelativePosition: 0
   distanceHeightBlend: 0

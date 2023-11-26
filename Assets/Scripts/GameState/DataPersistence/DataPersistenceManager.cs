@@ -60,7 +60,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             case SceneType.Single:
                 dataPersistenceObjects = FindAllDataPersistenceObjects();
-                LoadGame();
+                LoadGame(false);
                 break;
             case SceneType.Parent:
                 dataPersistenceObjectsParent = FindAllDataPersistenceObjects();;
@@ -69,7 +69,7 @@ public class DataPersistenceManager : MonoBehaviour
                 dataPersistenceObjects = new();
                 dataPersistenceObjects.AddRange(dataPersistenceObjectsParent);
                 dataPersistenceObjects.AddRange(FindAllDataPersistenceObjects());
-                LoadGame();
+                LoadGame(false);
                 break;
         }
     }
@@ -85,13 +85,15 @@ public class DataPersistenceManager : MonoBehaviour
         gameData = new GameData(profileId);
         fileHandler.Save(gameData, selectedProfileId);
     }
-
-    private void LoadGame()
+    
+    private void LoadGame(bool reload = true)
     {
         if (disableDataPersistence) 
             return;
-
-        gameData = fileHandler.Load(selectedProfileId);
+        
+        // if reload=true, gameData will be reloaded from disk
+        if(reload)
+            gameData = fileHandler.Load(selectedProfileId);
 
         if (gameData == null && initializeDataIfNull)
             NewGame("dev_default_profile");
@@ -151,6 +153,6 @@ public class DataPersistenceManager : MonoBehaviour
     public void ModifyPosition(Vector3 position)
     {
         gameData.Position = position;
-        fileHandler.Save(gameData, selectedProfileId);
+        // fileHandler.Save(gameData, selectedProfileId);
     }
 }

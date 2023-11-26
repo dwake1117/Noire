@@ -40,10 +40,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
   m_Name: Vignette
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 0, g: 0, b: 0, a: 1}
+    m_Value: {r: 0.6158542, g: 0.7830189, b: 0.5939124, a: 1}
   center:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
@@ -68,22 +68,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   postExposure:
     m_OverrideState: 0
     m_Value: 0
   contrast:
-    m_OverrideState: 0
-    m_Value: -12
-  colorFilter:
     m_OverrideState: 1
+    m_Value: -6.4
+  colorFilter:
+    m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: -180
   saturation:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.6
 --- !u!114 &-3193577956902362632
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -136,10 +136,10 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9123765, z: 0.8931812, w: 0.003067441}
+    m_Value: {x: 1, y: 0.948428, z: 0.95506746, w: 0.003067441}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.8924609, y: 0.89189905, z: 1, w: 0}
+    m_Value: {x: 0.9830037, y: 1, z: 0.9711798, w: 0}
   gain:
     m_OverrideState: 0
     m_Value: {x: 1, y: 0.9875646, z: 0.9593739, w: 0}
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
   m_Name: DepthOfField
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   mode:
     m_OverrideState: 1
     m_Value: 2

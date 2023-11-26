@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 6001120115839444038}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88,7 +88,7 @@ Transform:
   - {fileID: 6613620082101110356}
   - {fileID: 1836108573909736630}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &4985618578863161070
 CharacterController:
@@ -201,6 +201,8 @@ MonoBehaviour:
   particleOutwardSplash: {fileID: 0}
   dashSmokePuff: {fileID: 0}
   dashSmokePuffOffset: {x: 0, y: 0, z: 0}
+  runSmokePuff: {fileID: 0}
+  runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
 --- !u!136 &6001120115839444038
 CapsuleCollider:
   m_ObjectHideFlags: 0
