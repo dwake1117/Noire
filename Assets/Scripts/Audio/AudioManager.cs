@@ -1,16 +1,61 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using FMODUnity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager Instance;
+    
     [Header("Volume Controller")]
-    [SerializeField] [Range(0,1.25f)] private float sfxVolume = 1f;
-    [SerializeField] [Range(0,1.25f)] private float ostVolume = 1f;
     private FMOD.Studio.VCA sfxVCA;
     private FMOD.Studio.VCA ostVCA;
+    
+    [Header("BGM")]
+    private FMOD.Studio.EventInstance currBgmState;
+
+    private void Awake()
+    {
+        if (Instance != null) 
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    private bool IsPlaying(FMOD.Studio.EventInstance instance) 
+    {
+        instance.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
+        return state != FMOD.Studio.PLAYBACK_STATE.STOPPED;
+    }
+
+    private void InitializeNewBgmEvent(FMODUnity.EventReference bgmAudioEvent)
+    {
+        var bgmState = FMODUnity.RuntimeManager.CreateInstance(bgmAudioEvent);
+        currBgmState = bgmState;
+    }
+    
+    public void PlayBgmAudio(FMODUnity.EventReference bgmAudioEvent)
+    {
+        if (IsPlaying(currBgmState))
+        {
+            StopBgmAudio();
+        }
+        
+        InitializeNewBgmEvent(bgmAudioEvent);
+        
+        if (!IsPlaying(currBgmState))
+        {
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(currBgmState, Player.Instance.transform, false);
+            currBgmState.start();
+        }
+    }
+    
+    public void StopBgmAudio()
+    {
+        currBgmState.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        currBgmState.release();
+    }
 
     public float GetVcaVolume(string vca)
     {
@@ -37,10 +82,10 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            if (0 <= desVolume & desVolume <= 1.25)
+            if (0 <= desVolume && desVolume <= 1.25)
             {
                 sfxVCA.setVolume(desVolume);
-                sfxVolume = desVolume;
+                // sfxVolume = desVolume;
                 float vol;
                 sfxVCA.getVolume(out vol);
                 //Debug.Log("sfx" + vol);
@@ -60,10 +105,10 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            if (0 <= desVolume & desVolume <= 1.25)
+            if (0 <= desVolume && desVolume <= 1.25)
             {
                 ostVCA.setVolume(desVolume);
-                ostVolume = desVolume;
+                // ostVolume = desVolume;
                 float vol;
                 ostVCA.getVolume(out vol);
                 //Debug.Log("ost:" +vol);
@@ -91,5 +136,4 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("Setting Global params failed");
         }
     }
-    
 }

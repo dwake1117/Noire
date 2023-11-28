@@ -16,7 +16,7 @@ public class ParentSceneController : MonoBehaviour
     [SerializeField] protected InteractableObject[] unaffectedInteractableObjects;
     
     [Header("Audio")]
-    [SerializeField] protected BGMAudio bgmAudio;
+    [SerializeField] protected FMODUnity.EventReference bgmAudioEvent;
     
     [Header("Title text")]
     [SerializeField] private CanvasGroup SceneTitle;

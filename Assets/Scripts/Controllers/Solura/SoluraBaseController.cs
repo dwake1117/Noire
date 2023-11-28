@@ -7,5 +7,6 @@ public class SoluraBaseController : ParentSceneController
     protected override void Init()
     {
         ScriptableRendererFeatureManager.Instance.EnableOnlyOneFog(fogIndex);
+        AudioManager.Instance.PlayBgmAudio(bgmAudioEvent);
     }
 }

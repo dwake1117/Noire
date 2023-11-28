@@ -24,6 +24,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private VisualEffect runSmokePuff;
     [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
     
+        
     private Animator animator;
     private const string WALK = "PlayerWalk";
     private const string IDLE = "PlayerIdle";
@@ -111,9 +112,7 @@ public class PlayerAnimator : MonoBehaviour
         
         runSmokePuff.transform.position = playerTransform.position + runSmokePuffOffset;
         runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 90, 0));
-        
         runSmokePuff.Play();
-        
-        // TODO: play sound of one step
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Player/PlayerFootsteps", transform.position);
     }
 }

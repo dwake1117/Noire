@@ -3527,6 +3527,31 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: bgmAudioEvent.Path
+      value: event:/ValleyOfSolura/Ost
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: bgmAudioEvent.Guid.Data1
+      value: 857764405
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: bgmAudioEvent.Guid.Data2
+      value: 1179832620
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: bgmAudioEvent.Guid.Data3
+      value: -1219651957
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: bgmAudioEvent.Guid.Data4
+      value: -236153154
+      objectReference: {fileID: 0}
     - target: {fileID: 2098905713970019777, guid: 9941c0554154711499239af33dc11147,
         type: 3}
       propertyPath: m_Layer
@@ -4012,20 +4037,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2a6812a25c1c4ee2af0eec517e148e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxVolume: 1.25
-  ostVolume: 1.25
---- !u!114 &1299873574 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1862566477555724389, guid: 9941c0554154711499239af33dc11147,
-    type: 3}
-  m_PrefabInstance: {fileID: 1192354855}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b7ac71480e747d081439d4ed6e77fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1314267911
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4197,7 +4208,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unaffectedInteractableObjects: []
-  bgmAudio: {fileID: 1299873574}
+  bgmAudioEvent:
+    Guid:
+      Data1: 857764405
+      Data2: 1179832620
+      Data3: -1219651957
+      Data4: -236153154
+    Path: event:/ValleyOfSolura/Ost
   SceneTitle: {fileID: 703251336}
   UI: {fileID: 703251335}
   titleIntensityCurve:
@@ -4794,7 +4811,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1747570357}
-  m_LocalRotation: {x: 0.2851664, y: -0.3026188, z: 0.09541534, w: 0.90443236}
+  m_LocalRotation: {x: 0.2851664, y: -0.30261883, z: 0.09541534, w: 0.9044324}
   m_LocalPosition: {x: 5.7668123, y: 8.4836445, z: 29.503157}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

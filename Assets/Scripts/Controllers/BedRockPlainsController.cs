@@ -19,14 +19,11 @@ public class BedRockPlainsController : ParentSceneController, IDataPersistence
     [SerializeField] private ParticleSystemBase dustParticles;
     [SerializeField] private ParticleSystemBase fireflies;
     
-    [Header("Audio Manager")]
-    [SerializeField] private AudioManager audioManager;
-    
     private bool lightsOpened;
     
     protected override void Init()
     {
-        audioManager.ChangeGlobalParaByName("Walking Surfaces", 1);
+        AudioManager.Instance.ChangeGlobalParaByName("Walking Surfaces", 1);
         mainLight.intensity = 0.01f;
         streetlampLight.gameObject.SetActive(false);
         ScriptableRendererFeatureManager.Instance.EnableOnlyOneFog(fogIndex);
@@ -56,7 +53,7 @@ public class BedRockPlainsController : ParentSceneController, IDataPersistence
     private void Begin()
     {
         mainLight.intensity = finalIntensity;
-        bgmAudio.PlayBgmAudio();
+        AudioManager.Instance.PlayBgmAudio(bgmAudioEvent);
         dustParticles.Play();
         fireflies.Play();
         ToggleAllInteractables(true);

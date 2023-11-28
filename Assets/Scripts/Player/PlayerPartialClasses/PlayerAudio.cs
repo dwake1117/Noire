@@ -2,9 +2,6 @@
 
 public partial class Player
 {
-    [Header("Audio")]
-    [SerializeField] private AudioManager audioManager;
-    
     public void PlaySteps(string path)
     {
         FMODUnity.RuntimeManager.PlayOneShot(path, transform.position);
@@ -12,5 +9,10 @@ public partial class Player
     public void PlaySwoosh(string path)
     {
         FMODUnity.RuntimeManager.PlayOneShot(path, transform.position);
+    }
+
+    public void PlayCharge(string path)
+    {
+        //FMODUnity
     }
 }
