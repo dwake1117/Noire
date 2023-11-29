@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Start()
     {
+        weapon = GameObject.Find("fabric_mesh").GetComponent<Weapon>();
         originalMaterial = new Material[onHits.Length][];
         for (int i = 0; i < onHits.Length; i++)
         {
@@ -64,6 +65,10 @@ public class Enemy : MonoBehaviour
         onHit = StartCoroutine(PlayOnHitEffectsWithDelay());
     }
 
+    public virtual void Update()
+    {
+        
+    }
     private IEnumerator PlayOnHitEffectsWithDelay()
     {
         if (onHitParticleEffects != null)
