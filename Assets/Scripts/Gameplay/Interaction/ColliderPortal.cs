@@ -7,7 +7,6 @@ public class ColliderPortal : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trugegr");
         if (other.gameObject.CompareTag("Player"))
         {
             DataPersistenceManager.Instance.ModifyPosition(teleportPosition);

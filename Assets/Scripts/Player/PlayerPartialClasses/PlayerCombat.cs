@@ -11,6 +11,7 @@ public partial class Player
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] public Transform attackPoint;
     [SerializeField] private float attackRadius = 3;
+    public Transform rangedTargeter;
     public float invulnerableTimer;
     private readonly float playerHitBoxHeight = 1f;
     
@@ -223,11 +224,12 @@ public partial class Player
         playerHealthSO.InflictDamage(dmg);
         GameEventsManager.Instance.PlayerEvents.UpdateHealthBar();
         
-        // play on-hit effects (material change + animation + slow time)
+        // play on-hit effects (material change + animation + slow time + chromatic impulse)
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
         TimeManager.Instance.DoSlowMotion(.4f);
+        PostProcessingManager.Instance.CAImpulse(.4f, 1.5f);
         
         // handle effects
         HandleDreamState();
@@ -306,11 +308,10 @@ public partial class Player
         if(hitEnemies.Length > 0)
             TimeManager.Instance.DoSlowMotionWithDelay(.25f);
         
-        // TODO: change enemy .OnHit() to take in dmg as parameter
         foreach (Collider enemy in hitEnemies)
         {
-            enemy.GetComponent<BasicEnemy>()?.OnHit();
-            enemy.GetComponent<Enemy>()?.OnHit();
+            // enemy.GetComponent<BasicEnemy>()?.OnHit();
+            enemy.GetComponent<Enemy>()?.OnHit(dmg);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// Interface for player. Refer here for the available public functions for the Player Instance
 /// </summary>
 
@@ -11,6 +13,8 @@ public interface IPlayer
     bool IsFalling();
     bool IsRunning();
     float GetPlayerHitBoxHeight();
+    Transform GetRangedTargeter();
+    
     bool AddItem(CollectableItemSO item);
     bool RemoveItem(CollectableItemSO item);
     void SetMaxHP(int x);

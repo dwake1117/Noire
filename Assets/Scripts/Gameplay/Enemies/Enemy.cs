@@ -1,101 +1,140 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Serialization;
 
 public class Enemy : MonoBehaviour
 {   
     [Header("Enemy Properties")]
-    [Tooltip("The maximum health of the enemy")]
-    [SerializeField] float maxHealth = 20;
-    [Tooltip("The enemy weapon damage")]
-    [SerializeField] protected float damage = 2f;
+    [SerializeField] private int maxHealth = 5;
+    
+    [Tooltip("The default enemy damage")]
+    [SerializeField] protected int damage = 1;
+    
     [Header("Enemy Effects")]
     [Tooltip("The particle effects that play when the enemy is hit")]
-    [SerializeField] ParticleSystem onHitParticleEffects;
+    [SerializeField] private ParticleSystemBase onHitParticleEffects;
+    [SerializeField] private ParticleSystemBase onHitCutEffects;
+    
     [Tooltip("The material that is applied to the enemy on hit")]
-    [SerializeField] Material OnHitMaterial;
-    [Tooltip("The players current weapon")]
-    [SerializeField] private Weapon weapon;
+    [SerializeField] private Material onHitMaterial;
+    
     [Tooltip("Mesh Renderers to apply the on hit material to")]
-    [SerializeField] private MeshRenderer[] onHits;
+    [SerializeField] private MeshRenderer[] onHitRenderers;
+
+    [SerializeField] private float onHitAnimationTime = .5f;
     
     // private unserialized fields
-    private Renderer renderer;
     private float health;
-    private Material[][] originalMaterial;
+    private List<Material[]> originalMaterials;
+    private List<Material[]> onHitMaterials;
     private Coroutine onHit;
+    
     private void Awake()
     {
         health = maxHealth;
-        //weapon = Player.Instance.GetWeapon();
-        renderer = GetComponent<Renderer>();
+        CacheOnHitAnimationVariables();
     }
 
     public virtual void Start()
     {
-        weapon = GameObject.Find("fabric_mesh").GetComponent<Weapon>();
-        originalMaterial = new Material[onHits.Length][];
-        for (int i = 0; i < onHits.Length; i++)
+        originalMaterials = new();
+        onHitMaterials = new();
+        foreach (var meshRenderer in onHitRenderers)
         {
-            originalMaterial[i] = onHits[i].materials;
+            originalMaterials.Add(meshRenderer.materials);
+            onHitMaterials.Add(Enumerable.Repeat(onHitMaterial, meshRenderer.materials.Length).ToArray());
         }
         
         if (onHitParticleEffects != null)
             onHitParticleEffects.Stop();
     }
 
+    public virtual void Update() { }
     
-    public void OnHit()
+    public void OnHit(int dmg)
     {
         PlayOnHitEffects();
-        RecieveDamage();
+        RecieveDamage(dmg);
     }
 
-    private void RecieveDamage()
+    private void RecieveDamage(int dmg)
     {
-        Debug.Log(health);
-        health -= weapon.GetAttackDamage();
+        // Debug.Log(health);
+        health -= dmg;
         if(health <= 0)
             Die();
     }
-    public void PlayOnHitEffects()  
+    
+    private float[] OnHitAnimVars = new float[3];
+    private void CacheOnHitAnimationVariables()
+    {
+        OnHitAnimVars[0] = onHitAnimationTime * 0.75f;
+        OnHitAnimVars[1] = onHitAnimationTime * 0.05f;
+        OnHitAnimVars[2] = onHitAnimationTime * 0.1f;
+    }
+    
+    private void PlayOnHitEffects()  
     {
         if (onHit != null)
             StopCoroutine(onHit);
         onHit = StartCoroutine(PlayOnHitEffectsWithDelay());
     }
 
-    public virtual void Update()
+    private void ChangeToOnHitMaterial()
     {
-        
+        for (int i = 0; i < onHitRenderers.Length; i++)
+            onHitRenderers[i].materials = onHitMaterials[i];
     }
+
+    private void ChangeToOriginalMaterial()
+    {
+        for (int i = 0; i < onHitRenderers.Length; i++)
+            onHitRenderers[i].materials = originalMaterials[i];
+    }
+    
     private IEnumerator PlayOnHitEffectsWithDelay()
     {
+        yield return new WaitForSeconds(.2f);
+        
+        // handles particle effects
         if (onHitParticleEffects != null)
         {
-            onHitParticleEffects.transform.LookAt(Player.Instance.transform.position + new Vector3(0, Player.Instance.GetPlayerHitBoxHeight(), 0));
-            onHitParticleEffects.Play();
+            onHitParticleEffects.transform.LookAt(Player.Instance.GetRangedTargeter());
+            onHitCutEffects.Restart();
+            onHitParticleEffects.Restart();
         }
-        for (int i = 0; i < onHits.Length; i++)
-        {
-            for (int j = 0; j < onHits[i].materials.Length; j++)
-            {
-                onHits[i].materials[j] = OnHitMaterial;
-            }
-             
-        }
-        yield return new WaitForSeconds(.2f);
-        for (int i = 0; i < onHits.Length; i++)
-        {
-            onHits[i].materials = originalMaterial[i];
-        }
+        
+        // play onHitAnimations
+        CameraManager.Instance.CameraShake(0.1f, 3f);
+        ChangeToOnHitMaterial();
+        yield return new WaitForSeconds(OnHitAnimVars[0]);
+        
+        ChangeToOriginalMaterial();
+        yield return new WaitForSeconds(OnHitAnimVars[1]);
+        
+        ChangeToOnHitMaterial();
+        yield return new WaitForSeconds(OnHitAnimVars[1]);
+        
+        ChangeToOriginalMaterial();
+        yield return new WaitForSeconds(OnHitAnimVars[2]);
+        
+        ChangeToOnHitMaterial();
+        yield return new WaitForSeconds(OnHitAnimVars[2]);
+        
+        ChangeToOriginalMaterial();
+        // set current coroutine to null
         onHit = null;
     }
 
-    public void Die()
+    protected virtual void HandleDeath() { }
+    
+    private void Die()
     {
         //PlayDyingSound
-        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballDie", transform.position);
+        HandleDeath();
         gameObject.SetActive(false);
     }
 }

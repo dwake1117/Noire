@@ -306,7 +306,7 @@ public class MeleeEnemy : Enemy
         {
             if (other.gameObject.layer == 7 && isAttacking)
             {
-                GameEventsManager.Instance.PlayerEvents.TakeDamage((int)damage, transform.position);
+                GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
             }
         }
         private void JumpAttack(Vector3 initalDirection)

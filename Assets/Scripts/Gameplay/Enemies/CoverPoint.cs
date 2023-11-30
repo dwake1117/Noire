@@ -4,10 +4,9 @@ public class CoverPoint : MonoBehaviour
 {
     public bool IsCoverSafe(Vector3 threatPosition, LayerMask IgnoreLayers, GameObject Threat)
     {
-        RaycastHit hit;
-        if (Physics.Linecast(transform.position, threatPosition , out hit, ~IgnoreLayers))
+        if (Physics.Linecast(transform.position, threatPosition , out RaycastHit hit, ~IgnoreLayers))
         {
-            Debug.Log(hit.collider.name);
+            // Debug.Log(hit.collider.name);
             return hit.collider.gameObject != Threat;
         }
         return false;
