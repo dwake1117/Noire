@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Serialization;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Character
 {   
     [Header("Enemy Properties")]
     [SerializeField] private int maxHealth = 5;
@@ -18,12 +18,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ParticleSystemBase onHitParticleEffects;
     [SerializeField] private ParticleSystemBase onHitCutEffects;
     
-    [Tooltip("The material that is applied to the enemy on hit")]
-    [SerializeField] private Material onHitMaterial;
-    
     [Tooltip("Mesh Renderers to apply the on hit material to")]
-    [SerializeField] private MeshRenderer[] onHitRenderers;
-
     [SerializeField] private float onHitAnimationTime = .5f;
     
     // private unserialized fields
@@ -40,13 +35,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Start()
     {
-        originalMaterials = new();
-        onHitMaterials = new();
-        foreach (var meshRenderer in onHitRenderers)
-        {
-            originalMaterials.Add(meshRenderer.materials);
-            onHitMaterials.Add(Enumerable.Repeat(onHitMaterial, meshRenderer.materials.Length).ToArray());
-        }
+        InitializeOnHitRenderers();
         
         if (onHitParticleEffects != null)
             onHitParticleEffects.Stop();
@@ -81,18 +70,6 @@ public class Enemy : MonoBehaviour
         if (onHit != null)
             StopCoroutine(onHit);
         onHit = StartCoroutine(PlayOnHitEffectsWithDelay());
-    }
-
-    private void ChangeToOnHitMaterial()
-    {
-        for (int i = 0; i < onHitRenderers.Length; i++)
-            onHitRenderers[i].materials = onHitMaterials[i];
-    }
-
-    private void ChangeToOriginalMaterial()
-    {
-        for (int i = 0; i < onHitRenderers.Length; i++)
-            onHitRenderers[i].materials = originalMaterials[i];
     }
     
     private IEnumerator PlayOnHitEffectsWithDelay()

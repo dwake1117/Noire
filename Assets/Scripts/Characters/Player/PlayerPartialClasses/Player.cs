@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
+public partial class Player : Character, IPlayer, IDataPersistence
 {
     [Header("Fields")]
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
@@ -78,12 +78,12 @@ public partial class Player : MonoBehaviour, IPlayer, IDataPersistence
         
         // set initial material for weapon
         weaponFabricRenderer.material = originalWeaponFabricMaterial;
-        cloakRenderer.material = cloakOriginalMaterial;
         CacheOnHitAnimationVariables();
     }
 
     private void Start()
     {
+        InitializeOnHitRenderers();
         UpdateAbilities();
         
         Shader.SetGlobalColor("_FullScreenVoronoiColor", StaticInfoObjects.Instance.VORONOI_INDICATOR[DreamState]);

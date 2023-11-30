@@ -21,9 +21,6 @@ public partial class Player
     private AbilitySO currentAbility;
     
     [Header("On Hit Materials")]
-    [SerializeField] private Renderer cloakRenderer;
-    [SerializeField] private Material cloakOnHitMaterial;
-    [SerializeField] private Material cloakOriginalMaterial;
     private Coroutine onHitCoroutine;
     
     [Header("Glowing Sword Effects")]
@@ -263,23 +260,23 @@ public partial class Player
         CameraManager.Instance.CameraShake(0.3f, 5f);
         
         // material change animation
-        cloakRenderer.material = cloakOnHitMaterial;
+        ChangeToOnHitMaterial();
         yield return new WaitForSeconds(OnHitAnimVars[0]);
         
-        cloakRenderer.material = cloakOriginalMaterial;
+        ChangeToOriginalMaterial();
         yield return new WaitForSeconds(OnHitAnimVars[1]);
         
-        cloakRenderer.material = cloakOnHitMaterial;
+        ChangeToOnHitMaterial();
         yield return new WaitForSeconds(OnHitAnimVars[1]);
         
-        cloakRenderer.material = cloakOriginalMaterial;
+        ChangeToOriginalMaterial();
         yield return new WaitForSeconds(OnHitAnimVars[1]);
         
-        cloakRenderer.material = cloakOnHitMaterial;
+        ChangeToOnHitMaterial();
         yield return new WaitForSeconds(OnHitAnimVars[2]);
         
         // reset back to original material
-        cloakRenderer.material = cloakOriginalMaterial;
+        ChangeToOriginalMaterial();
         
         onHitCoroutine = null;
     }

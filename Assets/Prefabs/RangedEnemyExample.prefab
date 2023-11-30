@@ -10306,14 +10306,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97227bfcdb7a194ea1aa2b118153acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitRenderers:
+  - {fileID: 2327576203823158452}
+  - {fileID: 8330280535349547622}
+  onHitMaterial: {fileID: 2100000, guid: 2d84d27bf8d4d1a428b0e3e82c231b8c, type: 2}
   maxHealth: 3
   damage: 1
   onHitParticleEffects: {fileID: 832543099041853463}
   onHitCutEffects: {fileID: 3017530511912759120}
-  onHitMaterial: {fileID: 2100000, guid: 2d84d27bf8d4d1a428b0e3e82c231b8c, type: 2}
-  onHits:
-  - {fileID: 2327576203823158452}
-  - {fileID: 8330280535349547622}
+  onHitAnimationTime: 0.5
   TargetPlayer: {fileID: 0}
   coverPoints:
   - {fileID: 1144797317412660061}
@@ -10718,14 +10719,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97227bfcdb7a194ea1aa2b118153acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitRenderers:
+  - {fileID: 6177475152290224344}
+  - {fileID: 462992048645725706}
+  onHitMaterial: {fileID: 2100000, guid: 2d84d27bf8d4d1a428b0e3e82c231b8c, type: 2}
   maxHealth: 3
   damage: 1
   onHitParticleEffects: {fileID: 4904858795375012030}
   onHitCutEffects: {fileID: 1663071623180829226}
-  onHitMaterial: {fileID: 2100000, guid: 2d84d27bf8d4d1a428b0e3e82c231b8c, type: 2}
-  onHits:
-  - {fileID: 6177475152290224344}
-  - {fileID: 462992048645725706}
+  onHitAnimationTime: 0.5
   TargetPlayer: {fileID: 0}
   coverPoints:
   - {fileID: 1144797317412660061}
