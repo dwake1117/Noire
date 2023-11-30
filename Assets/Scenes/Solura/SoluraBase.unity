@@ -2482,11 +2482,11 @@ MonoBehaviour:
   unaffectedInteractableObjects: []
   bgmAudioEvent:
     Guid:
-      Data1: 857764405
-      Data2: 1179832620
-      Data3: -1219651957
-      Data4: -236153154
-    Path: event:/ValleyOfSolura/Ost
+      Data1: 1107171122
+      Data2: 1083193566
+      Data3: 1578759865
+      Data4: 1765462010
+    Path: event:/BedRockPlain/Ost
   SceneTitle: {fileID: 703251336}
   UI: {fileID: 703251335}
   titleIntensityCurve:
@@ -2568,17 +2568,17 @@ PrefabInstance:
     - target: {fileID: 1056033783186384513, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.26681
+      value: 18.116812
       objectReference: {fileID: 0}
     - target: {fileID: 1056033783186384513, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.7836466
+      value: 7.7836432
       objectReference: {fileID: 0}
     - target: {fileID: 1056033783186384513, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 97.60316
+      value: 67.01316
       objectReference: {fileID: 0}
     - target: {fileID: 1359843337278986657, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
@@ -2588,17 +2588,17 @@ PrefabInstance:
     - target: {fileID: 2826079601591800446, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.26681
+      value: 18.116812
       objectReference: {fileID: 0}
     - target: {fileID: 2826079601591800446, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.7836466
+      value: 7.7836432
       objectReference: {fileID: 0}
     - target: {fileID: 2826079601591800446, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 97.60316
+      value: 67.01316
       objectReference: {fileID: 0}
     - target: {fileID: 6578607110277723103, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
@@ -2658,12 +2658,22 @@ PrefabInstance:
     - target: {fileID: 6765360140662671712, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 46.2
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 6765360140662671712, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 103
+      value: 72.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021771340410082867, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 073c0357044501d4ca6456e993dc7891, type: 2}
+    - target: {fileID: 9065124402258069238, guid: cfd9fc1ea2a35ca45b668bbaa125d93a,
+        type: 3}
+      propertyPath: orthographic size
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

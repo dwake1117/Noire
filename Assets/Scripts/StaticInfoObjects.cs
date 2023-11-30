@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// class for storing all CONST fields such as static dictionaries, animation curves, etc
@@ -14,10 +15,8 @@ public class StaticInfoObjects : MonoBehaviour
     public static StaticInfoObjects Instance { get; private set; }
 
     [SerializeField] public AnimationCurve FADE_ANIM_CURVE;
-    [SerializeField] public AnimationCurve OPEN_REALM_CURVE;
-    [SerializeField] public AnimationCurve CLOSE_REALM_CURVE;
-    [SerializeField] public AnimationCurve CA_OPEN_REALM_CURVE; // chromatic aberration curve
-    [SerializeField] public AnimationCurve LD_OPEN_REALM_CURVE; // lens distortion curve
+    [SerializeField] public AnimationCurve CA_DEATH_CURVE; // chromatic aberration curve
+    [SerializeField] public AnimationCurve LD_DEATH_CURVE; // lens distortion curve
     
     [SerializeField] public AnimationCurve CA_QUICK_IMPULSE; // chromatic aberration curve
     [SerializeField] public AnimationCurve LD_QUICK_IMPULSE; // lens distortion curve

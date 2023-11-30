@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 395762422}
   - component: {fileID: 395762421}
   - component: {fileID: 395762420}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1403,7 +1403,7 @@ GameObject:
   - component: {fileID: 1424636755}
   - component: {fileID: 1424636754}
   - component: {fileID: 1424636753}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Electric_Shock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2315,7 +2315,7 @@ GameObject:
   - component: {fileID: 1936391746}
   - component: {fileID: 1936391745}
   - component: {fileID: 1936391744}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
 /// <summary>
@@ -23,6 +25,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Vector3 dashSmokePuffOffset = new(0f, 0.89f, -2.07f);
     [SerializeField] private VisualEffect runSmokePuff;
     [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
+    [SerializeField] private float deathAnimationTime = 1f;
     
         
     private Animator animator;
@@ -38,6 +41,8 @@ public class PlayerAnimator : MonoBehaviour
     
     private void Awake()
     {
+        Instance = this;
+        
         animator = GetComponent<Animator>();
         WALK_ID  = Animator.StringToHash(WALK);
         IDLE_ID =  Animator.StringToHash(IDLE);
@@ -62,6 +67,38 @@ public class PlayerAnimator : MonoBehaviour
     // {
     //     return AnimatorIsPlaying(layer) && animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
     // }
+
+    public void PlayDeathAnimation()
+    {
+        StartCoroutine(DeathAnimationCoroutine());
+    }
+
+    private IEnumerator DeathAnimationCoroutine()
+    {
+        var loadingOperation = SceneManager.LoadSceneAsync(GameScene.DeathScene.ToString());
+        loadingOperation.allowSceneActivation = false;
+        
+        PostProcessingManager.Instance.SetSaturation(-95f);
+        CameraManager.Instance.CameraShake(.4f, 7f);
+        
+        float time = 0;
+        while (time < deathAnimationTime)
+        {
+            float eval = time / deathAnimationTime;
+        
+            // post effects
+            PostProcessingManager.Instance.SetLensDistortionIntensity(
+                Mathf.Lerp(0, -1, StaticInfoObjects.Instance.LD_DEATH_CURVE.Evaluate(eval)));
+            PostProcessingManager.Instance.SetChromaticAberrationIntensity(
+                Mathf.Lerp(0, 1, StaticInfoObjects.Instance.CA_DEATH_CURVE.Evaluate(eval)));
+        
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        // load scene directly
+        loadingOperation.allowSceneActivation = true;
+    }
 
     private void Swing1AnimationStartedTrigger()
     {

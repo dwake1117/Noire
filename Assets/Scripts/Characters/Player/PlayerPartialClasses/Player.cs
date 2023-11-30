@@ -246,7 +246,7 @@ public partial class Player : Character, IPlayer, IDataPersistence
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
         
         state = PlayerState.Dead;
-        Loader.Load(GameScene.DeathScene);
+        PlayerAnimator.Instance.PlayDeathAnimation();
     }
     
     #endregion

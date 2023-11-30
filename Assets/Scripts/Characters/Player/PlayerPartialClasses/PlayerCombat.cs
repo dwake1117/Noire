@@ -211,27 +211,27 @@ public partial class Player
     private void OnTakingDamage(int dmg, Vector3 source)
     {
         if (invulnerableTimer > 0)
-        {
-            Debug.Log("Invulnerable -- did not take hit: " + dmg);
             return;
-        }
 
         // take damage
         invulnerableTimer = invulnerableTimerMax;
         playerHealthSO.InflictDamage(dmg);
         GameEventsManager.Instance.PlayerEvents.UpdateHealthBar();
         
+        // handle effects
+        HandleDreamState();
+        if (playerHealthSO.IsDead())
+        {
+            HandleDeath();
+            return;
+        }
+
         // play on-hit effects (material change + animation + slow time + chromatic impulse)
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
         TimeManager.Instance.DoSlowMotion(.4f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1.5f);
-        
-        // handle effects
-        HandleDreamState();
-        if (playerHealthSO.IsDead())
-            HandleDeath();
     }
 
     private float[] OnHitAnimVars = new float[3];
@@ -307,7 +307,6 @@ public partial class Player
         
         foreach (Collider enemy in hitEnemies)
         {
-            // enemy.GetComponent<BasicEnemy>()?.OnHit();
             enemy.GetComponent<Enemy>()?.OnHit(dmg);
         }
     }
