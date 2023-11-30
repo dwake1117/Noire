@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -97,7 +98,7 @@ public class RangedEnemy : Enemy
     private bool AttackStarted = false;
     private float lastAttackTime = -1;
     private float lastSpottedTime = 0f;
-    private float LoseInterestTimer = 8f;
+    private float LoseInterestTimer = 35f;
     private bool moveToNextPatrolPoint = true;
 
     // Nested class for Range
@@ -117,11 +118,13 @@ public class RangedEnemy : Enemy
     public override void Start()
     {
         base.Start();
+        
         currentState = EnemyState.Idle;
         Invoke("SlowUpdate", slowUpdateTime);
         CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
         LaserParticles.Stop();
         LaserLineRenderer.enabled = false;
+        TargetPlayer = GameObject.Find("PlayerTargeter").transform;
     }
 
     private void SlowUpdate()
@@ -187,8 +190,12 @@ public class RangedEnemy : Enemy
     {
         // check if there is LOS to the player
         RaycastHit hit;
+        
+
+        //var l = transform.position;
         if (Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, out hit, Mathf.Infinity))
         {
+            Debug.Log(hit.collider.gameObject);
             if (hit.collider.gameObject.layer == 7)
             {
                 return true;
@@ -238,7 +245,11 @@ public class RangedEnemy : Enemy
         }
     }
 
-
+    public override void Update()
+    {
+        base.Update();
+        Debug.DrawRay(transform.position, (TargetPlayer.position - transform.position), Color.red);
+    }
     void FaceTarget()
     {
         Vector3 direction = (TargetPlayer.position - transform.position).normalized;
@@ -250,12 +261,15 @@ public class RangedEnemy : Enemy
             FaceTarget();
             AttackStarted = true;
             RaycastHit hit;
-            Physics.Linecast(transform.position, TargetPlayer.position, out hit);
+            Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, out hit,
+                Mathf.Infinity);
+            Debug.DrawRay(transform.position, (TargetPlayer.position - transform.position).normalized, Color.red);
 
             while (hit.collider.gameObject.layer != 7)
             {
                 FaceTarget();
-                Physics.Linecast(transform.position, TargetPlayer.position, out hit);
+                Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, out hit,
+                    Mathf.Infinity);
                 Peek();
                 yield return null;
             }
