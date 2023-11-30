@@ -5290,8 +5290,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 20
-      minScalar: 10
+      scalar: 15
+      minScalar: 9
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5408,7 +5408,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.04
+      scalar: 0.03
       minScalar: 0.014
       maxCurve:
         serializedVersion: 2
@@ -5991,7 +5991,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 300
+      scalar: 250
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -10351,7 +10351,7 @@ MonoBehaviour:
   LaserParticles: {fileID: 4740292723225855576}
   impactParticleSystem: {fileID: 4740292723225855576}
   WarningTime: 0.5
-  noHitLaserDistance: 100
+  noHitLaserDistance: 10
   rotationSpeed: 2
   initialLaserDirection: {x: 0, y: 0, z: 0}
   currentLaserDirection: {x: 0, y: 0, z: 0}
@@ -10764,7 +10764,7 @@ MonoBehaviour:
   LaserParticles: {fileID: 962544304147593683}
   impactParticleSystem: {fileID: 962544304147593683}
   WarningTime: 0.5
-  noHitLaserDistance: 100
+  noHitLaserDistance: 10
   rotationSpeed: 2
   initialLaserDirection: {x: 0, y: 0, z: 0}
   currentLaserDirection: {x: 0, y: 0, z: 0}

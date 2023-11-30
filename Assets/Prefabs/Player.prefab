@@ -76,7 +76,7 @@ Animator:
   m_GameObject: {fileID: 5545684416420339613}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 813312e2f02f3fb47a9a1c0ee67ecae8, type: 3}
-  m_Controller: {fileID: 9100000, guid: eae4c66b1ffb2a143a0272b9017dd795, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4381d07d58b77204384a225ebb698d4b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   dashSmokePuffOffset: {x: 0, y: 0, z: 0}
   runSmokePuff: {fileID: 0}
   runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
-  deathAnimationTime: 1
+  deathAnimationTime: 1.5
 --- !u!136 &6001120115839444038
 CapsuleCollider:
   m_ObjectHideFlags: 0

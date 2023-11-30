@@ -8,6 +8,7 @@ public class SoluraBaseController : ParentSceneController
     protected override void LateInit()
     {
         PostProcessingManager.Instance.SetSaturation(-15f);
+        PostProcessingManager.Instance.SetContrast(0);
         PostProcessingManager.Instance.SetLensDistortionScale(1);
         PostProcessingManager.Instance.SetLensDistortionIntensity(0);
         PostProcessingManager.Instance.SetChromaticAberrationIntensity(0);

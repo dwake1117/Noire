@@ -258,20 +258,18 @@ public class RangedEnemy : Enemy
         Agent.isStopped = true;
         anim.SetTrigger("Attack");
         
-        // Physics.Raycast(transform.position, TargetPlayer.position - transform.position, out RaycastHit hit,
-        //     noHitLaserDistance);
-        
         Debug.DrawRay(transform.position, TargetPlayer.position - transform.position, Color.red);
         
-        // while (!hit.collider.gameObject.CompareTag("Player"))
-        // {
-        //     FaceTarget();
-        //     Physics.Raycast(transform.position, TargetPlayer.position - transform.position, out hit,
-        //         noHitLaserDistance);
-        //     Peek();
-        //     
-        //     yield return null;
-        // }
+        
+        while (Physics.Raycast(transform.position, TargetPlayer.position - transform.position, out RaycastHit hit,
+                   noHitLaserDistance) 
+               &&!hit.collider.gameObject.CompareTag("Player"))
+        {
+            FaceTarget();
+            Agent.SetDestination(TargetPlayer.position);
+            
+            yield return null;
+        }
         
         float timer = 0;
         while (timer < 0.75f)
@@ -344,7 +342,7 @@ public class RangedEnemy : Enemy
         // Debug.Log(PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Dash"));
         if (Player.Instance.invulnerableTimer < 0.5f)
         {
-            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, Mathf.Infinity) )
+            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, noHitLaserDistance) )
             {
                 impactParticleSystem.transform.position = hit.point;
                 impactParticleSystem.transform.forward = -currentLaserDirection;
@@ -365,7 +363,7 @@ public class RangedEnemy : Enemy
         }
         else
         {
-            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, Mathf.Infinity, ~PlayerLayers) )
+            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, noHitLaserDistance, ~PlayerLayers) )
             {
                 impactParticleSystem.transform.position = hit.point;
                 impactParticleSystem.transform.forward = -currentLaserDirection.normalized;

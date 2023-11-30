@@ -45,7 +45,7 @@ public class PostProcessingManager : MonoBehaviour
     public void SetLensDistortionScale(float val) => lensDistortion.scale.value = val;
     public void SetChromaticAberrationIntensity(float val) => chromaticAberration.intensity.value = val;
     public void SetSaturation(float val) => colorAdjustments.saturation.value = val;
-
+    public void SetContrast(float val) => colorAdjustments.contrast.value = val;
     public void SetBloomIntensity(float val) => bloom.intensity.value = val;
 
     public float GetLensDistortionIntensity() => lensDistortion.intensity.value;

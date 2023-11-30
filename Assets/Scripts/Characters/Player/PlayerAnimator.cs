@@ -79,7 +79,7 @@ public class PlayerAnimator : MonoBehaviour
         loadingOperation.allowSceneActivation = false;
         
         PostProcessingManager.Instance.SetSaturation(-95f);
-        CameraManager.Instance.CameraShake(.4f, 7f);
+        CameraManager.Instance.CameraShake(deathAnimationTime / 2, 7f);
         
         float time = 0;
         while (time < deathAnimationTime)
@@ -91,7 +91,9 @@ public class PlayerAnimator : MonoBehaviour
                 Mathf.Lerp(0, -1, StaticInfoObjects.Instance.LD_DEATH_CURVE.Evaluate(eval)));
             PostProcessingManager.Instance.SetChromaticAberrationIntensity(
                 Mathf.Lerp(0, 1, StaticInfoObjects.Instance.CA_DEATH_CURVE.Evaluate(eval)));
-        
+            PostProcessingManager.Instance.SetContrast(
+                Mathf.Lerp(0, 100, StaticInfoObjects.Instance.LD_DEATH_CURVE.Evaluate(eval)));
+            
             time += Time.deltaTime;
             yield return null;
         }
