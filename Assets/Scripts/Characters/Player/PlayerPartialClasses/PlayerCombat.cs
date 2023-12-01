@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class Player
 {
     [Header("Player Combat")]
-    [SerializeField] private float invulnerableTimerMax = .5f;
-    [SerializeField] private ParticleSystemBase onHitParticleEffects;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] public Transform attackPoint;
     [SerializeField] private float attackRadius = 3;
+    [SerializeField] private Hitbox weaponHitbox;
     public Transform rangedTargeter;
-    public float invulnerableTimer;
     private readonly float playerHitBoxHeight = 1f;
     
-    // [Header("Abilities")]
+    [Header("On Hit")]
+    [SerializeField] private float invulnerableTimerMax = .5f;
+    [SerializeField] private ParticleSystemBase onHitParticleEffects;
+    [SerializeField] private float onHitParticleEffectsOffset;
+    public float invulnerableTimer;
+    
+    [Header("Abilities")]
     private AbilitySO[] playerAbilitiesList;  // up to three abilities is currently supported by input
     private Dictionary<int, AbilitySO> playerAbilities; // the available abilities we currently have given a dreamstate
     private AbilitySO currentAbility;
@@ -213,12 +218,16 @@ public partial class Player
         if (invulnerableTimer > 0)
             return;
 
+        // interrupts any interruptable abilities
+        if (currentAbility && currentAbility.interruptable)
+            currentAbility.Activate(-1);
+        
         // take damage
         invulnerableTimer = invulnerableTimerMax;
         playerHealthSO.InflictDamage(dmg);
         GameEventsManager.Instance.PlayerEvents.UpdateHealthBar();
         
-        // handle effects
+        // handle state changes
         HandleDreamState();
         if (playerHealthSO.IsDead())
         {
@@ -230,6 +239,7 @@ public partial class Player
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
+        
         TimeManager.Instance.DoSlowMotion(.4f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1.5f);
     }
@@ -244,8 +254,13 @@ public partial class Player
     
     private IEnumerator PlayOnHitEffects(Vector3 source)
     {
+        // knock back
+        MoveFor(20, .02f, transform.position - source, false);
+        
+        // particle effects
         onHitParticleEffects.transform.position = rangedTargeter.position;
         onHitParticleEffects.transform.LookAt(source);
+        onHitParticleEffects.transform.position += onHitParticleEffects.transform.forward * -onHitParticleEffectsOffset;
         onHitParticleEffects.Restart();
         
         // camera shake on hit
@@ -290,19 +305,16 @@ public partial class Player
     }
     
     // called after attacks
-    public void HandleAttackOnHitEffects(int dmg)
+    public void HandleAttackOnHitEffects(int dmg, float duration)
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRadius, enemyLayer);
+        StartCoroutine(AttackEffectCoroutine(dmg, duration));
+    }
 
-        if (hitEnemies.Length > 0)
-        {
-            TimeManager.Instance.DoSlowMotionWithDelay(.25f);
-            PlayerAnimator.Instance.PlayEnemyOnHitAnimations(attackPoint.position);
-        }
-
-        foreach (Collider enemy in hitEnemies)
-        {
-            enemy.GetComponent<Enemy>()?.OnHit(dmg);
-        }
+    private IEnumerator AttackEffectCoroutine(int dmg, float duration)
+    {
+        weaponHitbox.EnableHitbox();
+        weaponHitbox.SetCurrentDamage(dmg);
+        yield return new WaitForSeconds(duration);
+        weaponHitbox.DisableHitbox();
     }
 }

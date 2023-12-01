@@ -28,8 +28,8 @@ public partial class Player
             transform.forward = Vector3.Lerp(transform.forward, direction, turnSpeed * Time.deltaTime);
     }
     
-    // move towards `moveDir` with speed
-    public void Move(float speed)
+    /// move towards the last moved direction with specified speed, for a single frame
+    public void Move(float speed, bool turn=true)
     {
         Vector3 velocity = Vector3.zero;
         if(speed != 0)
@@ -38,11 +38,12 @@ public partial class Player
         velocity.y = -gravity;
         controller.Move(velocity);
 
-        Turn(moveDir);
+        if (turn)
+            Turn(moveDir);
     }
 
-    // overload of Move with moveDirection
-    public void Move(float speed, Vector3 moveDirection)
+    ///  Move with a specified speed and direction, for a single frame
+    public void Move(float speed, Vector3 moveDirection, bool turn=true)
     {
         Vector3 velocity = Vector3.zero;
         if(speed != 0)
@@ -50,47 +51,46 @@ public partial class Player
             
         velocity.y = -gravity;
         controller.Move(velocity);
-
-        Turn(moveDirection);
+        
+        if (turn)
+            Turn(moveDirection);
     }
     
     // Coroutine for move for a certain period of time with `speed`
-    private IEnumerator MoveForCoroutine(float speed, float time)
+    private IEnumerator MoveForCoroutine(float speed, float time, bool turn)
     {
         float t = 0;
         while (t < time)
         {
             t += Time.deltaTime;
-            Move(speed);
+            Move(speed, turn);
             yield return null;
         }
     }
 
     // overload of MoveFor, specifying a direction `dir`
-    private IEnumerator MoveForCoroutine(float speed, float time, Vector3 dir)
+    private IEnumerator MoveForCoroutine(float speed, float time, Vector3 dir, bool turn)
     {
         float t = 0;
         while (t < time)
         {
             t += Time.deltaTime;
-            Move(speed, dir);
+            Move(speed, dir, turn);
             yield return null;
         }
     }
     
-    // the actual public function to move the player for a certain time period
-    public void MoveFor(float speed, float time)
+    /// Move the player for a certain time period and speed towards the last moved direction
+    public void MoveFor(float speed, float time, bool turn=true)
     {
-        StartCoroutine(MoveForCoroutine(speed, time));
+        StartCoroutine(MoveForCoroutine(speed, time, turn));
     }
 
-    // overload for `MoveFor`, specifying a direction `dir`
-    public void MoveFor(float speed, float time, Vector3 dir)
+    /// Move the player for a certain time period and speed towards `dir`
+    public void MoveFor(float speed, float time, Vector3 dir, bool turn=true)
     {
-        StartCoroutine(MoveForCoroutine(speed, time, dir));
+        StartCoroutine(MoveForCoroutine(speed, time, dir, turn));
     }
-    
-    
 
     private void HandleFall()
     {

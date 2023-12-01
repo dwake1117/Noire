@@ -52,13 +52,13 @@ public class TimeManager : MonoBehaviour
         SlowTime();
     }
     
-    // slows time by `slowdownFactor` for default length after specified delay
+    /// slows time by `slowdownFactor` for default length after `delay` seconds
     public void DoSlowMotionWithDelay(float delay)
     {
         StartCoroutine(DelaySlowMotionCoroutine(delay, defaultSlowdownLength));
     }
     
-    // slows time by `slowdownFactor` for specified length after specified delay
+    /// slows time by `slowdownFactor` for specified length after specified delay
     public void DoSlowMotionWithDelay(float delay, float duration)
     {
         StartCoroutine(DelaySlowMotionCoroutine(delay, duration));

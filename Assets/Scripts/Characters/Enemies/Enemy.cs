@@ -69,13 +69,11 @@ public class Enemy : Character
     {
         if (onHit != null)
             StopCoroutine(onHit);
-        onHit = StartCoroutine(PlayOnHitEffectsWithDelay());
+        onHit = StartCoroutine(OnHitEffectsCoroutine());
     }
     
-    private IEnumerator PlayOnHitEffectsWithDelay()
+    private IEnumerator OnHitEffectsCoroutine()
     {
-        yield return new WaitForSeconds(.2f);
-        
         // handles particle effects
         if (onHitParticleEffects != null)
         {
