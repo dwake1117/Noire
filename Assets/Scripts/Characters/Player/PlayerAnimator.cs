@@ -27,6 +27,8 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
     [SerializeField] private float deathAnimationTime = 1f;
     
+    [Header("Enemy OnHit")]
+    [SerializeField] private ParticleSystemBase enemiesOnHitParticles;
         
     private Animator animator;
     private const string WALK = "PlayerWalk";
@@ -102,12 +104,19 @@ public class PlayerAnimator : MonoBehaviour
         loadingOperation.allowSceneActivation = true;
     }
 
+    public void PlayEnemyOnHitAnimations(Vector3 position)
+    {
+        enemiesOnHitParticles.transform.position = position;
+        enemiesOnHitParticles.transform.LookAt(-Player.Instance.transform.forward);
+        enemiesOnHitParticles.Restart();
+    }
+
     private void Swing1AnimationStartedTrigger()
     {
         var playerTransform = Player.Instance.transform;
         
         normalSlash.transform.position = playerTransform.position + normalSlashOffset;
-        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180));
         normalSlash.Restart();
     }
     
@@ -117,7 +126,7 @@ public class PlayerAnimator : MonoBehaviour
         var playerTransform = Player.Instance.transform;
         
         normalSlash.transform.position = playerTransform.position + normalSlashOffset;
-        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 0));
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
         normalSlash.Restart();
     }
     

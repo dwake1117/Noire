@@ -244,17 +244,9 @@ public partial class Player
     
     private IEnumerator PlayOnHitEffects(Vector3 source)
     {
-        // on hit particle effects
-        if (!onHitParticleEffects)
-        {
-            Debug.LogError("Did not find onHitParticleEffects. This may be intentional");
-            yield return null;
-        }
-        else
-        {
-            onHitParticleEffects.transform.LookAt(source);
-            onHitParticleEffects.Restart();
-        }
+        onHitParticleEffects.transform.position = rangedTargeter.position;
+        onHitParticleEffects.transform.LookAt(source);
+        onHitParticleEffects.Restart();
         
         // camera shake on hit
         CameraManager.Instance.CameraShake(0.3f, 5f);
@@ -301,10 +293,13 @@ public partial class Player
     public void HandleAttackOnHitEffects(int dmg)
     {
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRadius, enemyLayer);
-        
-        if(hitEnemies.Length > 0)
+
+        if (hitEnemies.Length > 0)
+        {
             TimeManager.Instance.DoSlowMotionWithDelay(.25f);
-        
+            PlayerAnimator.Instance.PlayEnemyOnHitAnimations(attackPoint.position);
+        }
+
         foreach (Collider enemy in hitEnemies)
         {
             enemy.GetComponent<Enemy>()?.OnHit(dmg);
