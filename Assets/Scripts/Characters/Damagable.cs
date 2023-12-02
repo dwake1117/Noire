@@ -2,10 +2,10 @@
 using System.Linq;
 using UnityEngine;
 /// <summary>
-/// Baseclass for Enemies and Players
+/// Baseclass for anything you can damage
 /// </summary>
 
-public class Character : MonoBehaviour
+public class Damagable : MonoBehaviour
 {
     [Header("Mesh Renderers and OnHit Material")]
     [SerializeField] protected Renderer[] onHitRenderers;
@@ -35,4 +35,6 @@ public class Character : MonoBehaviour
         for (int i = 0; i < onHitRenderers.Length; i++)
             onHitRenderers[i].materials = originalMaterials[i];
     }
+    
+    public virtual void OnHit(int dmg, Vector3 source) {}
 }

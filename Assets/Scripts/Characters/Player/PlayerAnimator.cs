@@ -87,7 +87,7 @@ public class PlayerAnimator : MonoBehaviour
         while (time < deathAnimationTime)
         {
             float eval = time / deathAnimationTime;
-        
+            
             // post effects
             PostProcessingManager.Instance.SetLensDistortionIntensity(
                 Mathf.Lerp(0, -1, StaticInfoObjects.Instance.LD_DEATH_CURVE.Evaluate(eval)));
@@ -97,18 +97,18 @@ public class PlayerAnimator : MonoBehaviour
                 Mathf.Lerp(0, 100, StaticInfoObjects.Instance.LD_DEATH_CURVE.Evaluate(eval)));
             
             time += Time.deltaTime;
+            
             yield return null;
         }
         
-        // load scene directly
         loadingOperation.allowSceneActivation = true;
     }
 
-    public void PlayEnemyOnHitAnimations(Vector3 position)
+    public void PlayDreamStateChangeAnimation()
     {
-        enemiesOnHitParticles.transform.position = position;
-        enemiesOnHitParticles.transform.LookAt(-Player.Instance.transform.forward);
-        enemiesOnHitParticles.Restart();
+        TimeManager.Instance.DoSlowMotion(.5f);
+        PostProcessingManager.Instance.CAImpulse();
+        PostProcessingManager.Instance.LDImpulse();
     }
 
     private void Swing1AnimationStartedTrigger()

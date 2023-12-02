@@ -11,6 +11,7 @@ public class Hitbox : MonoBehaviour
     private void Awake()
     {
         collider = GetComponent<Collider>();
+        DisableHitbox();
     }
 
     public void SetCurrentDamage(int dmg)
@@ -37,9 +38,9 @@ public class Hitbox : MonoBehaviour
             if(canTriggerTimeSlow)
             {
                 canTriggerTimeSlow = false;
-                TimeManager.Instance.DoSlowMotion(.1f);
+                TimeManager.Instance.DoSlowMotion(.06f);
             }
-            other.GetComponent<Enemy>()?.OnHit(currentDamage);
+            other.GetComponent<Damagable>()?.OnHit(currentDamage, Player.Instance.GetRangedTargeter().position);
         }
     }
 }

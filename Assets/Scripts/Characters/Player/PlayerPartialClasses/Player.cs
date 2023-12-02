@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public partial class Player : Character, IPlayer, IDataPersistence
+public partial class Player : Damagable, IPlayer, IDataPersistence
 {
     [Header("Fields")]
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
@@ -47,8 +47,6 @@ public partial class Player : Character, IPlayer, IDataPersistence
     public void SetMaxStamina(float x) => playerStaminaSO.SetMaxStamina(x);
     
     #endregion
-    
-    #region EVENT FUNCTIONS
     
     private void Awake()
     {
@@ -91,7 +89,7 @@ public partial class Player : Character, IPlayer, IDataPersistence
         GameInput.Instance.OnInteract += OnInteract;
         GameInput.Instance.OnAbilityCast += OnAbilityCast;
         
-        GameEventsManager.Instance.PlayerEvents.OnTakeDamage += OnTakingDamage;
+        GameEventsManager.Instance.PlayerEvents.OnTakeDamage += OnHit;
         GameEventsManager.Instance.PlayerEvents.OnHealthRegen += OnRegenDrowsiness;
         GameEventsManager.Instance.PlayerEvents.OnDreamShardsChange += OnDreamShardsChange;
         GameEventsManager.Instance.PlayerEvents.OnDreamThreadsChange += OnDreamThreadsChange;
@@ -102,7 +100,7 @@ public partial class Player : Character, IPlayer, IDataPersistence
         GameInput.Instance.OnInteract -= OnInteract;
         GameInput.Instance.OnAbilityCast -= OnAbilityCast;
         
-        GameEventsManager.Instance.PlayerEvents.OnTakeDamage -= OnTakingDamage;
+        GameEventsManager.Instance.PlayerEvents.OnTakeDamage -= OnHit;
         GameEventsManager.Instance.PlayerEvents.OnHealthRegen -= OnRegenDrowsiness;
         GameEventsManager.Instance.PlayerEvents.OnDreamShardsChange -= OnDreamShardsChange;
         GameEventsManager.Instance.PlayerEvents.OnDreamThreadsChange -= OnDreamThreadsChange;
@@ -125,10 +123,7 @@ public partial class Player : Character, IPlayer, IDataPersistence
             HandleMovement();
         }
     }
-
-    #endregion
-
-    #region TRIGGER FUNCTIONS
+    
     private void OnInteract()
     {
         Interact();
@@ -160,9 +155,6 @@ public partial class Player : Character, IPlayer, IDataPersistence
         dreamThreadsSO.Change(val);
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
     }
-    #endregion
-    
-    #region HELPER SUBROUTINES
     
     // called after ability for state transition
     public void ResetStateAfterAction()
@@ -199,10 +191,6 @@ public partial class Player : Character, IPlayer, IDataPersistence
         animator.ResetTrigger(triggerName);
     }
     
-    #endregion
-    
-    #region HANDLE FUNCTIONS
-
     // called on every frame for buffer regen
     private void HandleStamina()
     {
@@ -234,6 +222,7 @@ public partial class Player : Character, IPlayer, IDataPersistence
     private void HandleDreamStateTransition(DreamState prevDreamState)
     {
         UpdateAbilities();
+        PlayerAnimator.Instance.PlayDreamStateChangeAnimation();
         Shader.SetGlobalColor("_FullScreenVoronoiColor", StaticInfoObjects.Instance.VORONOI_INDICATOR[DreamState]);
     }
     
@@ -248,8 +237,6 @@ public partial class Player : Character, IPlayer, IDataPersistence
         state = PlayerState.Dead;
         PlayerAnimator.Instance.PlayDeathAnimation();
     }
-    
-    #endregion
     
     #region IDataPersistence
     

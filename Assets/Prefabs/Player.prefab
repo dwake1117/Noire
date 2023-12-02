@@ -109,14 +109,11 @@ MonoBehaviour:
   dreamShardsSO: {fileID: 11400000, guid: 52aa4afa771a20a458e523be9bd1feaf, type: 2}
   dreamThreadsSO: {fileID: 11400000, guid: 2faab5e8af90e314cad56f42cedb8ea7, type: 2}
   playerInventory: {fileID: 11400000, guid: 6dd0e28a8bf024b889be24ce0864d08b, type: 2}
+  weaponHitbox: {fileID: 0}
+  rangedTargeter: {fileID: 7570308798639021780}
   invulnerableTimerMax: 1
   onHitParticleEffects: {fileID: 8223727788762684481}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  attackPoint: {fileID: 7677830253633434885}
-  attackRadius: 3
-  rangedTargeter: {fileID: 7570308798639021780}
+  onHitParticleEffectsOffset: 0
   invulnerableTimer: 0.5
   weaponFabricRenderer: {fileID: 3997730660261660009}
   originalWeaponFabricMaterial: {fileID: 2100000, guid: b30b17ea8d64f194183b2faf64d49af5,
@@ -158,6 +155,7 @@ MonoBehaviour:
   runSmokePuff: {fileID: 0}
   runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
   deathAnimationTime: 1.5
+  enemiesOnHitParticles: {fileID: 0}
 --- !u!136 &6001120115839444038
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -487,7 +485,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 58142286458464921, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1509652017167173997}
+      addedObject: {fileID: 7093292099719761368}
+    - targetCorrespondingSourceObject: {fileID: 58142286458464921, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1589998639640368159}
   m_SourcePrefab: {fileID: 100100000, guid: 813312e2f02f3fb47a9a1c0ee67ecae8, type: 3}
 --- !u!137 &135125030046973210 stripped
 SkinnedMeshRenderer:
@@ -507,7 +509,30 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2229724336402283357}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1509652017167173997
+--- !u!136 &7093292099719761368
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2179463362730267076}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 1024
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.48
+  m_Height: 1.61
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.03, z: 0}
+--- !u!114 &1589998639640368159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,15 +541,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2179463362730267076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15775128e00fdb645bea0653a12f7926, type: 3}
+  m_Script: {fileID: 11500000, guid: 539ed408e83d4e8cb8a2388ceefefdb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPoint: {fileID: 8841837031825097727}
-  attackRadius: 3
   enemyLayer:
     serializedVersion: 2
     m_Bits: 1024
-  attackDamage: 10
 --- !u!23 &3997730660261660009 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -6229788203996889548, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,

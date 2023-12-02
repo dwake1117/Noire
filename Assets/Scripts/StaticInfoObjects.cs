@@ -62,6 +62,10 @@ public class StaticInfoObjects : MonoBehaviour
         
         { "TheShorelines", GameScene.TheShorelines },
     };
+    public SceneType GetSceneType(string scene)
+    {
+        return LOADING_INFO[GAMESCENES[scene]].Type;
+    }
 
     public readonly Dictionary<DreamState, Color> VORONOI_INDICATOR = new()
     {
@@ -69,9 +73,4 @@ public class StaticInfoObjects : MonoBehaviour
         { DreamState.Lucid, Color.cyan },
         { DreamState.Deep, Color.magenta },
     };
-
-    public SceneType GetSceneType(string scene)
-    {
-        return LOADING_INFO[GAMESCENES[scene]].Type;
-    }
 }

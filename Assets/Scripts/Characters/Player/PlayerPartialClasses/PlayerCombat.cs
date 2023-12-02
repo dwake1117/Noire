@@ -7,9 +7,6 @@ using UnityEngine;
 public partial class Player
 {
     [Header("Player Combat")]
-    [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] public Transform attackPoint;
-    [SerializeField] private float attackRadius = 3;
     [SerializeField] private Hitbox weaponHitbox;
     public Transform rangedTargeter;
     private readonly float playerHitBoxHeight = 1f;
@@ -19,14 +16,12 @@ public partial class Player
     [SerializeField] private ParticleSystemBase onHitParticleEffects;
     [SerializeField] private float onHitParticleEffectsOffset;
     public float invulnerableTimer;
+    private Coroutine onHitCoroutine;
     
     [Header("Abilities")]
     private AbilitySO[] playerAbilitiesList;  // up to three abilities is currently supported by input
     private Dictionary<int, AbilitySO> playerAbilities; // the available abilities we currently have given a dreamstate
     private AbilitySO currentAbility;
-    
-    [Header("On Hit Materials")]
-    private Coroutine onHitCoroutine;
     
     [Header("Glowing Sword Effects")]
     [SerializeField] private Renderer weaponFabricRenderer;
@@ -213,7 +208,7 @@ public partial class Player
     }
     
     // called when taking any damage
-    private void OnTakingDamage(int dmg, Vector3 source)
+    private void OnHit(int dmg, Vector3 source)
     {
         if (invulnerableTimer > 0)
             return;
@@ -240,7 +235,7 @@ public partial class Player
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
         
-        TimeManager.Instance.DoSlowMotion(.4f);
+        TimeManager.Instance.DoSlowMotion(.3f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1.5f);
     }
 

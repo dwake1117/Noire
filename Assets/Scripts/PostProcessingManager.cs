@@ -95,7 +95,7 @@ public class PostProcessingManager : MonoBehaviour
         SetLensDistortionIntensity(0);
     }
     
-    public void LDImpulse(float animationTime, float magnitude)
+    public void LDImpulse(float animationTime=0.2f, float magnitude=-0.4f)
     {
         StartCoroutine(LDImpulseCoroutine(animationTime, magnitude));
     }

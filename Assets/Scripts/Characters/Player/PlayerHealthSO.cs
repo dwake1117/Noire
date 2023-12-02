@@ -18,6 +18,8 @@ public class PlayerHealthSO : ScriptableObject
         if (damageValue < 0) 
             return;
         currentDrowsiness -= damageValue;
+        if (currentDrowsiness < 0)
+            currentDrowsiness = 0;
     }
     
     // returns true upon successful regen. Should not decrease potion otherwise

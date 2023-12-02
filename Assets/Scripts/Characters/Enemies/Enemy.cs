@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Serialization;
 
-public class Enemy : Character
+public class Enemy : Damagable
 {   
     [Header("Enemy Properties")]
     [SerializeField] private int maxHealth = 5;
@@ -43,9 +43,9 @@ public class Enemy : Character
 
     public virtual void Update() { }
     
-    public void OnHit(int dmg)
+    public override void OnHit(int dmg, Vector3 source)
     {
-        PlayOnHitEffects();
+        PlayOnHitEffects(source);
         RecieveDamage(dmg);
     }
 
@@ -65,19 +65,19 @@ public class Enemy : Character
         OnHitAnimVars[2] = onHitAnimationTime * 0.1f;
     }
     
-    private void PlayOnHitEffects()  
+    private void PlayOnHitEffects(Vector3 source)  
     {
         if (onHit != null)
             StopCoroutine(onHit);
-        onHit = StartCoroutine(OnHitEffectsCoroutine());
+        onHit = StartCoroutine(OnHitEffectsCoroutine(source));
     }
     
-    private IEnumerator OnHitEffectsCoroutine()
+    private IEnumerator OnHitEffectsCoroutine(Vector3 source)
     {
         // handles particle effects
         if (onHitParticleEffects != null)
         {
-            onHitParticleEffects.transform.LookAt(Player.Instance.GetRangedTargeter());
+            onHitParticleEffects.transform.LookAt(source);
             onHitCutEffects.Restart();
             onHitParticleEffects.Restart();
         }
