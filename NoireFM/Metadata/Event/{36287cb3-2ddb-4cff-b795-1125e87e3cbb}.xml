@@ -87,7 +87,7 @@
 	</object>
 	<object class="MultiSound" id="{6c45d4f3-0e91-49b1-890d-11f7277b8595}">
 		<relationship name="sounds">
-			<destination>{460a141f-d90b-495a-a12f-ba888369110e}</destination>
+			<destination>{667d8c76-85bd-42dc-b84f-605ce728470a}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{be7decba-9d1f-4c25-9daa-41adb4a23f55}">
@@ -99,20 +99,17 @@
 	<object class="MixerBusEffectChain" id="{49e4b2d9-4bab-48ef-9f2f-f6e97460792d}">
 		<relationship name="effects">
 			<destination>{da557c7a-8ae1-4a7d-9c66-c25aa708b7c0}</destination>
-			<destination>{c691f3bb-3891-4daa-94d7-c9209e44f174}</destination>
+			<destination>{d1e7899b-2470-4e29-9b99-2fcf80d9fe30}</destination>
 			<destination>{0be5fefa-e5a3-45a4-8124-4d454fd68f5a}</destination>
+			<destination>{13be3bd2-ff76-412c-9b98-e972dc5f7708}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{2c65df81-c14b-4563-b913-ab729eb7ff80}" />
-	<object class="SingleSound" id="{460a141f-d90b-495a-a12f-ba888369110e}">
-		<property name="startOffset">
-			<value>3</value>
-		</property>
-		<property name="volume">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{d949f68a-9bd5-4101-8eff-ef9ed1601148}</destination>
+	<object class="MultiSound" id="{667d8c76-85bd-42dc-b84f-605ce728470a}">
+		<relationship name="sounds">
+			<destination>{0a5f7ff5-d07e-4c95-bbd3-7e845f5b7fae}</destination>
+			<destination>{76d7d605-a453-4527-b265-13190f0b99bd}</destination>
+			<destination>{d1520b23-31e0-4056-a9a4-876986eb9187}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{bae8a174-a479-4f1d-b37a-6c6b9a482b16}" />
@@ -127,6 +124,50 @@
 			<value>-4</value>
 		</property>
 	</object>
-	<object class="PannerEffect" id="{c691f3bb-3891-4daa-94d7-c9209e44f174}" />
+	<object class="FlangerEffect" id="{d1e7899b-2470-4e29-9b99-2fcf80d9fe30}" />
 	<object class="MixerBusFader" id="{0be5fefa-e5a3-45a4-8124-4d454fd68f5a}" />
+	<object class="DelayEffect" id="{13be3bd2-ff76-412c-9b98-e972dc5f7708}">
+		<property name="delay">
+			<value>260</value>
+		</property>
+		<property name="feedback">
+			<value>31</value>
+		</property>
+		<property name="level">
+			<value>-14.5</value>
+		</property>
+	</object>
+	<object class="SingleSound" id="{0a5f7ff5-d07e-4c95-bbd3-7e845f5b7fae}">
+		<property name="startOffset">
+			<value>14.5</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{d949f68a-9bd5-4101-8eff-ef9ed1601148}</destination>
+		</relationship>
+	</object>
+	<object class="SingleSound" id="{76d7d605-a453-4527-b265-13190f0b99bd}">
+		<property name="startOffset">
+			<value>10.5</value>
+		</property>
+		<property name="pitch">
+			<value>-6.5</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{d949f68a-9bd5-4101-8eff-ef9ed1601148}</destination>
+		</relationship>
+	</object>
+	<object class="SingleSound" id="{d1520b23-31e0-4056-a9a4-876986eb9187}">
+		<property name="startOffset">
+			<value>3</value>
+		</property>
+		<property name="volume">
+			<value>3</value>
+		</property>
+		<property name="pitch">
+			<value>5</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{d949f68a-9bd5-4101-8eff-ef9ed1601148}</destination>
+		</relationship>
+	</object>
 </objects>
