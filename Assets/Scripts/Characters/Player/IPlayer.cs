@@ -12,6 +12,7 @@ public interface IPlayer
     bool IsDead();
     bool IsFalling();
     bool IsRunning();
+    bool IsKnockedBack();
     float GetPlayerHitBoxHeight();
     Transform GetRangedTargeter();
     

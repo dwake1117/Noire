@@ -39,6 +39,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     public bool IsDead() => state == PlayerState.Dead;
     public bool IsFalling() => state == PlayerState.Falling;
     public bool IsRunning() => state == PlayerState.Running;
+    public bool IsKnockedBack() => state == PlayerState.KnockedBack;
     public float GetPlayerHitBoxHeight() => playerHitBoxHeight;
     public Transform GetRangedTargeter() => rangedTargeter;
     public bool AddItem(CollectableItemSO item) => playerInventory.Add(item);
@@ -108,9 +109,9 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name == "LoadingScene")
-            return;
-        if (IsDead())
+        if (SceneManager.GetActiveScene().name == "LoadingScene"
+            || IsDead() 
+            || IsKnockedBack())
             return;
         
         HandleStamina();
@@ -120,6 +121,8 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         if (!IsCasting())
         {
             HandleFall();
+            if (IsDead())
+                return;
             HandleMovement();
         }
     }
@@ -129,7 +132,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         Interact();
     }
     
-    // called when restoring drowsiness (hp)
+    /// called when restoring drowsiness (hp)
     private void OnRegenDrowsiness(int value)
     {
         if(playerHealthSO.RegenHealth(value))
@@ -156,7 +159,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
     }
     
-    // called after ability for state transition
+    /// resets the player state to either Idle, Running, or Walking
     public void ResetStateAfterAction()
     {
         currentAbility = null;
@@ -174,10 +177,15 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         else
             state = PlayerState.Walking;
     }
-
-    public IEnumerator WaitForAndReset(float time)
+    
+    /// Waits for `time`, if realTime=True, then real waits for `time`. Then resets the state. 
+    public IEnumerator WaitForAndReset(float time, bool realTime=false)
     {
-        yield return new WaitForSeconds(time);
+        if (realTime)
+            yield return new WaitForSecondsRealtime(time);
+        else
+            yield return new WaitForSeconds(time);
+        
         ResetStateAfterAction();
     }
 
@@ -227,7 +235,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     }
     
     // called when drowsiness == 0
-    private void HandleDeath()
+    private void Die()
     {
         dreamShardsSO.OnDeath();
         dreamThreadsSO.OnDeath();

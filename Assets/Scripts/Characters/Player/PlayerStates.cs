@@ -5,7 +5,8 @@
     Running,
     Dead,
     Casting,
-    Falling
+    Falling,
+    KnockedBack,
 }
 
 public enum DreamState

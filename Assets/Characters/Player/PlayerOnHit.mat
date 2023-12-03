@@ -15,6 +15,7 @@ Material:
   - DR_OUTLINE_ON
   - DR_SPECULAR_ON
   - _DETAILMAPBLENDINGMODE_MULTIPLY
+  - _EMISSION
   - _TEXTUREBLENDINGMODE_MULTIPLY
   m_InvalidKeywords:
   - _CELPRIMARYMODE_NONE
@@ -182,8 +183,8 @@ Material:
     - _FlatRimEdgeSmoothness: 0.5
     - _FlatRimLightAlign: 0
     - _FlatRimSize: 0.5
-    - _FlatSpecularEdgeSmoothness: 0.776
-    - _FlatSpecularSize: 0.674
+    - _FlatSpecularEdgeSmoothness: 0.502
+    - _FlatSpecularSize: 0.703
     - _Flatness: 1
     - _FlatnessExtra: 1
     - _GlossMapScale: 1
@@ -196,7 +197,7 @@ Material:
     - _GradientSize: 10
     - _HeightTransition: 0
     - _LightContribution: 0
-    - _LightFalloffSize: 0
+    - _LightFalloffSize: 0.012
     - _LightmapDirectionPitch: 0
     - _LightmapDirectionYaw: 0
     - _Metallic: 0.5
@@ -207,7 +208,7 @@ Material:
     - _Mode: 0
     - _NumLayersCount: 1
     - _OcclusionStrength: 1
-    - _OutlineDepthOffset: 0.09
+    - _OutlineDepthOffset: 0.041
     - _OutlineEnabled: 1
     - _OutlineScale: 1
     - _OutlineWidth: 1
@@ -237,17 +238,17 @@ Material:
     - _UVSec: 0
     - _UnityShadowMode: 0
     - _UnityShadowOcclusion: 0
-    - _UnityShadowPower: 0.2
+    - _UnityShadowPower: 0.11
     - _UnityShadowSharpness: 1
     - _VertexColorsEnabled: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0, b: 0.21657658, a: 1}
+    - _BaseColor: {r: 0.7169812, g: 0, b: 0.25840938, a: 1}
     - _Color: {r: 1, g: 0.3369211, b: 0, a: 1}
     - _ColorDim: {r: 0.30319548, g: 0.38108486, b: 0.45338434, a: 1}
     - _ColorDimCurve: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
-    - _ColorDimExtra: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
+    - _ColorDimExtra: {r: 1, g: 0, b: 0.21568629, a: 1}
     - _ColorDimSteps: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
     - _ColorGradient: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
     - _DetailMapColor: {r: 1, g: 1, b: 1, a: 1}

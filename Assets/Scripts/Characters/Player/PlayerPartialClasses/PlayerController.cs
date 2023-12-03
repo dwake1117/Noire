@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+/// <summary>
+/// Handles all movements of the player
+/// </summary>
+/// 
 public partial class Player
 {
     [Header("Player Controller")]
@@ -15,7 +18,8 @@ public partial class Player
     private CharacterController controller;
     private Vector3 moveDir;
     private readonly Vector3 raycastOffset = new(0, 1f, 0);
-    private readonly float fallingThreshold = 1.3f;
+    private const float FALLING_THRESHOLD = 2f;
+    private const float MAX_FALL_RAYCAST = 200f;
     
     private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(0, 90, 0));
 
@@ -92,22 +96,36 @@ public partial class Player
         StartCoroutine(MoveForCoroutine(speed, time, dir, turn));
     }
 
+    private IEnumerator DieDelayedCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        Die();
+    }
+    
     private void HandleFall()
     {
+        // if nothing down beneath -> die!
+        // TODO: this may not be the best way to implement death on falling for too long -- should keep counter for falling time instead
+        if (!Physics.Raycast(transform.position + raycastOffset, Vector3.down, out RaycastHit hit, MAX_FALL_RAYCAST,
+                raycastHit))
+        {
+            state = PlayerState.Dead;
+            StartCoroutine(DieDelayedCoroutine());
+            return;
+        }
+
         Move(0);
         
-        if (Physics.Raycast(transform.position + raycastOffset, Vector3.down, out RaycastHit hit, Mathf.Infinity,
-                raycastHit)
-            && hit.distance > fallingThreshold)
-        {
-            if (!IsFalling())
-            {
-                state = PlayerState.Falling;
-            }
+        if (hit.distance > FALLING_THRESHOLD)
+        { 
+            state = PlayerState.Falling;
         }
-        else if(IsFalling())
+        else
         {
-            ResetStateAfterAction();
+            if (IsFalling())
+            {
+                ResetStateAfterAction();
+            }
         }
     }
     

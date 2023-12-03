@@ -15,6 +15,7 @@ public partial class Player
     [SerializeField] private float invulnerableTimerMax = .5f;
     [SerializeField] private ParticleSystemBase onHitParticleEffects;
     [SerializeField] private float onHitParticleEffectsOffset;
+    [SerializeField] private float knockedBackAnimTime = .4f;
     public float invulnerableTimer;
     private Coroutine onHitCoroutine;
     
@@ -207,7 +208,7 @@ public partial class Player
         chargeSwordCoroutine = null;
     }
     
-    // called when taking any damage
+    /// called when player takes direct damage from a certain `source`
     private void OnHit(int dmg, Vector3 source)
     {
         if (invulnerableTimer > 0)
@@ -226,7 +227,10 @@ public partial class Player
         HandleDreamState();
         if (playerHealthSO.IsDead())
         {
-            HandleDeath();
+            // knock backs
+            MoveFor(20, .1f, transform.position - source, false);
+            transform.LookAt(source);
+            Die();
             return;
         }
 
@@ -234,9 +238,6 @@ public partial class Player
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
-        
-        TimeManager.Instance.DoSlowMotion(.3f);
-        PostProcessingManager.Instance.CAImpulse(.4f, 1.5f);
     }
 
     private float[] OnHitAnimVars = new float[3];
@@ -247,10 +248,17 @@ public partial class Player
         OnHitAnimVars[2] = invulnerableTimerMax * 0.1f;
     }
     
+    /// plays any animations or vfx upon player taking direct damage
     private IEnumerator PlayOnHitEffects(Vector3 source)
     {
-        // knock back
+        TimeManager.Instance.DoSlowMotion(.3f);
+        PostProcessingManager.Instance.CAImpulse(.4f, 1f);
+        
+        // knock back, and resets it back to idle after certain period of time
         MoveFor(20, .02f, transform.position - source, false);
+        transform.LookAt(source);
+        state = PlayerState.KnockedBack;
+        StartCoroutine(WaitForAndReset(knockedBackAnimTime, true));
         
         // particle effects
         onHitParticleEffects.transform.position = rangedTargeter.position;
@@ -305,8 +313,10 @@ public partial class Player
         StartCoroutine(AttackEffectCoroutine(dmg, duration));
     }
 
-    private IEnumerator AttackEffectCoroutine(int dmg, float duration)
+    private IEnumerator AttackEffectCoroutine(int dmg, float duration, float delay=0.1f)
     {
+        yield return new WaitForSeconds(delay);
+        
         weaponHitbox.EnableHitbox();
         weaponHitbox.SetCurrentDamage(dmg);
         yield return new WaitForSeconds(duration);

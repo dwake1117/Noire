@@ -35,10 +35,13 @@ public class PlayerAnimator : MonoBehaviour
     private const string IDLE = "PlayerIdle";
     private const string FALL = "PlayerFall";
     private const string RUN = "PlayerRun";
+    private const string KNOCKBACK = "PlayerKnockback";
+    private const string DIE = "Death";
     private int WALK_ID;
     private int IDLE_ID;
     private int FALL_ID;
     private int RUN_ID;
+    private int KNOCKBACK_ID;
     
     
     private void Awake()
@@ -50,6 +53,7 @@ public class PlayerAnimator : MonoBehaviour
         IDLE_ID =  Animator.StringToHash(IDLE);
         FALL_ID =  Animator.StringToHash(FALL);
         RUN_ID = Animator.StringToHash(RUN);
+        KNOCKBACK_ID = Animator.StringToHash(KNOCKBACK);
     }
 
     private void Update()
@@ -58,6 +62,7 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetBool(IDLE_ID, Player.Instance.IsIdle());
         animator.SetBool(FALL_ID, Player.Instance.IsFalling());
         animator.SetBool(RUN_ID, Player.Instance.IsRunning());
+        animator.SetBool(KNOCKBACK_ID, Player.Instance.IsKnockedBack());
     }
 
     // public bool AnimatorIsPlaying(int layer)
@@ -72,6 +77,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void PlayDeathAnimation()
     {
+        animator.SetTrigger(DIE);
         StartCoroutine(DeathAnimationCoroutine());
     }
 

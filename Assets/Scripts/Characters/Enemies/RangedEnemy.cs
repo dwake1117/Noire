@@ -291,7 +291,7 @@ public class RangedEnemy : Enemy
         
         // Attack Audio Play
         FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballAttack", transform.position);
-        CameraManager.Instance.CameraShake(WarningTime, 5f);
+        CameraManager.Instance.CameraShake(WarningTime, 2f);
         
         // Enable the main attack laser and perform the attack
         LaserLineRenderer.enabled = true;
