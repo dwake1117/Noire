@@ -45,13 +45,19 @@ public class Enemy : Damagable
     
     public override void OnHit(int dmg, Vector3 source)
     {
+        
         PlayOnHitEffects(source);
+        PlayOnHitSound();
         RecieveDamage(dmg);
+    }
+    protected virtual void PlayOnHitSound(){
+        // keep empty. This solely exists to be extended
     }
 
     private void RecieveDamage(int dmg)
     {
         // Debug.Log(health);
+        
         health -= dmg;
         if(health <= 0)
             Die();
@@ -108,7 +114,6 @@ public class Enemy : Damagable
     
     private void Die()
     {
-        //PlayDyingSound
         HandleDeath();
         gameObject.SetActive(false);
     }

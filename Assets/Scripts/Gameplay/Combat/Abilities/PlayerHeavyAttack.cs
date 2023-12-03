@@ -14,7 +14,7 @@ public class PlayerHeavyAttack : AbilitySO
     protected override void Cast()
     {
         initialTimer = Time.time;
-        
+        Player.Instance.PlayCharge();
         if(overchargeCoroutine != null) 
             Player.Instance.StopCoroutine(overchargeCoroutine);
         
@@ -29,6 +29,7 @@ public class PlayerHeavyAttack : AbilitySO
 
     private void Release()
     {
+        Player.Instance.StopPlayCharge();
         Player.Instance.HandleAttackOnHitEffects(abilityDamage, attackDuration);
         Player.Instance.SetAnimatorTrigger(releaseAnimationTrigger);
         Player.Instance.MoveFor(20f, 0.2f, Player.Instance.transform.forward);
@@ -50,6 +51,7 @@ public class PlayerHeavyAttack : AbilitySO
             state = AbilityState.Ready;
             cooldownCounter = cooldown;
             Player.Instance.ResetStateAfterAction();
+            Player.Instance.StopPlayCharge();
         }
         charging = false;
     }

@@ -153,6 +153,13 @@ public class RangedEnemy : Enemy
         FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballDie", transform.position);
     }
 
+    protected override void PlayOnHitSound()
+    {
+        base.PlayOnHitSound();
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballOnhit", transform.position);
+        
+    }
+
     private void IdleBehavior()
     {
         TransitionToAttack();
