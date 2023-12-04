@@ -28,26 +28,16 @@ public class ParticleSystemBase : MonoBehaviour
             isPlaying = false;
         }
     }
+    
+    public void Clear()
+    {
+        particles.Clear();
+        isPlaying = false;
+    }
 
     public void Restart()
     {
-        Stop();
+        Clear();
         Play();
     }
-    
-    // private void Update()
-    // {
-    //     bool isNight = LightingManager.Instance.IsNight();
-    //
-    //     if (!isPlaying && isNight)
-    //     {
-    //         fireflies.Play();
-    //         isPlaying = true;
-    //     }
-    //     else if (isPlaying && !isNight)
-    //     {
-    //         fireflies.Stop();
-    //         isPlaying = false;
-    //     }
-    // }
 }

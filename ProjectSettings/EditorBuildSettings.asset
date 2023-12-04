@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Solura/SoluraBase.unity
     guid: 72dd49c17aa00e04e90b5b0a74c0c614
   - enabled: 1
-    path: Assets/Scenes/Solura/SoluraEntry.unity
+    path: Assets/Scenes/Solura/SoluraEntry/SoluraEntry.unity
     guid: 888fe5b460cb2794989d56a9c8400e13
   - enabled: 1
     path: Assets/Scenes/Solura/SoluraCliffHouses.unity

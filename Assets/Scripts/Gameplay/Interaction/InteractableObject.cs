@@ -14,6 +14,8 @@ public class InteractableObject : MonoBehaviour, IInteractable, IDataPersistence
     [SerializeField] protected ParticleSystemBase onInteractIndicator;
     protected int interactionsOccured = 0;
     protected bool disabled;
+    
+    
 
     private void Awake()
     {

@@ -1,56 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1275972942415552640
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2750535345239285328}
-  - component: {fileID: 1862566477555724389}
-  m_Layer: 7
-  m_Name: BGMAudio
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2750535345239285328
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275972942415552640}
-  m_LocalRotation: {x: -0, y: 0.87727195, z: -0, w: -0.47999373}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.85714275, y: 1.0714285, z: 0.85714275}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3697563887209734729}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1862566477555724389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275972942415552640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b7ac71480e747d081439d4ed6e77fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgmAudioEvent:
-    Guid:
-      Data1: 1107171122
-      Data2: 1083193566
-      Data3: 1578759865
-      Data4: 1765462010
-    Path: event:/BedRockPlain/OstFirst
 --- !u!1 &5545684416420339613
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +33,6 @@ Transform:
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 2750535345239285328}
   - {fileID: 6613620082101110356}
   - {fileID: 1836108573909736630}
   - {fileID: 7677830253633434885}
@@ -127,7 +75,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5545684416420339613}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: aaeef12fe738e4240b7f6d0f0db12bf8, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 813312e2f02f3fb47a9a1c0ee67ecae8, type: 3}
   m_Controller: {fileID: 9100000, guid: eae4c66b1ffb2a143a0272b9017dd795, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -151,25 +99,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0a60301def5df489454f8d0cde1fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitRenderers:
+  - {fileID: 4272874960980188547}
+  - {fileID: 135125030046973210}
+  onHitMaterial: {fileID: 2100000, guid: 9e3a3f3413bcea6459473c08038195b8, type: 2}
   virtualCamera: {fileID: 0}
   playerHealthSO: {fileID: 11400000, guid: 33dac87c2e381db4798eb0f06d68916c, type: 2}
   playerStaminaSO: {fileID: 11400000, guid: 9e82c2f7e0131314091ab00be4e479bc, type: 2}
   dreamShardsSO: {fileID: 11400000, guid: 52aa4afa771a20a458e523be9bd1feaf, type: 2}
   dreamThreadsSO: {fileID: 11400000, guid: 2faab5e8af90e314cad56f42cedb8ea7, type: 2}
   playerInventory: {fileID: 11400000, guid: 6dd0e28a8bf024b889be24ce0864d08b, type: 2}
-  audioManager: {fileID: 0}
+  weaponHitbox: {fileID: 0}
+  rangedTargeter: {fileID: 7570308798639021780}
   invulnerableTimerMax: 1
   onHitParticleEffects: {fileID: 8223727788762684481}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  attackPoint: {fileID: 7677830253633434885}
-  attackRadius: 3
+  onHitParticleEffectsOffset: 0
   invulnerableTimer: 0.5
-  cloakRenderer: {fileID: 135125030046973210}
-  cloakOnHitMaterial: {fileID: 2100000, guid: 9e3a3f3413bcea6459473c08038195b8, type: 2}
-  cloakOriginalMaterial: {fileID: 2100000, guid: e5982054283821a45b9d6d77cc21a3c5,
-    type: 2}
   weaponFabricRenderer: {fileID: 3997730660261660009}
   originalWeaponFabricMaterial: {fileID: 2100000, guid: b30b17ea8d64f194183b2faf64d49af5,
     type: 2}
@@ -209,6 +154,8 @@ MonoBehaviour:
   dashSmokePuffOffset: {x: 0, y: 0, z: 0}
   runSmokePuff: {fileID: 0}
   runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
+  deathAnimationTime: 1.5
+  enemiesOnHitParticles: {fileID: 0}
 --- !u!136 &6001120115839444038
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -377,6 +324,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -6984628890153286073, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 073c0357044501d4ca6456e993dc7891, type: 2}
+    - target: {fileID: -6984628890153286073, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 073c0357044501d4ca6456e993dc7891, type: 2}
     - target: {fileID: -6577439942937470973, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
         type: 3}
       propertyPath: m_Layer
@@ -528,7 +485,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 58142286458464921, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1509652017167173997}
+      addedObject: {fileID: 7093292099719761368}
+    - targetCorrespondingSourceObject: {fileID: 58142286458464921, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1589998639640368159}
   m_SourcePrefab: {fileID: 100100000, guid: 813312e2f02f3fb47a9a1c0ee67ecae8, type: 3}
 --- !u!137 &135125030046973210 stripped
 SkinnedMeshRenderer:
@@ -548,7 +509,30 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2229724336402283357}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1509652017167173997
+--- !u!136 &7093292099719761368
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2179463362730267076}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 1024
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.48
+  m_Height: 1.61
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.03, z: 0}
+--- !u!114 &1589998639640368159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -557,18 +541,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2179463362730267076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15775128e00fdb645bea0653a12f7926, type: 3}
+  m_Script: {fileID: 11500000, guid: 539ed408e83d4e8cb8a2388ceefefdb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPoint: {fileID: 8841837031825097727}
-  attackRadius: 3
   enemyLayer:
     serializedVersion: 2
     m_Bits: 1024
-  attackDamage: 10
 --- !u!23 &3997730660261660009 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -6229788203996889548, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2229724336402283357}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4272874960980188547 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2719575331948177118, guid: 813312e2f02f3fb47a9a1c0ee67ecae8,
     type: 3}
   m_PrefabInstance: {fileID: 2229724336402283357}
   m_PrefabAsset: {fileID: 0}

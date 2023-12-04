@@ -17,48 +17,6 @@ MonoBehaviour:
   injectionPoint: 550
   requirements: 0
   passIndex: 0
---- !u!114 &-1304647417798613784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderObjects
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    passTag: RenderObjects
-    Event: 450
-    filterSettings:
-      RenderQueueType: 0
-      LayerMask:
-        serializedVersion: 2
-        m_Bits: 6912
-      PassNames: []
-    overrideMaterial: {fileID: 0}
-    overrideMaterialPassIndex: 0
-    overrideShader: {fileID: 0}
-    overrideShaderPassIndex: 0
-    overrideMode: 1
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    stencilSettings:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    cameraSettings:
-      overrideCamera: 0
-      restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
 --- !u!114 &-407661055715409898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,10 +53,9 @@ MonoBehaviour:
   - {fileID: -407661055715409898}
   - {fileID: 8014490324881951954}
   - {fileID: 4078901449947301039}
-  - {fileID: -1304647417798613784}
   - {fileID: -4327920889024400675}
   - {fileID: 4861608501604974159}
-  m_RendererFeatureMap: ebc8015c341b0442168052016eb257fad2cc64e67c30396faf44effd412b9b38e8a4fbf815f6e4eddd32b5b9e122f0c34ffe2e9f2ce77743
+  m_RendererFeatureMap: ebc8015c341b0442168052016eb257fad2cc64e67c30396faf44effd412b9b38dd32b5b9e122f0c34ffe2e9f2ce77743
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -122,7 +79,7 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 1505
+    m_Bits: 2017
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 592
@@ -159,7 +116,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 128
+        m_Bits: 1152
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
@@ -236,7 +193,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 128
+        m_Bits: 1152
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: 264ee7a632f4da74c9378ae441ef4e6e, type: 2}
     overrideMaterialPassIndex: 0

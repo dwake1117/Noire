@@ -7,9 +7,9 @@ public class PlayerLightAttack : AbilitySO
     
     protected override void Cast()
     {
+        Player.Instance.HandleAttackOnHitEffects(abilityDamage, attackDuration);
         Player.Instance.SetAnimatorTrigger(abilityAnimationTrigger);
         Player.Instance.MoveFor(10f, 0.2f, Player.Instance.transform.forward);
-        Player.Instance.HandleAttackOnHitEffects(abilityDamage);
         Player.Instance.GlowSwordAnimation(0);
         Player.Instance.StartCoroutine(WaitEndOfAction(attackDuration));
     }

@@ -8,15 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GrassSoluraEntry
-  m_Shader: {fileID: 4800000, guid: bee44b4a58655ee4cbff107302a3e131, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 019c71932dbe91e4d91ce7e9f7509d1a,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _CELPRIMARYMODE_SINGLE
-  - _DETAILMAPBLENDINGMODE_MULTIPLY
-  - _EMISSION
-  - _TEXTUREBLENDINGMODE_MULTIPLY
-  - _UNITYSHADOWMODE_MULTIPLY
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 1
@@ -105,8 +101,9 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _Ambient_Occlusion: 0
     - _BaseMapPremultiply: 0
-    - _Blend: 0
+    - _Blend: 2.22
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _CameraDistanceImpact: 0
@@ -115,6 +112,8 @@ Material:
     - _CelPrimaryMode: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorNoiseScale: 13.3
+    - _ColorNoiseStrength: 0.57
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -159,13 +158,15 @@ Material:
     - _SelfShadingSizeExtra: 0.6
     - _ShadowEdgeSize: 0.08
     - _ShadowEdgeSizeExtra: 0.05
-    - _Smoothness: 0.5
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularEnabled: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _TerrainBlend: 0.19
+    - _TerrainSnapshotStrength: 0.36
     - _TextureBlendingMode: 0
     - _TextureImpact: 1
     - _UnityShadowMode: 1
@@ -173,14 +174,14 @@ Material:
     - _UnityShadowPower: 0.873
     - _UnityShadowSharpness: 1.92
     - _VertexColorsEnabled: 0
-    - _Wind_Density: 2
-    - _Wind_Strength: 1
+    - _Wind_Density: 0.2
+    - _Wind_Strength: 0.5
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.5632783, g: 0.6509434, b: 0.3664115, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorDim: {r: 0.14204344, g: 0.2264151, b: 0.14204344, a: 1}
+    - _BaseColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
+    - _Color: {r: 0.6698113, g: 0.623375, b: 0.18114388, a: 1}
+    - _ColorDim: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
     - _ColorDimCurve: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
     - _ColorDimExtra: {r: 0.5660378, g: 0.5427795, b: 0.33374867, a: 1}
     - _ColorDimSteps: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
@@ -190,10 +191,14 @@ Material:
     - _FlatRimColor: {r: 0.2264151, g: 0.06728373, b: 0.06728373, a: 1}
     - _FlatSpecularColor: {r: 1.3208221, g: 1.3208221, b: 1.3208221, a: 1}
     - _LightmapDirection: {r: 0, g: 1, b: 0, a: 0}
+    - _NoiseColor: {r: 1, g: 0.8966649, b: 0.23270425, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Speed: {r: 2, g: 2, b: 0, a: 0}
-    - _TerrainSize: {r: 200, g: 200, b: 0, a: 0}
+    - _Specular: {r: 0.09784028, g: 0.16037738, b: 0.112567835, a: 1}
+    - _Speed: {r: 1, g: 1, b: 0, a: 0}
+    - _TerrainPosition: {r: 0, g: 65, b: 0, a: 0}
+    - _TerrainSize: {r: 90, g: 90, b: 0, a: 0}
+    - _TopColor: {r: 1, g: 1, b: 0.8862745, a: 1}
     - _UnityShadowColor: {r: 0.85023, g: 0.85034, b: 0.8504499, a: 0.85056}
   m_BuildTextureStacks: []
 --- !u!114 &7094747146320815484

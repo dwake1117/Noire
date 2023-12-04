@@ -17,6 +17,7 @@ MonoBehaviour:
   abilityAnimationTrigger: Charging
   cooldown: 2
   staminaCost: 40
+  abilityDamage: 1
   applicableDreamStates: 000000000100000002000000
   playerMovableDuringCast: 0
   interruptable: 1

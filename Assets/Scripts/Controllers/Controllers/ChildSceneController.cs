@@ -14,7 +14,7 @@ public class ChildSceneController : MonoBehaviour
     [SerializeField] protected InteractableObject[] unaffectedInteractableObjects;
     
     [Header("Audio")]
-    [SerializeField] protected BGMAudio bgmAudio;
+    [SerializeField] protected FMODUnity.EventReference bgmAudioEvent;
     
     protected List<InteractableObject> interactablesList;
 

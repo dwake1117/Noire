@@ -29,9 +29,9 @@ public class PlayerHeavyAttack : AbilitySO
 
     private void Release()
     {
+        Player.Instance.HandleAttackOnHitEffects(abilityDamage, attackDuration);
         Player.Instance.SetAnimatorTrigger(releaseAnimationTrigger);
         Player.Instance.MoveFor(20f, 0.2f, Player.Instance.transform.forward);
-        Player.Instance.HandleAttackOnHitEffects(abilityDamage);
     }
 
     protected override void Interrupt()
