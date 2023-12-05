@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: PlayerLightAttack
   m_EditorClassIdentifier: 
   abilityID: 0
+  sprite: {fileID: 0}
   abilityAnimationTrigger: Attack1
   cooldown: 0.1
   staminaCost: 20
+  abilityDamage: 1
   applicableDreamStates: 000000000200000001000000
   playerMovableDuringCast: 0
   interruptable: 0
+  equippable: 0
+  abilityType: 0
   attackDuration: 0.3
+  attackHitboxEnd: 0.1

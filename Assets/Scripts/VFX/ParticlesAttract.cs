@@ -56,8 +56,8 @@ public class ParticlesAttract : MonoBehaviour
                 Destroy(gameObject);
             }
             
-            float step = speed * Time.deltaTime;
             speed += Time.deltaTime * speedMultiplier;
+            float step = speed * Time.deltaTime;
             
             for (int i = 0; i < numParticlesAlive; i++)
             {
