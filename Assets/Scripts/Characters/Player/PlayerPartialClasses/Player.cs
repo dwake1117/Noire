@@ -117,12 +117,10 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         HandleStamina();
         HandleAbilityCooldowns();
         HandleComboCooldowns();
+        HandleFall();
         
-        if (!IsCasting())
+        if (!IsCasting() && !IsFalling() && !IsDead())
         {
-            HandleFall();
-            if (IsDead())
-                return;
             HandleMovement();
         }
     }

@@ -251,7 +251,7 @@ public partial class Player
     /// plays any animations or vfx upon player taking direct damage
     private IEnumerator PlayOnHitEffects(Vector3 source)
     {
-        TimeManager.Instance.DoSlowMotion(.3f);
+        TimeManager.Instance.DoSlowMotion(duration:.3f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1f);
         
         // knock back, and resets it back to idle after certain period of time
