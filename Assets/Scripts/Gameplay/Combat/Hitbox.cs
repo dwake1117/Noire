@@ -38,7 +38,7 @@ public class Hitbox : MonoBehaviour
             if(canTriggerTimeSlow)
             {
                 canTriggerTimeSlow = false;
-                TimeManager.Instance.DoSlowMotion(.2f, 0.03f);
+                TimeManager.Instance.DoSlowMotionWithDelay(0.05f, 0.1f, 0.03f);
             }
             other.GetComponent<Damagable>()?.TakeHit(currentDamage, Player.Instance.GetRangedTargeter().position);
         }

@@ -14,7 +14,6 @@ public partial class Player
     [SerializeField] private float gravity = 1f;
     
     [SerializeField] private float turnSpeed = 30f;
-    [SerializeField] private LayerMask raycastHit;
     [SerializeField] private float fallTimerMax = 2f;
     private float fallTimer;
 
@@ -24,17 +23,13 @@ public partial class Player
     private float currentGravity = 5f;
     
     // constants
-    private readonly Vector3 raycastOffset = new(0, 1f, 0);
-    private const float FALLING_THRESHOLD = 2f;
-    private const float MAX_FALL_RAYCAST = 200f;
-    
     private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(0, 90, 0));
 
     private void Turn(Vector3 direction)
     {
         float dist = Vector3.Distance(transform.forward, direction);
-        if(dist > 1.3f)
-            transform.forward = Vector3.Lerp(transform.forward, direction, 2f * turnSpeed * Time.deltaTime);
+        if (dist > 1.3f)
+            transform.forward = direction;
         else
             transform.forward = Vector3.Lerp(transform.forward, direction, turnSpeed * Time.deltaTime);
     }

@@ -15,14 +15,17 @@ public class PlayerAnimator : MonoBehaviour
     
     [Header("Splash Effects")]
     [SerializeField] private ParticleSystemBase normalSlash;
-    [SerializeField] private Vector3 normalSlashOffset = new(0f, 2.3f, -1.9f);
+    [SerializeField] private float normalSlashOffset = 1f;
+    [SerializeField] private float normalSlashOffsetY = 1f;
     [SerializeField] private ParticleSystemBase chargedSlash;
-    [SerializeField] private Vector3 chargedSlashOffset = new(0f, 2.3f, -3f);
+    [SerializeField] private float chargedSlashOffset = 2f;
+    [SerializeField] private float chargedSlashOffsetY = 2f;
     [SerializeField] private ParticleSystemBase particleOutwardSplash;
     
     [Header("Dash Effects")]
     [SerializeField] private VisualEffect dashSmokePuff;
-    [SerializeField] private Vector3 dashSmokePuffOffset = new(0f, 0.89f, -2.07f);
+    [SerializeField] private float dashSmokePuffOffset = 2f;
+    [SerializeField] private float dashSmokePuffOffsetY = .2f;
     [SerializeField] private VisualEffect runSmokePuff;
     [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
     [SerializeField] private float deathAnimationTime = 1f;
@@ -123,55 +126,56 @@ public class PlayerAnimator : MonoBehaviour
         PostProcessingManager.Instance.LDImpulse();
     }
 
+    private void PlayNormalSlash(bool inverted=false)
+    {
+        var t = Player.Instance.transform;
+        
+        normalSlash.transform.position = t.position + t.forward * normalSlashOffset + new Vector3(0, normalSlashOffsetY, 0);
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 180, inverted ? 180 : 0));
+        normalSlash.Restart();
+    }
+    
     private void Swing1AnimationStartedTrigger()
     {
-        var playerTransform = Player.Instance.transform;
-        
-        normalSlash.transform.position = playerTransform.position + normalSlashOffset;
-        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180));
-        normalSlash.Restart();
+        PlayNormalSlash();
     }
     
     // the reverse swing
     private void Swing2AnimationStartedTrigger()
     {
-        var playerTransform = Player.Instance.transform;
-        
-        normalSlash.transform.position = playerTransform.position + normalSlashOffset;
-        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
-        normalSlash.Restart();
+        PlayNormalSlash(true);
     }
     
     private void ChargedSwingAnimationStartedTrigger()
     {
-        var playerTransform = Player.Instance.transform;
+        var t = Player.Instance.transform;
 
-        particleOutwardSplash.transform.position = playerTransform.position;
+        particleOutwardSplash.transform.position = t.position;
         particleOutwardSplash.Restart();
         CameraManager.Instance.CameraShake(.2f, 4f);
         PostProcessingManager.Instance.CAImpulse();
         
-        chargedSlash.transform.position = playerTransform.position + chargedSlashOffset;
-        chargedSlash.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 180, 180));
+        chargedSlash.transform.position = t.position + t.forward * chargedSlashOffset + new Vector3(0, chargedSlashOffsetY, 0);
+        chargedSlash.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 180, 180));
         chargedSlash.Restart();
     }
     
     private void DashAnimationStartedTrigger()
     {
-        var playerTransform = Player.Instance.transform;
+        var t = Player.Instance.transform;
         
-        dashSmokePuff.transform.position = playerTransform.position + dashSmokePuffOffset;
-        dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 143, 0));
+        dashSmokePuff.transform.position = t.position + t.forward * dashSmokePuffOffset + new Vector3(0, dashSmokePuffOffsetY, 0);
+        dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 143, 0));
         
         dashSmokePuff.Play();
     }
 
     private void RunOneStepTrigger()
     {
-        var playerTransform = Player.Instance.transform;
+        var t = Player.Instance.transform;
         
-        runSmokePuff.transform.position = playerTransform.position + runSmokePuffOffset;
-        runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, playerTransform.rotation.eulerAngles.y + 90, 0));
+        runSmokePuff.transform.position = t.position + runSmokePuffOffset;
+        runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 90, 0));
         runSmokePuff.Play();
         FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Player/PlayerFootsteps", transform.position);
     }

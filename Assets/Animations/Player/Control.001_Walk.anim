@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Walk
+  m_Name: Control.001_Walk
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -15940,7 +15940,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
+  - time: 0
     functionName: PlaySteps
     data: event:/Character/Player/PlayerFootsteps
     objectReferenceParameter: {fileID: 11500000, guid: bc0a60301def5df489454f8d0cde1fde,
@@ -15948,7 +15948,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1
+  - time: 0.45833334
     functionName: PlaySteps
     data: event:/Character/Player/PlayerFootsteps
     objectReferenceParameter: {fileID: 11500000, guid: bc0a60301def5df489454f8d0cde1fde,
