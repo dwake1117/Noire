@@ -2,24 +2,20 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Handles all movements of the player
-/// </summary>
-
 public partial class Player
 {
-    [Header("Player Controller")]
+    [Header("---------- Player Controller ---------- ")]
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 10f;
-    [SerializeField] private float gravity = 1f;
-    
     [SerializeField] private float turnSpeed = 30f;
+
     [SerializeField] private float fallTimerMax = 2f;
     private float fallTimer;
 
     private PlayerState state;
-    private CharacterController controller;
     private Vector3 moveDir;
+    
+    [SerializeField] private float gravity = 1f;
     private float currentGravity = 5f;
     
     // constants

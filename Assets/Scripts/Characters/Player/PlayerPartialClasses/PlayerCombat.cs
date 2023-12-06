@@ -6,7 +6,7 @@ using UnityEngine;
 
 public partial class Player
 {
-    [Header("Player Combat")]
+    [Header("---------- Player Combat ---------- ")]
     [SerializeField] private Hitbox weaponHitbox;
     public Transform rangedTargeter;
     private readonly float playerHitBoxHeight = 1f;
@@ -297,7 +297,7 @@ public partial class Player
         playerAbilities = new Dictionary<int, AbilitySO>();
         foreach (AbilitySO ability in playerAbilitiesList)
         {
-            if (Array.Exists(ability.applicableDreamStates, elem => elem == DreamState))
+            if (Array.Exists(ability.applicableDreamStates, elem => elem == dreamState))
             {
                 playerAbilities.Add(ability.abilityID, ability);
                 if(ability.equippable)

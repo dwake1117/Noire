@@ -3,17 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
-/// <summary>
-/// The Player Animator class. Attached to a Player instance.
-/// Controls animation and VFXs. 
-/// </summary>
-
-[RequireComponent(typeof(Player))]
-public class PlayerAnimator : MonoBehaviour
+public partial class Player
 {
-    public static PlayerAnimator Instance { get; private set; }
-    
-    [Header("Splash Effects")]
+    [Header("---------- Player Animator ---------- ")]
     [SerializeField] private ParticleSystemBase normalSlash;
     [SerializeField] private float normalSlashOffset = 1f;
     [SerializeField] private float normalSlashOffsetY = 1f;
@@ -30,10 +22,6 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Vector3 runSmokePuffOffset = new(0f, 0.89f, 0f);
     [SerializeField] private float deathAnimationTime = 1f;
     
-    [Header("Enemy OnHit")]
-    [SerializeField] private ParticleSystemBase enemiesOnHitParticles;
-        
-    private Animator animator;
     private const string WALK = "PlayerWalk";
     private const string IDLE = "PlayerIdle";
     private const string FALL = "PlayerFall";
@@ -47,17 +35,8 @@ public class PlayerAnimator : MonoBehaviour
     private int KNOCKBACK_ID;
     
     
-    private void Awake()
+    private void AnimatorAwake()
     {
-        if (Instance != null) 
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        
-        animator = GetComponent<Animator>();
         WALK_ID  = Animator.StringToHash(WALK);
         IDLE_ID =  Animator.StringToHash(IDLE);
         FALL_ID =  Animator.StringToHash(FALL);
@@ -65,7 +44,7 @@ public class PlayerAnimator : MonoBehaviour
         KNOCKBACK_ID = Animator.StringToHash(KNOCKBACK);
     }
 
-    private void Update()
+    private void AnimatorUpdate()
     {
         animator.SetBool(WALK_ID, Player.Instance.IsWalking());
         animator.SetBool(IDLE_ID, Player.Instance.IsIdle());
@@ -73,17 +52,7 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetBool(RUN_ID, Player.Instance.IsRunning());
         animator.SetBool(KNOCKBACK_ID, Player.Instance.IsKnockedBack());
     }
-
-    // public bool AnimatorIsPlaying(int layer)
-    // {
-    //     return animator.GetCurrentAnimatorStateInfo(layer).length > animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
-    // }
-    //
-    // public bool AnimatorIsPlaying(int layer, string stateName)
-    // {
-    //     return AnimatorIsPlaying(layer) && animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
-    // }
-
+    
     public void PlayDeathAnimation()
     {
         animator.SetTrigger(DIE);

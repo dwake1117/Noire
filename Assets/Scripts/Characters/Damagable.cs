@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Damagable : MonoBehaviour
 {
-    [Header("Mesh Renderers and OnHit Material")]
+    [Header("---------- Damagable ---------- ")]
     [SerializeField] protected Renderer[] onHitRenderers;
     [SerializeField] protected Material onHitMaterial;
     private List<Material[]> originalMaterials;
