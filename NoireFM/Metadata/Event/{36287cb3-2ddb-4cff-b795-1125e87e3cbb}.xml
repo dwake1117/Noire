@@ -128,13 +128,13 @@
 	<object class="MixerBusFader" id="{0be5fefa-e5a3-45a4-8124-4d454fd68f5a}" />
 	<object class="DelayEffect" id="{13be3bd2-ff76-412c-9b98-e972dc5f7708}">
 		<property name="delay">
-			<value>260</value>
+			<value>240</value>
 		</property>
 		<property name="feedback">
-			<value>31</value>
+			<value>17.5</value>
 		</property>
 		<property name="level">
-			<value>-14.5</value>
+			<value>-19.5</value>
 		</property>
 	</object>
 	<object class="SingleSound" id="{0a5f7ff5-d07e-4c95-bbd3-7e845f5b7fae}">

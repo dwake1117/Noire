@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{33207235-d12c-4652-8b96-4db7be96ecf1}">
 		<property name="name">
-			<value>Ost</value>
+			<value>EntryOst</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -57,7 +57,7 @@
 			<destination>{e0517e84-0082-4b9e-b80a-ca16e9836fd2}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{7b9e2e94-9c29-4e43-8691-52027c14aca1}</destination>
+			<destination>{162c433e-d64b-45cb-8a2b-f805aa37896f}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{95b5a34c-8d11-447d-b2a5-e58c7a5ee75b}" />
@@ -144,6 +144,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{cbdc83ac-f5e9-40b9-8075-0961e22af31f}">
+		<property name="volume">
+			<value>-3.5</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>

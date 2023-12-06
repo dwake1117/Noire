@@ -12,6 +12,8 @@ public class AudioManager : MonoBehaviour
     [Header("BGM")]
     private FMOD.Studio.EventInstance currBgmState;
 
+    [SerializeField] private AnimationCurve volumeAnimCurve;
+
     private void Awake()
     {
         if (Instance != null) 
@@ -21,6 +23,7 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        volumeAnimCurve.Evaluate(0.2f);
     }
     
     public bool IsPlaying(FMOD.Studio.EventInstance instance) 

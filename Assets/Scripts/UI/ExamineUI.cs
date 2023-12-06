@@ -29,8 +29,8 @@ public class ExamineUI : UI
         gameObject.SetActive(true);
         examineText.text = '-' + text;
         examineImage.texture = image;
-        int x = 2 * image.width;
-        int y = 2 * image.height;
+        int x =  image.width;
+        int y =  image.height;
         examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(x, y);
         Show();
         StartCoroutine(HideText());
