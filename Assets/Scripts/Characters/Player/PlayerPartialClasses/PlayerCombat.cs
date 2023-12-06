@@ -251,7 +251,7 @@ public partial class Player
     /// plays any animations or vfx upon player taking direct damage
     private IEnumerator PlayOnHitEffects(Vector3 source)
     {
-        TimeManager.Instance.DoSlowMotion(.3f);
+        TimeManager.Instance.DoSlowMotion(duration:.3f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1f);
         
         // knock back, and resets it back to idle after certain period of time
@@ -306,20 +306,19 @@ public partial class Player
             }
         }
     }
-    
-    // called after attacks
+
+    /// Handles melee attack on hit effects given a specific `dmg` and `duration` of the ability
     public void HandleAttackOnHitEffects(int dmg, float duration)
     {
         StartCoroutine(AttackEffectCoroutine(dmg, duration));
     }
 
-    private IEnumerator AttackEffectCoroutine(int dmg, float duration, float delay=0.1f)
+    private IEnumerator AttackEffectCoroutine(int dmg, float duration)
     {
-        yield return new WaitForSeconds(delay);
-        
         weaponHitbox.EnableHitbox();
         weaponHitbox.SetCurrentDamage(dmg);
-        yield return new WaitForSeconds(duration);
+        
+        yield return new WaitForSecondsRealtime(duration);
         weaponHitbox.DisableHitbox();
     }
 }

@@ -9,6 +9,8 @@ public class Enemy : Damagable
 {   
     [Header("Enemy Properties")]
     [SerializeField] private int maxHealth = 5;
+    [SerializeField] private int shardsOnDeath;
+    [SerializeField] private int threadsOnDeath;
     
     [Tooltip("The default enemy damage")]
     [SerializeField] protected int damage = 1;
@@ -114,6 +116,13 @@ public class Enemy : Damagable
     
     private void Die()
     {
+        GameEventsManager.Instance.PlayerEvents.DreamShardsChange(shardsOnDeath);
+        GameEventsManager.Instance.PlayerEvents.DreamThreadsChange(threadsOnDeath);
+        ParticleVFXManager.Instance.InstantiateAttractionParticles(
+            shardsOnDeath / 10 + 2, 
+            Player.Instance.GetRangedTargeter(), 
+            transform.position);
+        
         HandleDeath();
         gameObject.SetActive(false);
     }

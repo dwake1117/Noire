@@ -247,6 +247,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""37bd03ef-79cc-470f-a124-78d4031c485b"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d1e2bedb-a0b0-4026-a861-a69c19cbb1f8"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",

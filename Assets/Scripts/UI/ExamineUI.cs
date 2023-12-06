@@ -26,7 +26,6 @@ public class ExamineUI : UI
 
     public void Display(string text, Texture2D image)
     {
-        Debug.Log("here");
         gameObject.SetActive(true);
         examineText.text = '-' + text;
         examineImage.texture = image;

@@ -66,7 +66,7 @@ MonoBehaviour:
     ctime6: 0
     ctime7: 0
     atime0: 193
-    atime1: 51850
+    atime1: 39514
     atime2: 65535
     atime3: 0
     atime4: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 3
   low: -100
   high: 1
-  heightFogIntensity: 1
+  heightFogIntensity: 0.232
   cameraRelativePosition: 0
   distanceHeightBlend: 0
   renderEvent: 500

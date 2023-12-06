@@ -46,7 +46,13 @@ public class PlayerAnimator : MonoBehaviour
     
     private void Awake()
     {
+        if (Instance != null) 
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
         
         animator = GetComponent<Animator>();
         WALK_ID  = Animator.StringToHash(WALK);
@@ -112,7 +118,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void PlayDreamStateChangeAnimation()
     {
-        TimeManager.Instance.DoSlowMotion(.5f);
+        TimeManager.Instance.DoSlowMotion(duration:.5f);
         PostProcessingManager.Instance.CAImpulse();
         PostProcessingManager.Instance.LDImpulse();
     }

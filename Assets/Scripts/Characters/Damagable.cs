@@ -12,6 +12,7 @@ public class Damagable : MonoBehaviour
     [SerializeField] protected Material onHitMaterial;
     private List<Material[]> originalMaterials;
     private List<Material[]> onHitMaterials;
+    public bool CanBeHit = false;
     
     protected void InitializeOnHitRenderers()
     {
@@ -34,6 +35,14 @@ public class Damagable : MonoBehaviour
     {
         for (int i = 0; i < onHitRenderers.Length; i++)
             onHitRenderers[i].materials = originalMaterials[i];
+    }
+
+    public void ToggleCanBeHit(bool val) => CanBeHit = val;
+
+    public void TakeHit(int dmg, Vector3 source)
+    {
+        if(CanBeHit)
+            OnHit(dmg, source);
     }
     
     public virtual void OnHit(int dmg, Vector3 source) {}
