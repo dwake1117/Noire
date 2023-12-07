@@ -40,6 +40,8 @@ public class RangedEnemy : Enemy
 
     [SerializeField] [Tooltip("Enemy layers to consider for AI decisions.")]
     private LayerMask EnemyLayers;
+    
+    [SerializeField] private LayerMask playerLayer;
 
     [SerializeField] [Tooltip("Speed when patrolling.")]
     private float patrolWalkSpeed = 3.5f;
@@ -189,7 +191,7 @@ public class RangedEnemy : Enemy
 
     public void TransitionToAttack()
     {
-        if (IsPlayerInSight() && IsPlayerInRadius(lookRadiusHiding))
+        if (IsPlayerInRadius(lookRadiusHiding))
         {
             Invoke("AttackCooldown", currentAttackCooldown);
             currentState = EnemyState.Attack;
@@ -205,25 +207,13 @@ public class RangedEnemy : Enemy
     bool IsPlayerInSight()
     {
         // check if there is LOS to the player
-        RaycastHit hit;
-
-        //var l = transform.position;
-        if (Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, out hit,
-                AttackRange))
-        {
-            Debug.Log(hit.collider.gameObject);
-            if (hit.collider.gameObject.layer == 7)
-            {
-                return true;
-            }
-        }
-
-        return false;
+         return Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, 
+             out RaycastHit hit, AttackRange, playerLayer);
     }
 
     private void AttackBehavior()
     {
-        if (IsPlayerInSight())
+        if (IsPlayerInSight() && IsPlayerInRadius(lookRadiusHiding))
         {
             lastSpottedTime = 0f;
         }
