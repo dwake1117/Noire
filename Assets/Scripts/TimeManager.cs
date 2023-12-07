@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Provides functions to temporarily slow down time effects.
@@ -12,9 +13,10 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
         
-    [SerializeField] [Range(0, 1)] private float slowdownFactor = 0.03f;
-    [SerializeField] [Range(0, 1)] private float defaultSlowdownLength = 0.04f;
+    private const float defaultSlowdownFactor = 0.02f;
+    private const float defaultSlowdownLength = 0.05f;
     private float slowdownLength;
+    private float slowdownFactor;
     private Coroutine slowtimeCoroutine;
 
     private void Awake()
@@ -26,6 +28,9 @@ public class TimeManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        slowdownLength = defaultSlowdownLength;
+        slowdownFactor = defaultSlowdownFactor;
     }
     
     private IEnumerator SlowTimeCoroutine()
@@ -53,36 +58,24 @@ public class TimeManager : MonoBehaviour
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
         }
     }
-    
-    // slows time by `slowdownFactor` for default length
-    public void DoSlowMotion()
-    {
-        slowdownLength = defaultSlowdownLength;
-        SlowTime();
-    }
 
-    // slows time by `slowdownFactor` for specified length
-    public void DoSlowMotion(float duration)
+    /// slows time by specified factor and length. If not specified, default is used.
+    public void DoSlowMotion(float factor=defaultSlowdownFactor, float duration=defaultSlowdownLength)
     {
+        slowdownFactor = factor;
         slowdownLength = duration;
         SlowTime();
     }
     
-    /// slows time by `slowdownFactor` for default length after `delay` seconds
-    public void DoSlowMotionWithDelay(float delay)
+    /// slows time after a specified delay
+    public void DoSlowMotionWithDelay(float delay, float factor=defaultSlowdownFactor, float duration=defaultSlowdownLength)
     {
-        StartCoroutine(DelaySlowMotionCoroutine(delay, defaultSlowdownLength));
-    }
-    
-    /// slows time by `slowdownFactor` for specified length after specified delay
-    public void DoSlowMotionWithDelay(float delay, float duration)
-    {
-        StartCoroutine(DelaySlowMotionCoroutine(delay, duration));
+        StartCoroutine(DelaySlowMotionCoroutine(delay, factor, duration));
     }
 
-    private IEnumerator DelaySlowMotionCoroutine(float delay, float duration)
+    private IEnumerator DelaySlowMotionCoroutine(float delay, float factor, float duration)
     {
         yield return new WaitForSeconds(delay);
-        DoSlowMotion(duration);
+        DoSlowMotion(factor, duration);
     }
 }

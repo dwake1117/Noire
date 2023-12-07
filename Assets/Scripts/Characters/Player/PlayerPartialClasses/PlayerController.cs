@@ -1,33 +1,31 @@
 ﻿using System.Collections;
 using UnityEngine;
-/// <summary>
-/// Handles all movements of the player
-/// </summary>
-/// 
+using UnityEngine.SceneManagement;
+
 public partial class Player
 {
-    [Header("Player Controller")]
+    [Header("---------- Player Controller ---------- ")]
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 10f;
-    [SerializeField] private float gravity = 1f;
-    
     [SerializeField] private float turnSpeed = 30f;
-    [SerializeField] private LayerMask raycastHit;
+
+    [SerializeField] private float fallTimerMax = 2f;
+    private float fallTimer;
 
     private PlayerState state;
-    private CharacterController controller;
     private Vector3 moveDir;
-    private readonly Vector3 raycastOffset = new(0, 1f, 0);
-    private const float FALLING_THRESHOLD = 2f;
-    private const float MAX_FALL_RAYCAST = 200f;
     
+    [SerializeField] private float gravity = 1f;
+    private float currentGravity = 5f;
+    
+    // constants
     private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(0, 90, 0));
 
     private void Turn(Vector3 direction)
     {
         float dist = Vector3.Distance(transform.forward, direction);
-        if(dist > 1.3f)
-            transform.forward = Vector3.Lerp(transform.forward, direction, 2f * turnSpeed * Time.deltaTime);
+        if (dist > 1.3f)
+            transform.forward = direction;
         else
             transform.forward = Vector3.Lerp(transform.forward, direction, turnSpeed * Time.deltaTime);
     }
@@ -39,7 +37,7 @@ public partial class Player
         if(speed != 0)
             velocity = speed * Time.deltaTime * moveDir;
         
-        velocity.y = -gravity;
+        velocity.y = -currentGravity;
         controller.Move(velocity);
 
         if (turn)
@@ -49,15 +47,8 @@ public partial class Player
     ///  Move with a specified speed and direction, for a single frame
     public void Move(float speed, Vector3 moveDirection, bool turn=true)
     {
-        Vector3 velocity = Vector3.zero;
-        if(speed != 0)
-            velocity = speed * Time.deltaTime * moveDirection;
-            
-        velocity.y = -gravity;
-        controller.Move(velocity);
-        
-        if (turn)
-            Turn(moveDirection);
+        moveDir = moveDirection;
+        Move(speed, turn);
     }
     
     // Coroutine for move for a certain period of time with `speed`
@@ -95,38 +86,38 @@ public partial class Player
     {
         StartCoroutine(MoveForCoroutine(speed, time, dir, turn));
     }
-
-    private IEnumerator DieDelayedCoroutine()
-    {
-        yield return new WaitForSeconds(1f);
-        Die();
-    }
     
     private void HandleFall()
     {
-        // if nothing down beneath -> die!
-        // TODO: this may not be the best way to implement death on falling for too long -- should keep counter for falling time instead
-        if (!Physics.Raycast(transform.position + raycastOffset, Vector3.down, out RaycastHit hit, MAX_FALL_RAYCAST,
-                raycastHit))
+        if (controller.isGrounded)
         {
-            state = PlayerState.Dead;
-            StartCoroutine(DieDelayedCoroutine());
-            return;
-        }
-
-        Move(0);
-        
-        if (hit.distance > FALLING_THRESHOLD)
-        { 
-            state = PlayerState.Falling;
+            currentGravity = 1f;
+            fallTimer = 0;
+            if (IsFalling())
+                ResetStateAfterAction();
         }
         else
         {
-            if (IsFalling())
+            currentGravity += gravity * Time.deltaTime;
+            fallTimer += Time.deltaTime;
+            
+            if (!IsFalling())
             {
-                ResetStateAfterAction();
+                state = PlayerState.Falling;
+                currentGravity = 0.01f;
+                fallTimer = 0;
+            }
+            else
+            {
+                if (fallTimer > fallTimerMax)
+                {
+                    state = PlayerState.Dead;
+                    Die();
+                }
             }
         }
+
+        Move(0);
     }
     
     // called when player is either moving or idle

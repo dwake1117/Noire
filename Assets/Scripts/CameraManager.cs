@@ -8,7 +8,8 @@ public class CameraManager : MonoBehaviour
     public static CameraManager Instance { get; private set; }
     
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
-
+    public Transform screenspaceLookAt;
+    
     [Header("Camera zoom/pan")]
     // here orthographic camera is used so FOV is actually m_Lens.OrthographicSize
     [SerializeField] private float FOVmax;

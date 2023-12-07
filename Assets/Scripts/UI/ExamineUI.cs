@@ -26,12 +26,11 @@ public class ExamineUI : UI
 
     public void Display(string text, Texture2D image)
     {
-        Debug.Log("here");
         gameObject.SetActive(true);
         examineText.text = '-' + text;
         examineImage.texture = image;
-        int x = image.width;
-        int y = image.height;
+        int x =  image.width;
+        int y =  image.height;
         examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(x, y);
         Show();
         StartCoroutine(HideText());

@@ -4,17 +4,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// The main partial class for Player
+/// The Player monolith* class. The following are partial class declarations:
+/// <code>PlayerAnimator</code> - handles most of VFX and animations
+/// <code>PlayerAudio</code> - handles audio and SFXs
+/// <code>PlayerCombat</code> - handles combat, and combat related VFX/Anims
+/// <code>PlayerController</code> - handles movement and controls
+/// <code>PlayerInteract</code> - handles interaction
+///
+/// The Player class implements the IPlayer interface, a public API for all player-related functions
 /// </summary>
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CapsuleCollider))]
 public partial class Player : Damagable, IPlayer, IDataPersistence
 {
-    [Header("Fields")]
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
     public static Player Instance { get; private set; }
+    
+    [Header("---------- Player Fields and Components ---------- ")]
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    private CharacterController controller;
     private Animator animator;
+    private CapsuleCollider capsuleCollider;
+
+    [Header("Shader Properties")]
+    private const string PLAYER_POSITION = "_PlayerPosition";
+    private int PLAYER_POSITION_ID;
+    private const string DREAMSTATE_INDICATOR = "_FullScreenVoronoiColor";
+    private int DREAMSTATE_INDICATOR_ID;
 
     [Header("Player Health/Stamina")]
     [SerializeField] private PlayerHealthSO playerHealthSO;
@@ -27,7 +44,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     [Header("Player Dream State")]
     public readonly int LucidThreshold = 2;
     public readonly int DeepThreshold = 5;
-    public DreamState DreamState { get; private set; }
+    private DreamState dreamState;
 
     [Header("Player Items")] 
     [SerializeField] private InventorySO playerInventory;
@@ -60,10 +77,13 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         DontDestroyOnLoad(gameObject);
         
         state = PlayerState.Idle;
-        DreamState = DreamState.Neutral;
+        dreamState = DreamState.Neutral;
         
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        
+        AnimatorAwake();
         
         playerHealthSO.ResetHealth();
         playerStaminaSO.ResetStamina();
@@ -72,7 +92,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         dreamThreadsSO.SetCurrencyCount(0);
         
         playerInventory.Init();
-
+        
         InitializeAbilitiesAndCombos();
         
         // set initial material for weapon
@@ -82,10 +102,13 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
 
     private void Start()
     {
+        PLAYER_POSITION_ID = Shader.PropertyToID(PLAYER_POSITION);
+        DREAMSTATE_INDICATOR_ID = Shader.PropertyToID(DREAMSTATE_INDICATOR);            
+        Shader.SetGlobalColor(DREAMSTATE_INDICATOR_ID, StaticInfoObjects.Instance.VORONOI_INDICATOR[dreamState]);
+
         InitializeOnHitRenderers();
-        UpdateAbilities();
         
-        Shader.SetGlobalColor("_FullScreenVoronoiColor", StaticInfoObjects.Instance.VORONOI_INDICATOR[DreamState]);
+        UpdateAbilities();
         
         GameInput.Instance.OnInteract += OnInteract;
         GameInput.Instance.OnAbilityCast += OnAbilityCast;
@@ -109,20 +132,22 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     
     private void Update()
     {
+        Shader.SetGlobalVector(PLAYER_POSITION_ID, transform.position + Vector3.up * capsuleCollider.radius);
+        
         if (SceneManager.GetActiveScene().name == "LoadingScene"
-            || IsDead() 
+            || IsDead()
             || IsKnockedBack())
             return;
+        
+        AnimatorUpdate();
         
         HandleStamina();
         HandleAbilityCooldowns();
         HandleComboCooldowns();
+        HandleFall();
         
-        if (!IsCasting())
+        if (!IsCasting() && !IsFalling() && !IsDead())
         {
-            HandleFall();
-            if (IsDead())
-                return;
             HandleMovement();
         }
     }
@@ -199,7 +224,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         animator.ResetTrigger(triggerName);
     }
     
-    // called on every frame for buffer regen
+    /// Called on every frame for stamina regen
     private void HandleStamina()
     {
         if(invulnerableTimer > 0)
@@ -209,32 +234,32 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
             GameEventsManager.Instance.PlayerEvents.UpdateStaminaBar();
     }
     
-    // called upon changing HP
+    /// Handles dream state changes
     private void HandleDreamState()
     {
-        DreamState prevDreamState = DreamState;
+        DreamState prevDreamState = dreamState;
         
         int currDrowsiness = playerHealthSO.CurrentDrowsiness;
         if (currDrowsiness < LucidThreshold)
-            DreamState = DreamState.Lucid;
+            dreamState = DreamState.Lucid;
         else if (currDrowsiness > DeepThreshold)
-            DreamState = DreamState.Deep;
+            dreamState = DreamState.Deep;
         else
-            DreamState = DreamState.Neutral;
+            dreamState = DreamState.Neutral;
 
-        if (prevDreamState != DreamState)
-            HandleDreamStateTransition(prevDreamState);
+        if (prevDreamState != dreamState)
+            DreamStateTransition(prevDreamState);
     }
     
-    // called when transitioning between dream states
-    private void HandleDreamStateTransition(DreamState prevDreamState)
+    /// Handles dream state transitions, sets fullscreen pass colors and plays animation
+    private void DreamStateTransition(DreamState prevDreamState)
     {
         UpdateAbilities();
-        PlayerAnimator.Instance.PlayDreamStateChangeAnimation();
-        Shader.SetGlobalColor("_FullScreenVoronoiColor", StaticInfoObjects.Instance.VORONOI_INDICATOR[DreamState]);
+        PlayDreamStateChangeAnimation();
+        Shader.SetGlobalColor(DREAMSTATE_INDICATOR_ID, StaticInfoObjects.Instance.VORONOI_INDICATOR[dreamState]);
     }
     
-    // called when drowsiness == 0
+    /// Handles player death
     private void Die()
     {
         dreamShardsSO.OnDeath();
@@ -243,15 +268,10 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
         
         state = PlayerState.Dead;
-        PlayerAnimator.Instance.PlayDeathAnimation();
+        PlayDeathAnimation();
     }
     
     #region IDataPersistence
-    
-    /** IMPORTANT DEBUGGING INFORMATION:
-     * if you get an error saying loading error or something in main scene,
-     * please DISABLE DataPersistenceManager in scene/Globals or toggle on "Disable Data Persistence"
-    */
     
     public void LoadData(GameData data)
     {

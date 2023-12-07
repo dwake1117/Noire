@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using FMODUnity;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
@@ -12,6 +12,8 @@ public class AudioManager : MonoBehaviour
     [Header("BGM")]
     private FMOD.Studio.EventInstance currBgmState;
 
+    [SerializeField] private AnimationCurve volumeAnimCurve;
+
     private void Awake()
     {
         if (Instance != null) 
@@ -21,21 +23,22 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        volumeAnimCurve.Evaluate(0.2f);
     }
     
-    private bool IsPlaying(FMOD.Studio.EventInstance instance) 
+    public bool IsPlaying(FMOD.Studio.EventInstance instance) 
     {
         instance.getPlaybackState(out FMOD.Studio.PLAYBACK_STATE state);
         return state != FMOD.Studio.PLAYBACK_STATE.STOPPED;
     }
 
-    private void InitializeNewBgmEvent(FMODUnity.EventReference bgmAudioEvent)
+    private void InitializeNewBgmEvent(EventReference bgmAudioEvent)
     {
-        var bgmState = FMODUnity.RuntimeManager.CreateInstance(bgmAudioEvent);
+        var bgmState = RuntimeManager.CreateInstance(bgmAudioEvent);
         currBgmState = bgmState;
     }
     
-    public void PlayBgmAudio(FMODUnity.EventReference bgmAudioEvent)
+    public void PlayBgmAudio(EventReference bgmAudioEvent)
     {
         if (IsPlaying(currBgmState))
         {
@@ -62,20 +65,20 @@ public class AudioManager : MonoBehaviour
         float result;
         if (vca == "Sfx")
         {
-            sfxVCA = FMODUnity.RuntimeManager.GetVCA("vca:/SfxVCA");
+            sfxVCA = RuntimeManager.GetVCA("vca:/SfxVCA");
             sfxVCA.getVolume(out result);
             return result;
         }
         else
         {
-            ostVCA = FMODUnity.RuntimeManager.GetVCA("vca:/OstVCA");
+            ostVCA = RuntimeManager.GetVCA("vca:/OstVCA");
             ostVCA.getVolume(out result);
             return result;
         }
     }
     public void SetSfxVolume(float desVolume)
     {
-        sfxVCA = FMODUnity.RuntimeManager.GetVCA("vca:/SfxVCA");
+        sfxVCA = RuntimeManager.GetVCA("vca:/SfxVCA");
         if (!(sfxVCA.isValid()))
         {
             Debug.LogError("sfxVca is not Valid");
@@ -98,7 +101,7 @@ public class AudioManager : MonoBehaviour
     }
     public void SetOstVolume(float desVolume)
     {
-        ostVCA = FMODUnity.RuntimeManager.GetVCA("vca:/OstVCA");
+        ostVCA = RuntimeManager.GetVCA("vca:/OstVCA");
         if (!(ostVCA.isValid()))
         {
             Debug.LogError("OstVca is not Valid");
@@ -123,14 +126,14 @@ public class AudioManager : MonoBehaviour
     {
         FMOD.Studio.PARAMETER_DESCRIPTION parameterDescription;
         var result =
-            FMODUnity.RuntimeManager.StudioSystem.getParameterDescriptionByName(name, out parameterDescription);
+            RuntimeManager.StudioSystem.getParameterDescriptionByName(name, out parameterDescription);
         if (result != FMOD.RESULT.OK)
         {
             Debug.LogError("Setting Global params failed");
             return;
         }
 
-        result = FMODUnity.RuntimeManager.StudioSystem.setParameterByID(parameterDescription.id, value);
+        result = RuntimeManager.StudioSystem.setParameterByID(parameterDescription.id, value);
         if (result != FMOD.RESULT.OK)
         {
             Debug.LogError("Setting Global params failed");

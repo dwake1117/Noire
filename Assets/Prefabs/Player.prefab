@@ -114,6 +114,7 @@ MonoBehaviour:
   invulnerableTimerMax: 1
   onHitParticleEffects: {fileID: 8223727788762684481}
   onHitParticleEffectsOffset: 0
+  knockedBackAnimTime: 0.4
   invulnerableTimer: 0.5
   weaponFabricRenderer: {fileID: 3997730660261660009}
   originalWeaponFabricMaterial: {fileID: 2100000, guid: b30b17ea8d64f194183b2faf64d49af5,
@@ -127,11 +128,12 @@ MonoBehaviour:
   comboTimerMax: 2.5
   walkSpeed: 6
   runSpeed: 12
-  gravity: 0.06
+  gravity: 0.03
   turnSpeed: 30
   raycastHit:
     serializedVersion: 2
     m_Bits: 320
+  fallTimerMax: 2
   interactDistance: 4
 --- !u!114 &6159779904692874417
 MonoBehaviour:

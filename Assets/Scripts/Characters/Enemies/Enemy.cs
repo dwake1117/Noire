@@ -9,6 +9,8 @@ public class Enemy : Damagable
 {   
     [Header("Enemy Properties")]
     [SerializeField] private int maxHealth = 5;
+    [SerializeField] private int shardsOnDeath;
+    [SerializeField] private int threadsOnDeath;
     
     [Tooltip("The default enemy damage")]
     [SerializeField] protected int damage = 1;
@@ -45,13 +47,19 @@ public class Enemy : Damagable
     
     public override void OnHit(int dmg, Vector3 source)
     {
+        
         PlayOnHitEffects(source);
+        PlayOnHitSound();
         RecieveDamage(dmg);
+    }
+    protected virtual void PlayOnHitSound(){
+        // keep empty. This solely exists to be extended
     }
 
     private void RecieveDamage(int dmg)
     {
         // Debug.Log(health);
+        
         health -= dmg;
         if(health <= 0)
             Die();
@@ -108,7 +116,13 @@ public class Enemy : Damagable
     
     private void Die()
     {
-        //PlayDyingSound
+        GameEventsManager.Instance.PlayerEvents.DreamShardsChange(shardsOnDeath);
+        GameEventsManager.Instance.PlayerEvents.DreamThreadsChange(threadsOnDeath);
+        ParticleVFXManager.Instance.InstantiateAttractionParticles(
+            shardsOnDeath / 10 + 2, 
+            Player.Instance.GetRangedTargeter(), 
+            transform.position);
+        
         HandleDeath();
         gameObject.SetActive(false);
     }

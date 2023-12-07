@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: PlayerDashAbility
   m_EditorClassIdentifier: 
   abilityID: 1
+  sprite: {fileID: 0}
   abilityAnimationTrigger: Dash
   cooldown: 0.5
   staminaCost: 30
+  abilityDamage: 1
   applicableDreamStates: 0000000001000000
   playerMovableDuringCast: 0
-  dashSpeed: 25
-  dashTime: 0.3
+  interruptable: 0
+  equippable: 0
+  abilityType: 0
+  dashSpeed: 30
+  dashTime: 0.2
