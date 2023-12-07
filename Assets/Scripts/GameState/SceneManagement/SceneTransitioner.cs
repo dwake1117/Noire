@@ -123,6 +123,7 @@ public class SceneTransitioner : MonoBehaviour
     }
     private IEnumerator Enter(TransitionSO transitionSO)
     {
+            
         // start to fade in with next scene
         yield return StartCoroutine(transitionSO.Enter(transitionCanvas));
         isLoading = false;
@@ -138,7 +139,15 @@ public class SceneTransitioner : MonoBehaviour
     private void HandleSceneChange(Scene scene, LoadSceneMode mode)
     {
         // never enters scene transition when loading a parent (since the child always will be loaded as well)
-        if(StaticInfoObjects.Instance.GetSceneType(scene.name) != SceneType.Parent)
-            StartCoroutine(Enter(lastTransition));
+        if (StaticInfoObjects.Instance.GetSceneType(scene.name) != SceneType.Parent)
+        {
+            if (lastTransition)
+                StartCoroutine(Enter(lastTransition));
+            else
+            {
+                Debug.Log("Scene transition not found, using default slow fade.");
+                StartCoroutine(Enter(fadeTransitionSlow));
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1577717463674497603
 Transform:
   m_ObjectHideFlags: 0
@@ -3659,14 +3659,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
+      propertyPath: normalSlash
+      value: 
+      objectReference: {fileID: 2197417544076741178}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
       propertyPath: audioManager
       value: 
       objectReference: {fileID: 173129346032190534}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
+      propertyPath: chargedSlash
+      value: 
+      objectReference: {fileID: 6660727318632706461}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: runSmokePuff
+      value: 
+      objectReference: {fileID: 3354566661689828555}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
       propertyPath: weaponHitbox
       value: 
       objectReference: {fileID: 8693018898714705718}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: dashSmokePuff
+      value: 
+      objectReference: {fileID: 253067750911656594}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
       propertyPath: onHitMaterial
@@ -3689,6 +3709,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
+      propertyPath: chargedSlashOffset
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: deathAnimationTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: dashSmokePuffOffset
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: dashSmokePuffOffsetY
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
       propertyPath: invulnerableTimerMax
       value: 1.5
       objectReference: {fileID: 0}
@@ -3699,9 +3739,19 @@ PrefabInstance:
       objectReference: {fileID: 1814181639538373689}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
+      propertyPath: runSmokePuffOffset.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
       propertyPath: glowSwordEndParticles
       value: 
       objectReference: {fileID: 288577209635963169}
+    - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
+        type: 3}
+      propertyPath: particleOutwardSplash
+      value: 
+      objectReference: {fileID: 1499195375824370513}
     - target: {fileID: 7980669707722753614, guid: 9941c0554154711499239af33dc11147,
         type: 3}
       propertyPath: onHitRenderers.Array.size
@@ -3745,6 +3795,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1509652017167173997, guid: 9941c0554154711499239af33dc11147, type: 3}
     - {fileID: 7093292099719761368, guid: 9941c0554154711499239af33dc11147, type: 3}
+    - {fileID: 6159779904692874417, guid: 9941c0554154711499239af33dc11147, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1275972942415552640, guid: 9941c0554154711499239af33dc11147, type: 3}
     - {fileID: 3942411334304633561, guid: 9941c0554154711499239af33dc11147, type: 3}
@@ -4101,6 +4152,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: InkSplashOnHitEnemies
+      objectReference: {fileID: 0}
+    - target: {fileID: 6048209501239781642, guid: fda7996871379fd439752c3efd0b3fe9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6551553289745422794, guid: fda7996871379fd439752c3efd0b3fe9,
         type: 3}

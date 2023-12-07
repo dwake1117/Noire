@@ -234,7 +234,7 @@ public partial class Player
             return;
         }
 
-        // play on-hit effects (material change + animation + slow time + chromatic impulse)
+        // play on-hit effects (material change + animation + slow time + chromatic impulse + SFX)
         if (onHitCoroutine != null)
             StopCoroutine(onHitCoroutine);
         onHitCoroutine = StartCoroutine(PlayOnHitEffects(source));
@@ -253,6 +253,7 @@ public partial class Player
     {
         TimeManager.Instance.DoSlowMotion(duration:.3f);
         PostProcessingManager.Instance.CAImpulse(.4f, 1f);
+        PlayOnHitSound();
         
         // knock back, and resets it back to idle after certain period of time
         MoveFor(20, .02f, transform.position - source, false);

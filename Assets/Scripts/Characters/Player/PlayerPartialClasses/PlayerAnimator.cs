@@ -27,12 +27,13 @@ public partial class Player
     private const string FALL = "PlayerFall";
     private const string RUN = "PlayerRun";
     private const string KNOCKBACK = "PlayerKnockback";
-    private const string DIE = "Death";
+    private const string DIE = "PlayerDeath";
     private int WALK_ID;
     private int IDLE_ID;
     private int FALL_ID;
     private int RUN_ID;
     private int KNOCKBACK_ID;
+    private int DIE_ID;
     
     
     private void AnimatorAwake()
@@ -41,21 +42,23 @@ public partial class Player
         IDLE_ID =  Animator.StringToHash(IDLE);
         FALL_ID =  Animator.StringToHash(FALL);
         RUN_ID = Animator.StringToHash(RUN);
+        DIE_ID = Animator.StringToHash(DIE);
         KNOCKBACK_ID = Animator.StringToHash(KNOCKBACK);
     }
 
     private void AnimatorUpdate()
     {
-        animator.SetBool(WALK_ID, Player.Instance.IsWalking());
-        animator.SetBool(IDLE_ID, Player.Instance.IsIdle());
-        animator.SetBool(FALL_ID, Player.Instance.IsFalling());
-        animator.SetBool(RUN_ID, Player.Instance.IsRunning());
-        animator.SetBool(KNOCKBACK_ID, Player.Instance.IsKnockedBack());
+        animator.SetBool(WALK_ID, IsWalking());
+        animator.SetBool(IDLE_ID, IsIdle());
+        animator.SetBool(FALL_ID, IsFalling());
+        animator.SetBool(RUN_ID, IsRunning());
+        animator.SetBool(KNOCKBACK_ID, IsKnockedBack());
+        animator.SetBool(DIE_ID, IsDead());
     }
     
-    public void PlayDeathAnimation()
+    private void PlayDeathAnimation()
     {
-        animator.SetTrigger(DIE);
+        // TODO: play death SFX here!
         StartCoroutine(DeathAnimationCoroutine());
     }
 
@@ -85,10 +88,11 @@ public partial class Player
             yield return null;
         }
         
+        //TODO: end death SFX here!    
         loadingOperation.allowSceneActivation = true;
     }
 
-    public void PlayDreamStateChangeAnimation()
+    private void PlayDreamStateChangeAnimation()
     {
         TimeManager.Instance.DoSlowMotion(duration:.5f);
         PostProcessingManager.Instance.CAImpulse();
@@ -97,10 +101,8 @@ public partial class Player
 
     private void PlayNormalSlash(bool inverted=false)
     {
-        var t = Player.Instance.transform;
-        
-        normalSlash.transform.position = t.position + t.forward * normalSlashOffset + new Vector3(0, normalSlashOffsetY, 0);
-        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 180, inverted ? 180 : 0));
+        normalSlash.transform.position = transform.position + transform.forward * normalSlashOffset + new Vector3(0, normalSlashOffsetY, 0);
+        normalSlash.transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y + 180, inverted ? 180 : 0));
         normalSlash.Restart();
     }
     
@@ -117,35 +119,31 @@ public partial class Player
     
     private void ChargedSwingAnimationStartedTrigger()
     {
-        var t = Player.Instance.transform;
-
-        particleOutwardSplash.transform.position = t.position;
+        particleOutwardSplash.transform.position = transform.position;
         particleOutwardSplash.Restart();
         CameraManager.Instance.CameraShake(.2f, 4f);
         PostProcessingManager.Instance.CAImpulse();
         
-        chargedSlash.transform.position = t.position + t.forward * chargedSlashOffset + new Vector3(0, chargedSlashOffsetY, 0);
-        chargedSlash.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 180, 180));
+        chargedSlash.transform.position = transform.position + transform.forward * chargedSlashOffset + new Vector3(0, chargedSlashOffsetY, 0);
+        chargedSlash.transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y + 180, 180));
         chargedSlash.Restart();
     }
     
     private void DashAnimationStartedTrigger()
     {
-        var t = Player.Instance.transform;
-        
-        dashSmokePuff.transform.position = t.position + t.forward * dashSmokePuffOffset + new Vector3(0, dashSmokePuffOffsetY, 0);
-        dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 143, 0));
+        dashSmokePuff.transform.position = transform.position + transform.forward * dashSmokePuffOffset + new Vector3(0, dashSmokePuffOffsetY, 0);
+        dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y + 143, 0));
         
         dashSmokePuff.Play();
     }
 
     private void RunOneStepTrigger()
     {
-        var t = Player.Instance.transform;
-        
-        runSmokePuff.transform.position = t.position + runSmokePuffOffset;
-        runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, t.rotation.eulerAngles.y + 90, 0));
+        runSmokePuff.transform.position = transform.position + runSmokePuffOffset;
+        runSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y + 90, 0));
         runSmokePuff.Play();
+        
+        // TODO: felix this shouldnt be hardcoded here. Either make the event constant or use Scriptable objects to encode the string.
         FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Player/PlayerFootsteps", transform.position);
     }
 }
