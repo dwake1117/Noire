@@ -124,6 +124,8 @@ public class Enemy : Damagable
             transform.position);
         
         HandleDeath();
+        
         gameObject.SetActive(false);
     }
+    
 }
