@@ -89,8 +89,10 @@ public class MeleeEnemy : Enemy
     [SerializeField ] private float lastSpottedTime = 0f;
     [SerializeField ]  private float LoseInterestTimer = 8f;
     [SerializeField ] private bool moveToNextPatrolPoint = true;
+    [SerializeField] GameObject lanternflyParent;
     public float maxAttackTime;
     public float ddTest = 2f;
+    public bool canDamage;
     // Nested class for Range
     public struct Range<T, U>
     {
@@ -108,14 +110,24 @@ public class MeleeEnemy : Enemy
     public override void Start()
     {
         base.Start();
+        lanternflyParent = gameObject.transform.parent.gameObject;
         currentState = EnemyState.Idle;
         Invoke("SlowUpdate", slowUpdateTime);
         CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
     }
 
+    protected override void HandleDeath()
+    {
+        base.HandleDeath();
+        lanternflyParent.SetActive(false);
+        
+    }
     private void SlowUpdate()
     {
-        if (gameObject.activeSelf == false) return;
+        if (gameObject.activeSelf == false)
+        {
+            return;
+        }
         switch (currentState)
         {
             case EnemyState.Idle:
@@ -245,6 +257,7 @@ public class MeleeEnemy : Enemy
     }
         private IEnumerator PeekAndAttack()
         {
+            
             isAttacking = true;
             FaceTarget();
             AttackStarted = true;
@@ -256,6 +269,7 @@ public class MeleeEnemy : Enemy
                 timer += Time.deltaTime;
                 yield return null;
             }
+            canDamage = true;
             //CameraManager.Instance.CameraShake(WarningTime, 5f);
             bool isReturning = false;
             Agent.isStopped = false;
@@ -298,16 +312,27 @@ public class MeleeEnemy : Enemy
             AttackStarted = false;
             isAttacking = false;
             CanAttack = false;
+            canDamage = false;
             Agent.angularSpeed = 120f;
             CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
             Invoke("AttackCooldown", CurrentAttackCooldown);
         }
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.layer == 7 && isAttacking)
+            if (other.gameObject.layer == 7)
             {
-                GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
+                Invoke("damageCooldown", 2);
+                if (isAttacking && canDamage)
+                {
+                    GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
+                    canDamage = false;
+                }
             }
+        }
+
+        void damageCooldown()
+        {
+            canDamage = true;
         }
         private void JumpAttack(Vector3 initalDirection)
         {
