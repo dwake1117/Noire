@@ -9,11 +9,6 @@ public class StatusIndicator : MonoBehaviour
     [SerializeField] private float rotationalSpeed = 10.5f;
     [SerializeField] private float positionalOffset = 2;
     [SerializeField] private float positionalOffsetRunning = 1;
-    
-    private void Start()
-    {
-        throw new NotImplementedException();
-    }
 
     private void Update()
     {

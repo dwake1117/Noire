@@ -132,14 +132,14 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     
     private void Update()
     {
-        Shader.SetGlobalVector(PLAYER_POSITION_ID, transform.position + Vector3.up * capsuleCollider.radius);
+        AnimatorUpdate();
         
         if (SceneManager.GetActiveScene().name == "LoadingScene"
             || IsDead()
             || IsKnockedBack())
             return;
         
-        AnimatorUpdate();
+        Shader.SetGlobalVector(PLAYER_POSITION_ID, transform.position + Vector3.up * capsuleCollider.radius);
         
         HandleStamina();
         HandleAbilityCooldowns();

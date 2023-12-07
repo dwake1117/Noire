@@ -40,7 +40,7 @@ public partial class Player
         velocity.y = -currentGravity;
         controller.Move(velocity);
 
-        if (turn)
+        if (turn && moveDir != Vector3.zero)
             Turn(moveDir);
     }
 
