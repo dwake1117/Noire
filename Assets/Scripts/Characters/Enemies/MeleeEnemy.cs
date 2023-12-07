@@ -1,14 +1,12 @@
 using System.Collections;
-using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class MeleeEnemy : Enemy
 {
     public bool DEBUG = false;
-    [Header("Target Settings")]
-    [Tooltip("The Transform of the player.")]
-    public Transform TargetPlayer;
+    [Header("Target Settings")] [Tooltip("The Transform of the player.")]
+    private Transform targetPlayer;
 
     [Header("Cover and Patrol")]
     [SerializeField] [Tooltip("Patrol points for enemy movement.")]
@@ -44,6 +42,7 @@ public class MeleeEnemy : Enemy
     [SerializeField] [Tooltip("How often to update the slow update loop.")]
     private float slowUpdateTime = 0.5f;
     public float WaitAttackRange = 2f;
+    
     [Header("Attack Cooldown")]
     [SerializeField] [Tooltip("Range of random cooldowns between attacks.")]
     private Range<float, float> AttackCooldownRange = new Range<float, float>(1.0f, 2.0f);
@@ -51,13 +50,10 @@ public class MeleeEnemy : Enemy
     [SerializeField]private float AttackCooldownTimer = 0f;
     [SerializeField]private bool CanAttack = false;
     [SerializeField] private float noReturnThreshold = 3f;
+    
     [Header("Visual Effects")]
-    [SerializeField] [Tooltip("Line renderer for showing the warning line.")]
-    private LineRenderer WarningLineRenderer;
-    [SerializeField] [Tooltip("Particle system for laser attacks.")]
-    private ParticleSystem LaserParticles;
-    [SerializeField] [Tooltip("Particle system for impact effect.")]
-    private ParticleSystem impactParticleSystem;
+    [SerializeField] [Tooltip("Visuals for showing attack")]
+    private ParticleSystemBase meleeImpactParticles;
     [Tooltip("Time for the warning effect before an attack.")]
     public float WarningTime = 0.5f;
 
@@ -65,51 +61,33 @@ public class MeleeEnemy : Enemy
     [Tooltip("Rotation speed of the laser.")]
     public float rotationSpeed = 2f;
 
-    [Header("Animation")]
-    [Tooltip("Animator for the player.")]
-    public Animator PlayerAnimator;
-
     [Header("State Management")]
     [Tooltip("Current state of the enemy.")]
     public EnemyState currentState;
 
     [Header("Additional Components")]
-    [SerializeField] [Tooltip("Line renderer for the laser attack.")]
-    private LineRenderer LaserLineRenderer;
     [SerializeField] [Tooltip("Animator for the enemy.")]
     private Animator anim;
     [SerializeField] [Tooltip("Layers considered as player.")]
-    private LayerMask PlayerLayers;
-    [SerializeField] [Tooltip("Point from which the laser fires.")]
-    private Transform LaserFirePoint;
+    private LayerMask playerLayer;
 
-    [SerializeField ] private bool isAttacking;
-    [SerializeField ] private bool AttackStarted = false;
-    [SerializeField ]  private float lastAttackTime = -1;
-    [SerializeField ] private float lastSpottedTime = 0f;
-    [SerializeField ]  private float LoseInterestTimer = 8f;
-    [SerializeField ] private bool moveToNextPatrolPoint = true;
+    [SerializeField] private bool isAttacking;
+    [SerializeField] private bool attackStarted = false;
+    [SerializeField] private float lastAttackTime = -1;
+    [SerializeField] private float lastSpottedTime = 0f;
+    [SerializeField] private float loseInterestTimer = 8f;
+    [SerializeField] private bool moveToNextPatrolPoint = true;
     [SerializeField] GameObject lanternflyParent;
+    
     public float maxAttackTime;
     public float ddTest = 2f;
     public bool canDamage;
-    // Nested class for Range
-    public struct Range<T, U>
-    {
-        public T Lower;
-        public U Upper;
-        public Range(T first, U second)
-        {
-            Lower = first;
-            Upper = second;
-        }
-    }
-
-    // Enumeration for Enemy State
-    public enum EnemyState { Idle, Attack }
+    
     public override void Start()
     {
         base.Start();
+
+        targetPlayer = Player.Instance.GetTargeter();
         lanternflyParent = gameObject.transform.parent.gameObject;
         currentState = EnemyState.Idle;
         Invoke("SlowUpdate", slowUpdateTime);
@@ -118,10 +96,9 @@ public class MeleeEnemy : Enemy
 
     protected override void HandleDeath()
     {
-        base.HandleDeath();
         lanternflyParent.SetActive(false);
-        
     }
+    
     private void SlowUpdate()
     {
         if (gameObject.activeSelf == false)
@@ -182,26 +159,23 @@ public class MeleeEnemy : Enemy
     }
     public bool IsPlayerInRadius(float radius)
     {
-        return Vector3.Distance(transform.position, TargetPlayer.position) < radius;
+        return Vector3.Distance(transform.position, targetPlayer.position) < radius;
     }
+    
     bool IsPlayerInSight()
     {
         // check if there is LOS to the player
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, out hit, Mathf.Infinity))
-        {
-            if (hit.collider.gameObject.layer == 7)
-            {
-                return true;
-            }
-        }
-
-        return false;
+         return Physics.Raycast(transform.position, (targetPlayer.position - transform.position).normalized, 
+             out RaycastHit hit, AttackRange, playerLayer);
     }
+    
     private void AttackBehavior()
     {
-        if (isAttacking) return;
+        if (isAttacking) 
+            return;
+        
         Agent.speed = attackRunSpeed;
+        
         if (IsPlayerInSight())
         {
             lastSpottedTime = 0f;
@@ -210,149 +184,159 @@ public class MeleeEnemy : Enemy
         {
             lastSpottedTime += slowUpdateTime;
         }
-        if(lastSpottedTime > LoseInterestTimer)
+        
+        if(lastSpottedTime > loseInterestTimer)
         {
             Agent.isStopped = false;
             currentState = EnemyState.Idle;
+            return;
         }
+        
         // go back to idle if the player manages to get too far away
-        if (Vector3.Distance(transform.position, TargetPlayer.position) > lookRadiusHiding)
+        if (!IsPlayerInRadius(lookRadiusHiding))
         {
             currentState = EnemyState.Idle;
             Agent.isStopped = false;
             return;
         }
 
-        Debug.Log(Vector3.Distance(TargetPlayer.position, transform.position) < WaitAttackRange);
-        Debug.Log(IsPlayerInSight());
-        if(Vector3.Distance(TargetPlayer.position, transform.position) < WaitAttackRange && IsPlayerInSight())
+        // Debug.Log(Vector3.Distance(targetPlayer.position, transform.position) < WaitAttackRange);
+        // Debug.Log(IsPlayerInSight());
+        
+        if(IsPlayerInRadius(WaitAttackRange) && IsPlayerInSight())
         {
-            Debug.Log("God dammit ima say a slur");
-            Agent.SetDestination(transform.position);
+            // Debug.Log("God dammit ima say a slur"); YESIR
+            Agent.SetDestination(targetPlayer.position);
             FaceTarget();
             Agent.isStopped = true;
-            
         }
         else
         {
-            
-            Agent.SetDestination(TargetPlayer.position);
+            Agent.SetDestination(targetPlayer.position);
             Agent.isStopped = false;
             return;
         }
+        
         Agent.speed = attackRunSpeed;
         if(CanAttack)
         {
-            Debug.Log("AttackBehavior");
+            // Debug.Log("AttackBehavior");
             StartCoroutine(PeekAndAttack());
         }
     }
-
-
+    
     void FaceTarget()
     {
-        Vector3 direction = (TargetPlayer.position - transform.position).normalized;
+        Vector3 direction = (targetPlayer.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
-        private IEnumerator PeekAndAttack()
-        {
-            
-            isAttacking = true;
-            FaceTarget();
-            AttackStarted = true;
-            RaycastHit hit;
-            float timer = 0;
-            while (timer < 0.75f)
-            {
-                FaceTarget();
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            canDamage = true;
-            //CameraManager.Instance.CameraShake(WarningTime, 5f);
-            bool isReturning = false;
-            Agent.isStopped = false;
-            Vector3 initialPos = transform.position;
-            Vector3 initialPlayerPos = TargetPlayer.position;
-            float initialAgentSpeed = Agent.speed;
-            Agent.speed = 20f;
-            Agent.angularSpeed = 0f;
-            Agent.SetDestination(initialPlayerPos);
-            float attackTimer = 0f;
-            while(Vector3.Distance(transform.position, initialPos) > 0.5 /*Vector3.Distance*/ || !isReturning)
-            {
-                if (Vector3.Distance(initialPlayerPos, TargetPlayer.position) > noReturnThreshold)
-                {
-                    Debug.Log("Not Returning");
-                    break;
-                }
-                Debug.Log("returnState " + isReturning);
-                attackTimer += 0.2f;
-                
-                FaceTarget();
-                if (!isReturning && Vector3.Distance(transform.position, initialPlayerPos) < ddTest)
-                {
-                    if(DEBUG) Debug.Log("u are about to experience a whooping like no other, stores will sell out of the auotbiography of the experience, ur body will never recover to it's original state, you will forever show grace to the alpha");
-                    isReturning = true;
-                }
-                if(isReturning)
-                {
-                    FaceTarget();
-                    
-                    if(DEBUG) Debug.Log(
-                        "return");
-                    Agent.SetDestination(initialPos);
-                }
-                if(attackTimer > maxAttackTime) break;
-                yield return new WaitForSeconds(0.2f);
-            }
     
-            // reset attack
-            AttackStarted = false;
-            isAttacking = false;
-            CanAttack = false;
-            canDamage = false;
-            Agent.angularSpeed = 120f;
-            CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
-            Invoke("AttackCooldown", CurrentAttackCooldown);
-        }
-        private void OnTriggerStay(Collider other)
+    private IEnumerator PeekAndAttack()
+    {
+        isAttacking = true;
+        FaceTarget();
+        attackStarted = true;
+        
+        float timer = 0;
+        while (timer < 0.75f)
         {
-            if (other.gameObject.layer == 7)
+            FaceTarget();
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        canDamage = true;
+        
+        //CameraManager.Instance.CameraShake(WarningTime, 5f);
+        bool isReturning = false;
+        Agent.isStopped = false;
+        Vector3 initialPos = transform.position;
+        Vector3 initialPlayerPos = targetPlayer.position;
+        float initialAgentSpeed = Agent.speed;
+        Agent.speed = 20f;
+        Agent.angularSpeed = 0f;
+        Agent.SetDestination(initialPlayerPos);
+        
+        float attackTimer = 0f;
+        while(Vector3.Distance(transform.position, initialPos) > 0.5 /*Vector3.Distance*/ || !isReturning)
+        {
+            if (Vector3.Distance(initialPlayerPos, targetPlayer.position) > noReturnThreshold)
             {
-                Invoke("damageCooldown", 2);
-                if (isAttacking && canDamage)
-                {
-                    GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
-                    canDamage = false;
-                }
+                Debug.Log("Not Returning");
+                break;
+            }
+            Debug.Log("returnState " + isReturning);
+            attackTimer += 0.2f;
+            
+            FaceTarget();
+            if (!isReturning && Vector3.Distance(transform.position, initialPlayerPos) < ddTest)
+            {
+                if(DEBUG) Debug.Log("u are about to experience a whooping like no other, stores will sell out of the auotbiography of the experience, ur body will never recover to it's original state, you will forever show grace to the alpha");
+                isReturning = true;
+            }
+            if(isReturning)
+            {
+                FaceTarget();
+                
+                if(DEBUG) Debug.Log("return");
+                Agent.SetDestination(initialPos);
+            }
+            if(attackTimer > maxAttackTime) 
+                break;
+            
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        // reset attack
+        attackStarted = false;
+        isAttacking = false;
+        CanAttack = false;
+        canDamage = false;
+        Agent.angularSpeed = 120f;
+        CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
+        Invoke("AttackCooldown", CurrentAttackCooldown);
+    }
+    
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == 7)
+        {
+            Invoke("DamageCooldown", 2);
+            if (isAttacking && canDamage)
+            {
+                meleeImpactParticles.Play();
+                GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
+                canDamage = false;
             }
         }
+    }
 
-        void damageCooldown()
+    private void DamageCooldown()
+    {
+        canDamage = true;
+    }
+    
+    private void JumpAttack(Vector3 initalDirection)
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, targetPlayer.position);
+
+        // Check if the player is within attack range
+        // TODO: clean up magical numbers, and use IsPlayerInRadius(6)!
+        if (distanceToPlayer < 6)
         {
-            canDamage = true;
+            // Move towards the player quickly
+            Vector3 directionToPlayer = (targetPlayer.position - transform.position).normalized;
+            Agent.Move(directionToPlayer * 2 * Time.deltaTime);
+
+            // Optional: Add code here for the attack (e.g., animation, damage application)
+            
+            // Retreat
+            Vector3 retreatDirection = (transform.position - targetPlayer.position).normalized;
+            Vector3 retreatPosition = transform.position + retreatDirection * 2;
+            Agent.SetDestination(retreatPosition);
         }
-        private void JumpAttack(Vector3 initalDirection)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, TargetPlayer.position);
+    }
 
-            // Check if the player is within attack range
-            if (distanceToPlayer < 6)
-            {
-                // Move towards the player quickly
-                Vector3 directionToPlayer = (TargetPlayer.position - transform.position).normalized;
-                Agent.Move(directionToPlayer * 2 * Time.deltaTime);
-
-                // Optional: Add code here for the attack (e.g., animation, damage application)
-
-                // Retreat
-                Vector3 retreatDirection = (transform.position - TargetPlayer.position).normalized;
-                Vector3 retreatPosition = transform.position + retreatDirection * 2;
-                Agent.SetDestination(retreatPosition);
-            }
-        }
     public void AttackCooldown()
     {
         CanAttack = true;
@@ -360,7 +344,7 @@ public class MeleeEnemy : Enemy
     
     private void Peek()
     {
-        Agent.SetDestination(TargetPlayer.position);
+        Agent.SetDestination(targetPlayer.position);
     }
     
     // draw gizmos for radii

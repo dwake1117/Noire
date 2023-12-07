@@ -58,7 +58,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     public bool IsRunning() => state == PlayerState.Running;
     public bool IsKnockedBack() => state == PlayerState.KnockedBack;
     public float GetPlayerHitBoxHeight() => playerHitBoxHeight;
-    public Transform GetRangedTargeter() => rangedTargeter;
+    public Transform GetTargeter() => rangedTargeter;
     public bool AddItem(CollectableItemSO item) => playerInventory.Add(item);
     public bool RemoveItem(CollectableItemSO item) => playerInventory.Remove(item);
     public void SetMaxHP(int x) => playerHealthSO.SetMaxHP(x);

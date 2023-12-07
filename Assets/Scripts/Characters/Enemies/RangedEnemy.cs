@@ -109,26 +109,6 @@ public class RangedEnemy : Enemy
     private float loseInterestTimer = 35f;
     private bool moveToNextPatrolPoint = true;
 
-    // Nested class for Range
-    public struct Range<T, U>
-    {
-        public T Lower;
-        public U Upper;
-
-        public Range(T first, U second)
-        {
-            Lower = first;
-            Upper = second;
-        }
-    }
-
-    // Enumeration for Enemy State
-    public enum EnemyState
-    {
-        Idle,
-        Attack
-    }
-
     public override void Start()
     {
         base.Start();
@@ -138,10 +118,8 @@ public class RangedEnemy : Enemy
         currentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
         impactParticleSystem.Stop();
         LaserLineRenderer.enabled = false;
-        TargetPlayer = Player.Instance.GetRangedTargeter();
+        TargetPlayer = Player.Instance.GetTargeter();
     }
-    
-    
 
     private void SlowUpdate()
     {
@@ -376,7 +354,7 @@ public class RangedEnemy : Enemy
         Agent.SetDestination(TargetPlayer.position);
     }
     
-    public void FindCover(Vector3 threatPosition)
+    private void FindCover(Vector3 threatPosition)
     {
         CoverPoint bestCover = null;
         float closestDistance = float.MaxValue;
@@ -399,6 +377,7 @@ public class RangedEnemy : Enemy
             Agent.SetDestination(bestCover.transform.position);
         }
     }
+    
     // draw gizmos for radii
     void OnDrawGizmosSelected()
     {
