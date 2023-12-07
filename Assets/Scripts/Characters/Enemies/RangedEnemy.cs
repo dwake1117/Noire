@@ -1,4 +1,3 @@
-using System.Buffers.Text;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -65,7 +64,7 @@ public class RangedEnemy : Enemy
     // [SerializeField] [Tooltip("Particle system for laser attacks.")]
     // private ParticleSystem LaserParticles;
     [SerializeField] [Tooltip("Particle system for impact effect.")]
-    private ParticleSystem impactParticleSystem;
+    private ParticleSystemBase impactParticleSystem;
 
     [Tooltip("Time for the warning effect before an attack.")]
     public float WarningTime = 0.5f;
@@ -141,6 +140,8 @@ public class RangedEnemy : Enemy
         LaserLineRenderer.enabled = false;
         TargetPlayer = Player.Instance.GetRangedTargeter();
     }
+    
+    
 
     private void SlowUpdate()
     {
@@ -189,7 +190,7 @@ public class RangedEnemy : Enemy
         switchingPatrol = false;
     }
 
-    public void TransitionToAttack()
+    private void TransitionToAttack()
     {
         if (IsPlayerInRadius(lookRadiusHiding))
         {
@@ -199,21 +200,21 @@ public class RangedEnemy : Enemy
         }
     }
 
-    public bool IsPlayerInRadius(float radius)
+    private bool IsPlayerInRadius(float radius)
     {
         return Vector3.Distance(transform.position, TargetPlayer.position) < radius;
     }
 
-    bool IsPlayerInSight()
-    {
-        // check if there is LOS to the player
-         return Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, 
-             out RaycastHit hit, AttackRange, playerLayer);
-    }
+    // bool IsPlayerInSight()
+    // {
+    //     // check if there is LOS to the player
+    //      return Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, 
+    //          out RaycastHit hit, AttackRange, playerLayer);
+    // }
 
     private void AttackBehavior()
     {
-        if (IsPlayerInSight() && IsPlayerInRadius(lookRadiusHiding))
+        if (IsPlayerInRadius(lookRadiusHiding))
         {
             lastSpottedTime = 0f;
         }
@@ -225,10 +226,11 @@ public class RangedEnemy : Enemy
         if (lastSpottedTime > loseInterestTimer)
         {
             currentState = EnemyState.Idle;
+            return;
         }
 
         // go back to idle if the player manages to get too far away
-        if (Vector3.Distance(transform.position, TargetPlayer.position) > lookRadiusHiding)
+        if (!IsPlayerInRadius(lookRadiusHiding))
         {
             currentState = EnemyState.Idle;
             Agent.isStopped = true;
@@ -236,14 +238,7 @@ public class RangedEnemy : Enemy
         }
 
         Agent.speed = attackRunSpeed;
-        if (Vector3.Distance(transform.position, TargetPlayer.position) > AttackRange)
-        {
-            canAttack = false;
-        }
-        else
-        {
-            canAttack = true;
-        }
+        canAttack = IsPlayerInRadius(AttackRange);
 
         if (!isAttacking)
         {
@@ -345,12 +340,12 @@ public class RangedEnemy : Enemy
         {
             // Lerp the direction based on the initial direction
             currentLaserDirection = Vector3.Lerp(currentLaserDirection, targetDirection, lerpSpeed);
-            // currentLaserDirection.y = 0f;
         }
 
         // Debug.Log(PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Dash"));
         if (Physics.Raycast(transform.position, currentLaserDirection, out RaycastHit hit, AttackRange, hittableLayers))
         {
+            
             impactParticleSystem.Play();
             impactParticleSystem.transform.position = hit.point;
             impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
@@ -370,20 +365,6 @@ public class RangedEnemy : Enemy
             LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
         }
     }
-
-// if (Physics.Raycast(transform.position, currentLaserDirection, out hit, AttackRange, ~PlayerLayers) )
-                // {
-                //     impactParticleSystem.transform.position = hit.point;
-                //     impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
-                //     LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                //     LaserLineRenderer.SetPosition(1, hit.point);
-                // }
-                // else
-                // {
-                //     impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
-                //     LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                //     LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
-                // }
 
     public void AttackCooldown()
     {

@@ -793,7 +793,7 @@ MonoBehaviour:
   patrolWaitTime: 1
   AttackRange: 10
   attackDuration: 0.7
-  lookRadiusHiding: 10
+  lookRadiusHiding: 25
   Agent: {fileID: 5977538855359997053}
   EnemyLayers:
     serializedVersion: 2
@@ -808,7 +808,7 @@ MonoBehaviour:
   impactParticleSystem: {fileID: 3443416036086928135}
   WarningTime: 0.7
   noHitLaserDistance: 10
-  rotationSpeed: 2
+  rotationSpeed: 5
   lerpSpeed: 0.025
   LaserLineRenderer: {fileID: 7906025275205360116}
   anim: {fileID: 8265387076116652655}
