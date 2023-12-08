@@ -138,6 +138,9 @@ Material:
     - _GradientCenterY: 0
     - _GradientEnabled: 0
     - _GradientSize: 10
+    - _InteractionDistance: 5
+    - _InteractionHeight: 8
+    - _InteractionStrength: -0.65
     - _LightContribution: 0.651
     - _LightFalloffSize: 0.078
     - _LightmapDirectionPitch: 0

@@ -9,7 +9,6 @@ public class InteractablePortal : InteractableObject
 {
     [SerializeField] private GameScene destinationScene;
     [SerializeField] private Animator doorAnimator;
-    [SerializeField] private Vector3 teleportPosition;
     private string DOOR_OPEN = "DoorOpen";
     
     public override void Interact()
@@ -23,7 +22,6 @@ public class InteractablePortal : InteractableObject
     {
         doorAnimator.SetTrigger(DOOR_OPEN);
         yield return new WaitForSeconds(1f);
-        DataPersistenceManager.Instance.ModifyPosition(teleportPosition);
         Loader.Load(destinationScene);
     }
     

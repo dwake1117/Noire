@@ -7,7 +7,7 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Swing2Overide
-  m_Controller: {fileID: 9100000, guid: eae4c66b1ffb2a143a0272b9017dd795, type: 2}
+  m_Controller: {fileID: 9100000, guid: 14d3233fba905e747bf97b875e233d7b, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 397dac5ee197b2f4aa37ed9ce34c6720, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 64711ca982920a949b4830e367e8e970, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5251d55b79652f444831c02f62b83cb3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 33e6d85f11d078e4e9a251dd23a99346, type: 2}

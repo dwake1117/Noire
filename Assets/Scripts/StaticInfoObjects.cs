@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// class for storing all CONST fields such as static dictionaries, animation curves, etc
@@ -35,19 +33,22 @@ public class StaticInfoObjects : MonoBehaviour
     // maps scene -> (load type, load mode, initial position)
     public readonly Dictionary<GameScene, SceneInfo> LOADING_INFO = new()
     {
-        { GameScene.MainMenuScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
-        { GameScene.DeathScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
-        { GameScene.LoadingScene, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        { GameScene.MainMenuScene, new SceneInfo(SceneType.Single, null) },
+        { GameScene.DeathScene, new SceneInfo(SceneType.Single, null) },
+        { GameScene.LoadingScene, new SceneInfo(SceneType.Single, null) },
         
-        { GameScene.SoluraBase, new SceneInfo(SceneType.Parent, GameScene.SoluraEntry, new Vector3(0, 10, 0)) },
-        { GameScene.SoluraEntry, new SceneInfo(SceneType.Child, GameScene.SoluraBase, new Vector3(0, 10, 0)) },
-        { GameScene.SoluraCliffHouses, new SceneInfo(SceneType.Child, GameScene.SoluraBase, Vector3.zero) },
+        { GameScene.BedrockPlains, new SceneInfo(SceneType.Single, null) },
         
-        { GameScene.BedrockPlains, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        { GameScene.SoluraBase, new SceneInfo(SceneType.Parent, GameScene.SoluraEntry) },
+        { GameScene.SoluraEntry, new SceneInfo(SceneType.Child, GameScene.SoluraBase) },
+        { GameScene.SoluraCliffHouses, new SceneInfo(SceneType.Child, GameScene.SoluraBase) },
+        { GameScene.SoluraDam, new SceneInfo(SceneType.Child, GameScene.SoluraBase)},
+        { GameScene.SoluraBirthday, new SceneInfo(SceneType.Child, GameScene.SoluraBase)},
         
-        { GameScene.TheShorelines, new SceneInfo(SceneType.Single, null, Vector3.zero) },
+        { GameScene.TheShorelines, new SceneInfo(SceneType.Single, null) },
     };
     
+    // reverse mapping from string to GameScene enum
     public readonly Dictionary<string, GameScene> GAMESCENES = new()
     {
         { "MainMenuScene", GameScene.MainMenuScene },
@@ -59,9 +60,12 @@ public class StaticInfoObjects : MonoBehaviour
         { "SoluraBase", GameScene.SoluraBase },
         { "SoluraEntry", GameScene.SoluraEntry },
         { "SoluraCliffHouses", GameScene.SoluraCliffHouses },
+        { "SoluraDam", GameScene.SoluraDam},
+        { "SoluraBirthday", GameScene.SoluraBirthday},
         
         { "TheShorelines", GameScene.TheShorelines },
     };
+    
     public SceneType GetSceneType(string scene)
     {
         return LOADING_INFO[GAMESCENES[scene]].Type;

@@ -14,7 +14,7 @@ public interface IPlayer
     bool IsRunning();
     bool IsKnockedBack();
     float GetPlayerHitBoxHeight();
-    Transform GetRangedTargeter();
+    Transform GetTargeter();
     
     bool AddItem(CollectableItemSO item);
     bool RemoveItem(CollectableItemSO item);

@@ -1,4 +1,3 @@
-using System.Buffers.Text;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,131 +5,120 @@ using UnityEngine.Serialization;
 
 public class RangedEnemy : Enemy
 {
-    [Header("Target Settings")]
-    [Tooltip("The Transform of the player.")]
+    [Header("Target Settings")] [Tooltip("The Transform of the player.")]
     public Transform TargetPlayer;
 
-    [Header("Cover and Patrol")]
-    [SerializeField] [Tooltip("Possible cover points for the enemy.")]
+    [Header("Cover and Patrol")] [SerializeField] [Tooltip("Possible cover points for the enemy.")]
     private CoverPoint[] coverPoints;
+
     [SerializeField] [Tooltip("Patrol points for enemy movement.")]
     private Transform[] PatrolPoints;
+
     [SerializeField] [Tooltip("Time to wait at each patrol point.")]
     private float patrolWaitTime = 3f;
+
     private int currentPatrolIndex = 0;
     private bool switchingPatrol = false;
 
-    [Header("Attack Parameters")]
-    [Tooltip("Attack range of the enemy.")]
+    [Header("Attack Parameters")] [Tooltip("Attack range of the enemy.")]
     public float AttackRange = 10f;
-    [SerializeField] [Tooltip("Damage inflicted by the enemy.")] private int laserDamage = 1;
+
     // [Tooltip("Time between enemy attacks.")]
     // public float TimeBetweenAttacks = 1.0f;
-    [SerializeField] private float maximumLOS = 20f; 
     // [SerializeField] [Tooltip("Minimum distance from the player.")]
     // private float MinPlayerDistance = 5f;
     // [SerializeField] [Tooltip("Minimum height of obstacles for cover.")]
     // private float MinObstacleHeight = 1.25f;
+    [SerializeField] private float attackDuration = 0.5f;
+    
     [SerializeField] [Tooltip("How far the enemy can see to decide on attacking.")]
     private float lookRadiusHiding = 50f;
 
-    [Header("AI Settings")]
-    [SerializeField] [Tooltip("The NavMeshAgent for the enemy.")]
+    [Header("AI Settings")] [SerializeField] [Tooltip("The NavMeshAgent for the enemy.")]
     private NavMeshAgent Agent;
+
     [SerializeField] [Tooltip("Enemy layers to consider for AI decisions.")]
     private LayerMask EnemyLayers;
+    
+    [SerializeField] private LayerMask playerLayer;
+
     [SerializeField] [Tooltip("Speed when patrolling.")]
     private float patrolWalkSpeed = 3.5f;
+
     [SerializeField] [Tooltip("Speed when attacking.")]
     private float attackRunSpeed = 4.5f;
+
     [SerializeField] [Tooltip("How often to update the slow update loop.")]
     private float slowUpdateTime = 0.5f;
 
-    [Header("Attack Cooldown")]
-    [SerializeField] [Tooltip("Range of random cooldowns between attacks.")]
+    [Header("Attack Cooldown")] [SerializeField] [Tooltip("Range of random cooldowns between attacks.")]
     private Range<float, float> AttackCooldownRange = new Range<float, float>(1.0f, 2.0f);
-    private float CurrentAttackCooldown = 0f;
-    private float AttackCooldownTimer = 0f;
-    private bool CanAttack = false;
 
-    [Header("Visual Effects")]
-    [SerializeField] [Tooltip("Line renderer for showing the warning line.")]
+    private float currentAttackCooldown = 0f;
+    private float attackCooldownTimer = 0f;
+    private bool canAttack = false;
+
+    [Header("Visual Effects")] [SerializeField] [Tooltip("Line renderer for showing the warning line.")]
     private LineRenderer WarningLineRenderer;
-    [SerializeField] [Tooltip("Particle system for laser attacks.")]
-    private ParticleSystem LaserParticles;
+
+    // [SerializeField] [Tooltip("Particle system for laser attacks.")]
+    // private ParticleSystem LaserParticles;
     [SerializeField] [Tooltip("Particle system for impact effect.")]
-    private ParticleSystem impactParticleSystem;
+    private ParticleSystemBase impactParticleSystem;
+
     [Tooltip("Time for the warning effect before an attack.")]
     public float WarningTime = 0.5f;
 
-    [Header("Laser Direction and Speed")] 
-    [Tooltip("If the laser does not hit anything, how far should it go?")]
+    [Header("Laser Direction and Speed")] [Tooltip("If the laser does not hit anything, how far should it go?")]
     public float noHitLaserDistance = 100f;
+
     [Tooltip("Rotation speed of the laser.")]
     public float rotationSpeed = 2f;
-    [SerializeField] [Tooltip("Initial direction of the laser.")]
+
+    [Tooltip("Initial direction of the laser.")]
     private Vector3 initialLaserDirection;
-    [SerializeField] [Tooltip("Current direction of the laser.")]
+
+    [Tooltip("Current direction of the laser.")]
     private Vector3 currentLaserDirection;
-    [SerializeField] [Tooltip("Flag to check if initial laser direction is set.")]
+
+    [Tooltip("Flag to check if initial laser direction is set.")]
     private bool initialDirectionSet = false;
+
     [Tooltip("Speed of lerp for laser aiming.")]
     public float lerpSpeed = 0.1f;
 
-    [Header("Animation")]
-    [Tooltip("Animator for the player.")]
-    public Animator PlayerAnimator;
+    [Header("State Management")] [Tooltip("Current state of the enemy.")]
+    private EnemyState currentState;
 
-    [Header("State Management")]
-    [Tooltip("Current state of the enemy.")]
-    public EnemyState currentState;
-
-    [Header("Additional Components")]
-    [SerializeField] [Tooltip("Line renderer for the laser attack.")]
+    [Header("Additional Components")] [SerializeField] [Tooltip("Line renderer for the laser attack.")]
     private LineRenderer LaserLineRenderer;
+
     [SerializeField] [Tooltip("Animator for the enemy.")]
     private Animator anim;
-    [SerializeField] [Tooltip("Layers considered as player.")]
-    private LayerMask PlayerLayers;
-    [SerializeField] [Tooltip("Point from which the laser fires.")]
-    private Transform LaserFirePoint;
+
+    [SerializeField] [Tooltip("Which layers are the lasers allowed to collide with?")]
+    private LayerMask hittableLayers;
+
+    [FormerlySerializedAs("LaserFirePoint")] [SerializeField] [Tooltip("Point from which the laser fires.")]
+    private Transform laserFirePoint;
 
     private bool isAttacking;
-    private bool AttackStarted = false;
+    private bool attackStarted = false;
     private float lastAttackTime = -1;
     private float lastSpottedTime = 0f;
-    private float LoseInterestTimer = 35f;
+    private float loseInterestTimer = 35f;
     private bool moveToNextPatrolPoint = true;
 
-    // Nested class for Range
-    private struct Range<T, U>
-    {
-        public T Lower;
-        public U Upper;
-        public Range(T first, U second)
-        {
-            Lower = first;
-            Upper = second;
-        }
-    }
-
-    // Enumeration for Enemy State
-    public enum EnemyState { Idle, Attack }
     public override void Start()
     {
         base.Start();
-        
+
         currentState = EnemyState.Idle;
         Invoke("SlowUpdate", slowUpdateTime);
-        CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
-        LaserParticles.Stop();
+        currentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
+        impactParticleSystem.Stop();
         LaserLineRenderer.enabled = false;
-        TargetPlayer = Player.Instance.GetRangedTargeter();
-    }
-    public override void Update()
-    {
-        base.Update();
-        Debug.DrawRay(transform.position, (TargetPlayer.position - transform.position), Color.red);
+        TargetPlayer = Player.Instance.GetTargeter();
     }
 
     private void SlowUpdate()
@@ -145,19 +133,8 @@ public class RangedEnemy : Enemy
                 AttackBehavior();
                 break;
         }
+
         Invoke("SlowUpdate", slowUpdateTime);
-    }
-
-    protected override void HandleDeath()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballDie", transform.position);
-    }
-
-    protected override void PlayOnHitSound()
-    {
-        base.PlayOnHitSound();
-        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballOnhit", transform.position);
-        
     }
 
     private void IdleBehavior()
@@ -166,13 +143,13 @@ public class RangedEnemy : Enemy
 
         Agent.speed = patrolWalkSpeed;
 
-        if (PatrolPoints.Length == 0) return;  // No patrol points defined
+        if (PatrolPoints.Length == 0) return; // No patrol points defined
 
         if (moveToNextPatrolPoint)
         {
             Agent.SetDestination(PatrolPoints[currentPatrolIndex].position);
             moveToNextPatrolPoint = false;
-            return; 
+            return;
         }
 
         // Debug.Log("Point Reached");
@@ -193,29 +170,29 @@ public class RangedEnemy : Enemy
 
     private void TransitionToAttack()
     {
-        if (IsPlayerInSight() && IsPlayerInRadius(lookRadiusHiding))
+        if (IsPlayerInRadius(lookRadiusHiding))
         {
-            Invoke("AttackCooldown", CurrentAttackCooldown);
+            Invoke("AttackCooldown", currentAttackCooldown);
             currentState = EnemyState.Attack;
             Agent.isStopped = false;
         }
     }
-    
+
     private bool IsPlayerInRadius(float radius)
     {
         return Vector3.Distance(transform.position, TargetPlayer.position) < radius;
     }
-    
-    // check if there is LOS to the player
-    bool IsPlayerInSight()
-    {
-        return Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized,
-                   out RaycastHit hit, maximumLOS)
-               && hit.collider.gameObject.CompareTag("Player");
-    }
+
+    // bool IsPlayerInSight()
+    // {
+    //     // check if there is LOS to the player
+    //      return Physics.Raycast(transform.position, (TargetPlayer.position - transform.position).normalized, 
+    //          out RaycastHit hit, AttackRange, playerLayer);
+    // }
+
     private void AttackBehavior()
     {
-        if (IsPlayerInSight())
+        if (IsPlayerInRadius(lookRadiusHiding))
         {
             lastSpottedTime = 0f;
         }
@@ -223,12 +200,13 @@ public class RangedEnemy : Enemy
         {
             lastSpottedTime += slowUpdateTime;
         }
-        if(lastSpottedTime > LoseInterestTimer)
+
+        if (lastSpottedTime > loseInterestTimer)
         {
             currentState = EnemyState.Idle;
             return;
         }
-        
+
         // go back to idle if the player manages to get too far away
         if (!IsPlayerInRadius(lookRadiusHiding))
         {
@@ -236,56 +214,61 @@ public class RangedEnemy : Enemy
             Agent.isStopped = true;
             return;
         }
-        
+
         Agent.speed = attackRunSpeed;
-        CanAttack = IsPlayerInRadius(AttackRange);
-        
+        canAttack = IsPlayerInRadius(AttackRange);
+
         if (!isAttacking)
         {
             Agent.isStopped = false;
             FindCover(TargetPlayer.position + 0.5f * Vector3.up);
         }
-        else if(!AttackStarted && CanAttack)
+        else if (isAttacking && !attackStarted && canAttack)
         {
             StartCoroutine(PeekAndAttack());
         }
     }
 
-    
+    public override void Update()
+    {
+        base.Update();
+        Debug.DrawRay(transform.position, (TargetPlayer.position - transform.position), Color.red);
+    }
+
     void FaceTarget()
     {
-        Quaternion lookRotation = Quaternion.LookRotation(TargetPlayer.position - transform.position);
+        Vector3 direction = (TargetPlayer.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
-    
+
     private IEnumerator PeekAndAttack()
     {
         FaceTarget();
-        AttackStarted = true;
-        Agent.isStopped = true;
-        anim.SetTrigger("Attack");
-        
-        Debug.DrawRay(transform.position, TargetPlayer.position - transform.position, Color.red);
-        
-        
+        attackStarted = true;
+        // Debug.DrawRay(transform.position, (TargetPlayer.position - transform.position).normalized, Color.red);
+
         while (Physics.Raycast(transform.position, TargetPlayer.position - transform.position, out RaycastHit hit,
                    noHitLaserDistance) 
-               &&!hit.collider.gameObject.CompareTag("Player"))
+               && !hit.collider.gameObject.CompareTag("Player"))
         {
             FaceTarget();
             Agent.SetDestination(TargetPlayer.position);
             
             yield return null;
         }
+
+        Agent.isStopped = true;
+        anim.SetTrigger("Attack");
         
         float timer = 0;
-        while (timer < 0.75f)
+        while (timer < WarningTime)
         {
             FaceTarget();
             timer += Time.deltaTime;
             yield return null;
         }
-        
+
         Vector3 updatedDirection = (TargetPlayer.position - transform.position).normalized;
         timer = 0;
         while (timer < 0.25f)
@@ -294,17 +277,15 @@ public class RangedEnemy : Enemy
             timer += Time.deltaTime;
             yield return null;
         }
-        impactParticleSystem.Play();
-        
-        // Attack Audio Play
+
+        //Attack Audio Play
         FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Enemy/EyeballAttack", transform.position);
-        CameraManager.Instance.CameraShake(WarningTime, 2f);
         
         // Enable the main attack laser and perform the attack
         LaserLineRenderer.enabled = true;
-        
+        CameraManager.Instance.CameraShake(attackDuration, 5f);
         timer = 0;
-        while(timer < WarningTime)
+        while (timer < attackDuration)
         {
             FaceTarget();
             timer += Time.deltaTime;
@@ -314,25 +295,20 @@ public class RangedEnemy : Enemy
 
         // reset attack
         LaserLineRenderer.enabled = false;
-        AttackStarted = false;
+        attackStarted = false;
         isAttacking = false;
         initialDirectionSet = false;
-        CurrentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
+        currentAttackCooldown = Random.Range(AttackCooldownRange.Lower, AttackCooldownRange.Upper);
         impactParticleSystem.Stop();
-        Invoke("AttackCooldown", CurrentAttackCooldown);
+        Invoke("AttackCooldown", currentAttackCooldown);
     }
 
-    // private void Peek()
-    // {
-    //     Agent.SetDestination(TargetPlayer.position);
-    // }
-    
     private void LaserAttack(Vector3 initalDirection)
     {
         Vector3 targetDirection = (TargetPlayer.position - transform.position).normalized;
 
         // Set initial direction the first time the attack is initiated
-        if(!initialDirectionSet)
+        if (!initialDirectionSet)
         {
             initialLaserDirection = initalDirection;
             currentLaserDirection = initialLaserDirection;
@@ -342,56 +318,41 @@ public class RangedEnemy : Enemy
         {
             // Lerp the direction based on the initial direction
             currentLaserDirection = Vector3.Lerp(currentLaserDirection, targetDirection, lerpSpeed);
-            currentLaserDirection = new Vector3(currentLaserDirection.x, 0, currentLaserDirection.z);
         }
 
-        RaycastHit hit;
         // Debug.Log(PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Dash"));
-        if (Player.Instance.invulnerableTimer < 0.5f)
+        if (Physics.Raycast(transform.position, currentLaserDirection, out RaycastHit hit, AttackRange, hittableLayers))
         {
-            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, noHitLaserDistance) )
-            {
-                impactParticleSystem.transform.position = hit.point;
-                impactParticleSystem.transform.forward = -currentLaserDirection;
-                if (hit.collider.gameObject.CompareTag("Player"))
-                {
-                    GameEventsManager.Instance.PlayerEvents.TakeDamage(laserDamage, transform.position);
-                }
             
-                LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                LaserLineRenderer.SetPosition(1, hit.point);
-            }
-            else
+            impactParticleSystem.Play();
+            impactParticleSystem.transform.position = hit.point;
+            impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
+            if (hit.collider.gameObject.CompareTag("Player"))
             {
-                impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
-                LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
+                GameEventsManager.Instance.PlayerEvents.TakeDamage(damage, transform.position);
             }
+
+            LaserLineRenderer.SetPosition(0, laserFirePoint.position);
+            LaserLineRenderer.SetPosition(1, hit.point);
         }
         else
         {
-            if (Physics.Raycast(transform.position, currentLaserDirection, out hit, noHitLaserDistance, ~PlayerLayers) )
-            {
-                impactParticleSystem.transform.position = hit.point;
-                impactParticleSystem.transform.forward = -currentLaserDirection.normalized;
-                LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                LaserLineRenderer.SetPosition(1, hit.point);
-            }
-            else
-            {
-                impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
-                LaserLineRenderer.SetPosition(0, LaserFirePoint.position);
-                LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
-            }
+            impactParticleSystem.Stop();
+            impactParticleSystem.transform.position = transform.position + currentLaserDirection * noHitLaserDistance;
+            LaserLineRenderer.SetPosition(0, laserFirePoint.position);
+            LaserLineRenderer.SetPosition(1, transform.position + currentLaserDirection * noHitLaserDistance);
         }
-        
-        
     }
+
     public void AttackCooldown()
     {
         isAttacking = true;
     }
     
+    private void Peek()
+    {
+        Agent.SetDestination(TargetPlayer.position);
+    }
     
     private void FindCover(Vector3 threatPosition)
     {
@@ -416,6 +377,7 @@ public class RangedEnemy : Enemy
             Agent.SetDestination(bestCover.transform.position);
         }
     }
+    
     // draw gizmos for radii
     void OnDrawGizmosSelected()
     {

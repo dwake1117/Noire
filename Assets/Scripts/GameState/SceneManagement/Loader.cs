@@ -41,6 +41,7 @@ public static class Loader
 
     public static void Respawn()
     {
-        Load(GameScene.SoluraBase);
+        Load(TargetScene);
+        Player.Instance.Respawn();
     }
 }

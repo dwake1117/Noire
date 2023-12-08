@@ -52,7 +52,7 @@ public class SaveSlot : MonoBehaviour
         else
         {
             // load the slot
-            Loader.Load(DataPersistenceManager.Instance.CurrentScene); 
+            Loader.Load(DataPersistenceManager.Instance.LastCheckPointScene); 
         }
     }
 
@@ -106,7 +106,7 @@ public class SaveSlot : MonoBehaviour
             
             saveSlotButton.SetText(data.ProfileName);
             percentageCompletedText.text = data.PercentageComplete + "% Complete";
-            currentAreaText.text = data.CurrentScene.SplitCamelCase();
+            currentAreaText.text = data.LastCheckPointScene.SplitCamelCase();
             shardsText.text = data.DreamShards.ToString();
         }
     }

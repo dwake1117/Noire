@@ -52,14 +52,12 @@ public class Enemy : Damagable
         PlayOnHitSound();
         RecieveDamage(dmg);
     }
-    protected virtual void PlayOnHitSound(){
-        // keep empty. This solely exists to be extended
-    }
+    
+    // keep empty. This solely exists to be extended
+    protected virtual void PlayOnHitSound() { }
 
     private void RecieveDamage(int dmg)
     {
-        // Debug.Log(health);
-        
         health -= dmg;
         if(health <= 0)
             Die();
@@ -112,18 +110,21 @@ public class Enemy : Damagable
         onHit = null;
     }
 
-    protected virtual void HandleDeath() { }
+    protected virtual void HandleDeath()
+    {
+        gameObject.SetActive(false);
+    }
     
     private void Die()
     {
         GameEventsManager.Instance.PlayerEvents.DreamShardsChange(shardsOnDeath);
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChange(threadsOnDeath);
         ParticleVFXManager.Instance.InstantiateAttractionParticles(
-            shardsOnDeath / 10 + 2, 
-            Player.Instance.GetRangedTargeter(), 
+            shardsOnDeath / 10 + 2,
+            Player.Instance.GetTargeter(),
             transform.position);
         
-        HandleDeath();
-        gameObject.SetActive(false);
+        Invoke("HandleDeath", 1f);
     }
+    
 }

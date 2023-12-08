@@ -17,7 +17,6 @@ public class PlayerHealthSO : ScriptableObject
     {
         if (damageValue < 0) 
             return;
-        Player.Instance.PlayOnHit();
         currentDrowsiness -= damageValue;
         if (currentDrowsiness < 0)
             currentDrowsiness = 0;

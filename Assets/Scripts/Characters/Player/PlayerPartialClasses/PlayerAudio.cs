@@ -15,13 +15,11 @@ public partial class Player
         RuntimeManager.PlayOneShot(path, transform.position);
     }
 
-    public void PlayOnHit()
+    public void PlayOnHitSound()
     {
         RuntimeManager.PlayOneShot("event:/Character/Player/PlayerOnHit", transform.position);
     }
-
-
-
+    
     public void PlayCharge()
     {   
         StopPlayCharge();

@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using MessagePack;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -19,8 +17,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     // other fields
     private GameData gameData;
-    private List<IDataPersistence> dataPersistenceObjects;
-    private List<IDataPersistence> dataPersistenceObjectsParent;
+    private IDataPersistence[] dataPersistenceObjects;
     private GameStateFileIO fileHandler;
 
     private string selectedProfileId;
@@ -54,24 +51,9 @@ public class DataPersistenceManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        switch (StaticInfoObjects.Instance.GetSceneType(scene.name))
-        {
-            case SceneType.Single:
-                dataPersistenceObjects = FindAllDataPersistenceObjects();
-                LoadGame(false);
-                break;
-            case SceneType.Parent:
-                dataPersistenceObjectsParent = FindAllDataPersistenceObjects();;
-                break;
-            case SceneType.Child:
-                dataPersistenceObjects = new();
-                dataPersistenceObjects.AddRange(dataPersistenceObjectsParent);
-                dataPersistenceObjects.AddRange(FindAllDataPersistenceObjects());
-                LoadGame(false);
-                break;
-        }
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
     }
 
     public void ChangeSelectedProfileId(string newProfileId) 
@@ -101,7 +83,9 @@ public class DataPersistenceManager : MonoBehaviour
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects) 
             dataPersistenceObj.LoadData(gameData);
     }
-
+    
+    /// iterates through all data persistence objects, and calls save on each of them
+    /// Improvements for the future: manually save data, and make gameData public. SaveGame() is too expensive to call
     public void SaveGame()
     {
         if (disableDataPersistence || gameData == null) 
@@ -123,7 +107,7 @@ public class DataPersistenceManager : MonoBehaviour
         LoadGame();
     }
 
-    public string CurrentScene => gameData.CurrentScene;
+    public string LastCheckPointScene => gameData.LastCheckPointScene;
     
     private void InitializeSelectedProfileId() 
     {
@@ -131,11 +115,11 @@ public class DataPersistenceManager : MonoBehaviour
         gameData = fileHandler.Load(selectedProfileId);
     }
 
-    private List<IDataPersistence> FindAllDataPersistenceObjects() 
+    private IDataPersistence[] FindAllDataPersistenceObjects() 
     {
         return FindObjectsOfType<MonoBehaviour>(true)
             .OfType<IDataPersistence>()
-            .ToList();
+            .ToArray();
     }
 
     public bool HasGameData()
@@ -150,9 +134,14 @@ public class DataPersistenceManager : MonoBehaviour
         return fileHandler.LoadAllProfiles();
     }
 
-    public void ModifyPosition(Vector3 position)
+    public void OnDeath()
     {
-        gameData.Position = position;
-        // fileHandler.Save(gameData, selectedProfileId);
+        gameData.LastCheckPointScene = Loader.TargetScene;
+        Player.Instance.SaveCurrencyAndInventory(gameData);
+        
+        // timestamp the data
+        gameData.LastUpdated = DateTime.Now.ToBinary();
+
+        fileHandler.Save(gameData, selectedProfileId);
     }
 }
