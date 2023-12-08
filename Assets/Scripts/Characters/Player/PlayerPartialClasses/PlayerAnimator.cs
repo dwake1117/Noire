@@ -59,6 +59,7 @@ public partial class Player
     private void PlayDeathAnimation()
     {
         // TODO: play death SFX here!
+        PlayDeathSound();
         StartCoroutine(DeathAnimationCoroutine());
     }
 
@@ -90,6 +91,7 @@ public partial class Player
         
         //TODO: end death SFX here!    
         loadingOperation.allowSceneActivation = true;
+        
     }
 
     private void PlayDreamStateChangeAnimation()
@@ -131,9 +133,10 @@ public partial class Player
     
     private void DashAnimationStartedTrigger()
     {
+        
         dashSmokePuff.transform.position = transform.position + transform.forward * dashSmokePuffOffset + new Vector3(0, dashSmokePuffOffsetY, 0);
         dashSmokePuff.transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y + 143, 0));
-        
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Character/Player/PlayerDash", transform.position);
         dashSmokePuff.Play();
     }
 
