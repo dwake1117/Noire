@@ -23,14 +23,15 @@ public class BedRockPlainsController : ParentSceneController, IDataPersistence
     
     protected override void Init()
     {
-        AudioManager.Instance.ChangeGlobalParaByName("Walking Surfaces", 1);
         mainLight.intensity = 0.01f;
-        streetlampLight.gameObject.SetActive(false);
-        ScriptableRendererFeatureManager.Instance.EnableOnlyOneFog(fogIndex);
     }
 
     protected override void LateInit()
     {
+        streetlampLight.gameObject.SetActive(false);
+        ScriptableRendererFeatureManager.Instance.EnableOnlyOneFog(fogIndex);
+        AudioManager.Instance.ChangeGlobalParaByName("Walking Surfaces", 1);
+        
         if (lightsOpened)
         {
             PostProcessingManager.Instance.SetVignetteIntensity(0);

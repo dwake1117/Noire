@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4985618578863161070}
   - component: {fileID: 5765549527235520522}
   - component: {fileID: 7980669707722753614}
-  - component: {fileID: 6159779904692874417}
   - component: {fileID: 6001120115839444038}
   m_Layer: 7
   m_Name: Player
@@ -38,7 +37,7 @@ Transform:
   - {fileID: 7677830253633434885}
   - {fileID: 7570308798639021780}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &4985618578863161070
 CharacterController:
@@ -103,12 +102,26 @@ MonoBehaviour:
   - {fileID: 4272874960980188547}
   - {fileID: 135125030046973210}
   onHitMaterial: {fileID: 2100000, guid: 9e3a3f3413bcea6459473c08038195b8, type: 2}
+  CanBeHit: 0
   virtualCamera: {fileID: 0}
   playerHealthSO: {fileID: 11400000, guid: 33dac87c2e381db4798eb0f06d68916c, type: 2}
   playerStaminaSO: {fileID: 11400000, guid: 9e82c2f7e0131314091ab00be4e479bc, type: 2}
   dreamShardsSO: {fileID: 11400000, guid: 52aa4afa771a20a458e523be9bd1feaf, type: 2}
   dreamThreadsSO: {fileID: 11400000, guid: 2faab5e8af90e314cad56f42cedb8ea7, type: 2}
   playerInventory: {fileID: 11400000, guid: 6dd0e28a8bf024b889be24ce0864d08b, type: 2}
+  normalSlash: {fileID: 0}
+  normalSlashOffset: 1
+  normalSlashOffsetY: 1
+  chargedSlash: {fileID: 0}
+  chargedSlashOffset: 2
+  chargedSlashOffsetY: 2
+  particleOutwardSplash: {fileID: 0}
+  dashSmokePuff: {fileID: 0}
+  dashSmokePuffOffset: 2
+  dashSmokePuffOffsetY: 0.2
+  runSmokePuff: {fileID: 0}
+  runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
+  deathAnimationTime: 1
   weaponHitbox: {fileID: 0}
   rangedTargeter: {fileID: 7570308798639021780}
   invulnerableTimerMax: 1
@@ -128,36 +141,10 @@ MonoBehaviour:
   comboTimerMax: 2.5
   walkSpeed: 6
   runSpeed: 12
-  gravity: 0.03
   turnSpeed: 30
-  raycastHit:
-    serializedVersion: 2
-    m_Bits: 320
   fallTimerMax: 2
+  gravity: 0.03
   interactDistance: 4
---- !u!114 &6159779904692874417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5545684416420339613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7fca3e7b5049704ea14d36b08f167a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  normalSlash: {fileID: 0}
-  normalSlashOffset: {x: 0, y: 2.3, z: -1.9}
-  chargedSlash: {fileID: 0}
-  chargedSlashOffset: {x: 0, y: 2.3, z: -3}
-  particleOutwardSplash: {fileID: 0}
-  dashSmokePuff: {fileID: 0}
-  dashSmokePuffOffset: {x: 0, y: 0, z: 0}
-  runSmokePuff: {fileID: 0}
-  runSmokePuffOffset: {x: 0, y: 0.89, z: 0}
-  deathAnimationTime: 1.5
-  enemiesOnHitParticles: {fileID: 0}
 --- !u!136 &6001120115839444038
 CapsuleCollider:
   m_ObjectHideFlags: 0
