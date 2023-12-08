@@ -266,12 +266,27 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         dreamThreadsSO.OnDeath();
         GameEventsManager.Instance.PlayerEvents.DreamShardsChangeFinished();
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
+        DataPersistenceManager.Instance.OnDeath();
         
         state = PlayerState.Dead;
+        
         PlayDeathAnimation();
+    }
+
+    // TODO: play anims
+    public void Respawn()
+    {
+        // state = PlayerState.Idle;
     }
     
     #region IDataPersistence
+
+    public void SaveCurrencyAndInventory(GameData data)
+    {
+        data.DreamShards = dreamShardsSO.GetCurrencyCount();
+        data.DreamThreads = dreamThreadsSO.GetCurrencyCount();
+        data.Inventory = playerInventory.ToSerializableInventory();
+    }
     
     public void LoadData(GameData data)
     {
@@ -281,21 +296,19 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
             
             dreamShardsSO.SetCurrencyCount(data.DreamShards);
             dreamThreadsSO.SetCurrencyCount(data.DreamThreads);
-            transform.position = data.Position;
+            transform.position = data.LastCheckPointPosition;
             playerInventory.FromSerializedInventory(data.Inventory);
         }
     }
 
+    // TODO: dont update position unless its a checkpoint
     public void SaveData(GameData data)
     {
         // IMPORTANT: here we need to save the current scene, 
         // which was the last `targetScene` the loader had loaded
-        data.CurrentScene = SceneManager.GetActiveScene().name;
-        
-        data.DreamShards = dreamShardsSO.GetCurrencyCount();
-        data.DreamThreads = dreamThreadsSO.GetCurrencyCount();
-        data.Position = transform.position;
-        data.Inventory = playerInventory.ToSerializableInventory();
+        SaveCurrencyAndInventory(data);
+        data.LastCheckPointScene = Loader.TargetScene;
+        data.LastCheckPointPosition = transform.position;
     }
     
     #endregion

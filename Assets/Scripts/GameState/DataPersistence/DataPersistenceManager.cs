@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using MessagePack;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -56,8 +54,6 @@ public class DataPersistenceManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         dataPersistenceObjects = FindAllDataPersistenceObjects();
-        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects) 
-            dataPersistenceObj.LoadData(gameData);
     }
 
     public void ChangeSelectedProfileId(string newProfileId) 
@@ -87,7 +83,9 @@ public class DataPersistenceManager : MonoBehaviour
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects) 
             dataPersistenceObj.LoadData(gameData);
     }
-
+    
+    /// iterates through all data persistence objects, and calls save on each of them
+    /// Improvements for the future: manually save data, and make gameData public. SaveGame() is too expensive to call
     public void SaveGame()
     {
         if (disableDataPersistence || gameData == null) 
@@ -109,7 +107,7 @@ public class DataPersistenceManager : MonoBehaviour
         LoadGame();
     }
 
-    public string CurrentScene => gameData.CurrentScene;
+    public string LastCheckPointScene => gameData.LastCheckPointScene;
     
     private void InitializeSelectedProfileId() 
     {
@@ -136,9 +134,14 @@ public class DataPersistenceManager : MonoBehaviour
         return fileHandler.LoadAllProfiles();
     }
 
-    public void ModifyPosition(Vector3 position)
+    public void OnDeath()
     {
-        gameData.Position = position;
-        // fileHandler.Save(gameData, selectedProfileId);
+        gameData.LastCheckPointScene = Loader.TargetScene;
+        Player.Instance.SaveCurrencyAndInventory(gameData);
+        
+        // timestamp the data
+        gameData.LastUpdated = DateTime.Now.ToBinary();
+
+        fileHandler.Save(gameData, selectedProfileId);
     }
 }

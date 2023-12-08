@@ -121,6 +121,7 @@ public class SceneTransitioner : MonoBehaviour
             loadChildOperation.allowSceneActivation = true;
         }
     }
+    
     private IEnumerator Enter(TransitionSO transitionSO)
     {
         // start to fade in with next scene

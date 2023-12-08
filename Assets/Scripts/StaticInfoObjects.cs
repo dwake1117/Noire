@@ -37,12 +37,13 @@ public class StaticInfoObjects : MonoBehaviour
         { GameScene.DeathScene, new SceneInfo(SceneType.Single, null) },
         { GameScene.LoadingScene, new SceneInfo(SceneType.Single, null) },
         
+        { GameScene.BedrockPlains, new SceneInfo(SceneType.Single, null) },
+        
         { GameScene.SoluraBase, new SceneInfo(SceneType.Parent, GameScene.SoluraEntry) },
         { GameScene.SoluraEntry, new SceneInfo(SceneType.Child, GameScene.SoluraBase) },
         { GameScene.SoluraCliffHouses, new SceneInfo(SceneType.Child, GameScene.SoluraBase) },
         { GameScene.SoluraDam, new SceneInfo(SceneType.Child, GameScene.SoluraBase)},
-        
-        { GameScene.BedrockPlains, new SceneInfo(SceneType.Single, null) },
+        { GameScene.SoluraBirthday, new SceneInfo(SceneType.Child, GameScene.SoluraBase)},
         
         { GameScene.TheShorelines, new SceneInfo(SceneType.Single, null) },
     };
@@ -60,9 +61,11 @@ public class StaticInfoObjects : MonoBehaviour
         { "SoluraEntry", GameScene.SoluraEntry },
         { "SoluraCliffHouses", GameScene.SoluraCliffHouses },
         { "SoluraDam", GameScene.SoluraDam},
+        { "SoluraBirthday", GameScene.SoluraBirthday},
         
         { "TheShorelines", GameScene.TheShorelines },
     };
+    
     public SceneType GetSceneType(string scene)
     {
         return LOADING_INFO[GAMESCENES[scene]].Type;

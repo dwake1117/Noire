@@ -17,6 +17,7 @@ public enum GameScene
     SoluraEntry,
     SoluraCliffHouses,
     SoluraDam,
+    SoluraBirthday,
     
     TheShorelines,
 }

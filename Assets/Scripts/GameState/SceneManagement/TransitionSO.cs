@@ -11,6 +11,9 @@ public class TransitionSO : ScriptableObject
     
     public IEnumerator Enter(Canvas Parent)
     {
+        if (!img)
+            yield break;
+        
         float time = 0;
         
         Color startColor = Color.black;

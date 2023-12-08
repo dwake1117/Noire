@@ -57,7 +57,7 @@ public class MainMenu : UI
     private void OnContinueGameClicked()
     {
         ToggleButtons(false);
-        if(!Loader.Load(DataPersistenceManager.Instance.CurrentScene))
+        if(!Loader.Load(DataPersistenceManager.Instance.LastCheckPointScene))
             ToggleButtons(true);
     }
     

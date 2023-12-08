@@ -13,11 +13,11 @@ public class GameData
     // player fields
     [Key(3)] public float DreamShards;
     [Key(4)] public float DreamThreads;
-    [Key(5)] public Vector3 Position;
+    [Key(5)] public Vector3 LastCheckPointPosition;
     [Key(6)] public Dictionary<string, int> Inventory;
     
     // game states
-    [Key(7)] public string CurrentScene;
+    [Key(7)] public string LastCheckPointScene;
     
     // BedrockPlains
     [Key(8)] public Dictionary<string, InteractableProgress> InteractableProgress;
@@ -28,12 +28,12 @@ public class GameData
     {
         DreamShards = 0;
         DreamThreads = 0;
-        Position = new Vector3();
 
         ProfileName = profileId;
         PercentageComplete = 0;
 
-        CurrentScene = Loader.FirstScene.ToString();
+        LastCheckPointPosition = new Vector3();
+        LastCheckPointScene = Loader.FirstScene.ToString();
 
         Inventory = new();
         
