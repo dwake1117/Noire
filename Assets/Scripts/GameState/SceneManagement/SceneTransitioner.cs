@@ -123,7 +123,6 @@ public class SceneTransitioner : MonoBehaviour
     }
     private IEnumerator Enter(TransitionSO transitionSO)
     {
-            
         // start to fade in with next scene
         yield return StartCoroutine(transitionSO.Enter(transitionCanvas));
         isLoading = false;

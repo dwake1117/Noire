@@ -21494,12 +21494,12 @@ PrefabInstance:
     - target: {fileID: 6200712646836962573, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
       propertyPath: teleportPosition.x
-      value: 5
+      value: 194
       objectReference: {fileID: 0}
     - target: {fileID: 6200712646836962573, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
       propertyPath: teleportPosition.z
-      value: -22.5
+      value: 98
       objectReference: {fileID: 0}
     - target: {fileID: 6393383170714618571, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
@@ -21519,7 +21519,7 @@ PrefabInstance:
     - target: {fileID: 6393383170714618571, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 95
+      value: 98.3
       objectReference: {fileID: 0}
     - target: {fileID: 6393383170714618571, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}

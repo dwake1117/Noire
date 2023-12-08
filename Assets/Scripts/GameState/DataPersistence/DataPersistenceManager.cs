@@ -19,8 +19,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     // other fields
     private GameData gameData;
-    private List<IDataPersistence> dataPersistenceObjects;
-    private List<IDataPersistence> dataPersistenceObjectsParent;
+    private IDataPersistence[] dataPersistenceObjects;
     private GameStateFileIO fileHandler;
 
     private string selectedProfileId;
@@ -54,24 +53,11 @@ public class DataPersistenceManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        switch (StaticInfoObjects.Instance.GetSceneType(scene.name))
-        {
-            case SceneType.Single:
-                dataPersistenceObjects = FindAllDataPersistenceObjects();
-                LoadGame(false);
-                break;
-            case SceneType.Parent:
-                dataPersistenceObjectsParent = FindAllDataPersistenceObjects();;
-                break;
-            case SceneType.Child:
-                dataPersistenceObjects = new();
-                dataPersistenceObjects.AddRange(dataPersistenceObjectsParent);
-                dataPersistenceObjects.AddRange(FindAllDataPersistenceObjects());
-                LoadGame(false);
-                break;
-        }
+        dataPersistenceObjects = FindAllDataPersistenceObjects();
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects) 
+            dataPersistenceObj.LoadData(gameData);
     }
 
     public void ChangeSelectedProfileId(string newProfileId) 
@@ -131,11 +117,11 @@ public class DataPersistenceManager : MonoBehaviour
         gameData = fileHandler.Load(selectedProfileId);
     }
 
-    private List<IDataPersistence> FindAllDataPersistenceObjects() 
+    private IDataPersistence[] FindAllDataPersistenceObjects() 
     {
         return FindObjectsOfType<MonoBehaviour>(true)
             .OfType<IDataPersistence>()
-            .ToList();
+            .ToArray();
     }
 
     public bool HasGameData()
