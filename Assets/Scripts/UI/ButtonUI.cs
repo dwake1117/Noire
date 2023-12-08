@@ -47,7 +47,6 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void AddListener(UnityAction call)
     {
-        // TODO: add playsound effects of mouse click
         button.onClick.AddListener(call);
     }
 

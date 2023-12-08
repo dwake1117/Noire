@@ -58,8 +58,6 @@ public partial class Player
     
     private void PlayDeathAnimation()
     {
-        // TODO: play death SFX here!
-        PlayDeathSound();
         StartCoroutine(DeathAnimationCoroutine());
     }
 

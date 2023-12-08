@@ -1,18 +1,25 @@
+using FMOD;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using FMODUnity;
+using Debug = UnityEngine.Debug;
+
+// TODO: use enum for switching ost/sfx statements
+
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    
+
     [Header("Volume Controller")]
-    private FMOD.Studio.VCA sfxVCA;
-    private FMOD.Studio.VCA ostVCA;
+    [SerializeField] private AnimationCurve volumeAnimationCurve;
+    private const float FMOD_MAX_VOLUME = 1.25f;
+    public int currSfxLevel { get; private set; }
+    public int currOstLevel { get; private set; }
+    
+    public const int maxSounLevels = 5;
+    private const int defaultSoundLevel = 4;
     
     [Header("BGM")]
     private FMOD.Studio.EventInstance currBgmState;
-
-    [SerializeField] private AnimationCurve volumeAnimCurve;
 
     private void Awake()
     {
@@ -23,7 +30,9 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        volumeAnimCurve.Evaluate(0.2f);
+
+        currOstLevel = defaultSoundLevel;
+        currSfxLevel = defaultSoundLevel;
     }
     
     public bool IsPlaying(FMOD.Studio.EventInstance instance) 
@@ -49,7 +58,7 @@ public class AudioManager : MonoBehaviour
         
         if (!IsPlaying(currBgmState))
         {
-            FMODUnity.RuntimeManager.AttachInstanceToGameObject(currBgmState, Player.Instance.transform, false);
+            RuntimeManager.AttachInstanceToGameObject(currBgmState, Player.Instance.transform, false);
             currBgmState.start();
         }
     }
@@ -62,79 +71,60 @@ public class AudioManager : MonoBehaviour
 
     public float GetVcaVolume(string vca)
     {
-        float result;
-        if (vca == "Sfx")
-        {
-            sfxVCA = RuntimeManager.GetVCA("vca:/SfxVCA");
-            sfxVCA.getVolume(out result);
-            return result;
-        }
-        else
-        {
-            ostVCA = RuntimeManager.GetVCA("vca:/OstVCA");
-            ostVCA.getVolume(out result);
-            return result;
-        }
+        var res = RuntimeManager.GetVCA($"vca:/{vca}VCA").getVolume(out float result);
+        if (res != RESULT.OK)
+            Debug.Log("Get Vca Volume failed.");
+        
+        return result;
     }
-    public void SetSfxVolume(float desVolume)
+    
+    /// advances to the next volume gate. Resets to 0 if tries to advance it at max volume.
+    public void SetVolume(string vcaPath)
     {
-        sfxVCA = RuntimeManager.GetVCA("vca:/SfxVCA");
-        if (!(sfxVCA.isValid()))
+        var vca = RuntimeManager.GetVCA($"vca:/{vcaPath}VCA");
+        if (!vca.isValid())
         {
-            Debug.LogError("sfxVca is not Valid");
+            Debug.LogError($"vca path {vcaPath} is not Valid");
         }
         else
         {
-            if (0 <= desVolume && desVolume <= 1.25)
+            int levelToSet;
+            if (vcaPath == "Sfx")
             {
-                sfxVCA.setVolume(desVolume);
-                // sfxVolume = desVolume;
-                float vol;
-                sfxVCA.getVolume(out vol);
-                //Debug.Log("sfx" + vol);
+                levelToSet = (currSfxLevel + 1) % (maxSounLevels + 1);
+                currSfxLevel = levelToSet;
             }
             else
             {
-                Debug.LogError("sfxVca desvolume is not valid");
+                levelToSet = (currOstLevel + 1) % (maxSounLevels + 1);
+                currOstLevel = levelToSet;
             }
+            
+            float currSfxLevelNormalized = (float)levelToSet / maxSounLevels;
+            
+            float volumeToSet = volumeAnimationCurve.Evaluate(currSfxLevelNormalized);
+            if (volumeToSet < 0 || volumeToSet > 1)
+                Debug.LogError("Volume to set has to be between 0 and 1.");
+            
+            var res = vca.setVolume(volumeToSet * FMOD_MAX_VOLUME);
+            if (res != RESULT.OK)
+                Debug.LogError($"SetOstVolumeFailed with {res}");
         }
     }
-    public void SetOstVolume(float desVolume)
-    {
-        ostVCA = RuntimeManager.GetVCA("vca:/OstVCA");
-        if (!(ostVCA.isValid()))
-        {
-            Debug.LogError("OstVca is not Valid");
-        }
-        else
-        {
-            if (0 <= desVolume && desVolume <= 1.25)
-            {
-                ostVCA.setVolume(desVolume);
-                // ostVolume = desVolume;
-                float vol;
-                ostVCA.getVolume(out vol);
-                //Debug.Log("ost:" +vol);
-            }
-            else
-            {
-                Debug.LogError("OstVca desvolume is not valid");
-            }
-        }
-    }
+    
     public void ChangeGlobalParaByName(string name, float value)
     {
         FMOD.Studio.PARAMETER_DESCRIPTION parameterDescription;
         var result =
             RuntimeManager.StudioSystem.getParameterDescriptionByName(name, out parameterDescription);
-        if (result != FMOD.RESULT.OK)
+        if (result != RESULT.OK)
         {
             Debug.LogError("Setting Global params failed");
             return;
         }
 
         result = RuntimeManager.StudioSystem.setParameterByID(parameterDescription.id, value);
-        if (result != FMOD.RESULT.OK)
+        if (result != RESULT.OK)
         {
             Debug.LogError("Setting Global params failed");
         }

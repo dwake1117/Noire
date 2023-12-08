@@ -35,14 +35,13 @@ public partial class Player
             chargeAttack.stop(STOP_MODE.ALLOWFADEOUT);
             chargeAttack.release();
         }
-
-
     }
 
     public void PlayDashSound()
     {
         //RuntimeManager.PlayOneShot("");
     }
+    
     public void PlayDeathSound()
     {
         AudioManager.Instance.StopBgmAudio();
@@ -51,6 +50,6 @@ public partial class Player
 
     public void StopDeathSound()
     {
+        
     }
-
 }

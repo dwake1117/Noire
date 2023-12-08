@@ -270,6 +270,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         
         state = PlayerState.Dead;
         
+        PlayDeathSound();
         PlayDeathAnimation();
     }
 

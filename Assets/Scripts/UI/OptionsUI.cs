@@ -10,7 +10,8 @@ public class OptionsUI : UI
     [SerializeField] private ButtonUI musicButton;
     [SerializeField] private ButtonUI controlsButton;
     [SerializeField] private ButtonUI backButton;
-    
+    private const string SOUND_TEXT = "Sound Effects: ";
+    private const string MUSIC_TEXT = "Music: ";
     
     private void Awake()
     {
@@ -54,49 +55,11 @@ public class OptionsUI : UI
 
     private void VolChange(string vcaType)
     {
-        float currentVol = AudioManager.Instance.GetVcaVolume(vcaType);
-        // Debug.Log(currentVol);
-        float desVol = currentVol + 0.25f;
-        if (vcaType == "Sfx")
-        {
-            if ( desVol <= 1.25)
-            {
-                AudioManager.Instance.SetSfxVolume(desVol);
-                float covVolume = (desVol * 4);
-                soundEffectsButton.buttonText.text = "Sound Effects: " + covVolume + "/5";
-            }
-            else if (desVol == 1.50){
-                AudioManager.Instance.SetSfxVolume(0);
-                soundEffectsButton.buttonText.text = "Sound Effects: 0" + "/5";
-            }
-            else
-            {
-                desVol = desVol - 1.50f;
-                AudioManager.Instance.SetSfxVolume(desVol);
-                float covVolume = (desVol * 4);
-                soundEffectsButton.buttonText.text = "Sound Effects: " + covVolume + "/5";
-            }
-        }
+        AudioManager.Instance.SetVolume(vcaType);
+        if(vcaType == "Sfx")
+            soundEffectsButton.SetText(SOUND_TEXT + AudioManager.Instance.currSfxLevel);
         else
-        {
-            if ( desVol <= 1.25)
-            {
-                AudioManager.Instance.SetOstVolume(desVol);
-                float covVolume = (desVol * 4);
-                musicButton.buttonText.text = "Music: " + covVolume + "/5";
-            }
-            else if (desVol == 1.50){
-                AudioManager.Instance.SetOstVolume(0);
-                musicButton.buttonText.text = "Music: 0" + "/5";
-            }
-            else
-            {
-                desVol = desVol - 1.25f;
-                AudioManager.Instance.SetOstVolume(desVol);
-                float covVolume = (desVol * 4);
-                musicButton.buttonText.text = "Music: " + covVolume + "/5";
-            }
-        }
+            musicButton.SetText(MUSIC_TEXT + AudioManager.Instance.currOstLevel);
     }
 }
 

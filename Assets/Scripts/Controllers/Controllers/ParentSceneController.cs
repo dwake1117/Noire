@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// A parent scene controller supports virtual implementations of the following functions:
@@ -19,7 +20,7 @@ public class ParentSceneController : MonoBehaviour
     [SerializeField] protected FMODUnity.EventReference bgmAudioEvent;
     
     [Header("Title text")]
-    [SerializeField] private CanvasGroup SceneTitle;
+    [SerializeField] private CanvasGroup sceneTitle;
     [SerializeField] private CanvasGroup UI;
     [SerializeField] private AnimationCurve titleIntensityCurve;
     [SerializeField] private AnimationCurve UIIntensityCurve;
@@ -54,19 +55,21 @@ public class ParentSceneController : MonoBehaviour
     {
         GameEventsManager.Instance.GameStateEvents.MenuToggle(true);
         
-        SceneTitle.gameObject.SetActive(false);
+        sceneTitle.gameObject.SetActive(false);
         UI.alpha = 0;
         yield return new WaitForSeconds(1);
+        
         AudioManager.Instance.PlaySceneBegins();
-        SceneTitle.gameObject.SetActive(true);
+        
+        sceneTitle.gameObject.SetActive(true);
         float time = 0;
         while (time < 1)
         {
-            SceneTitle.alpha = Mathf.Lerp(1, 0, titleIntensityCurve.Evaluate(time));
+            sceneTitle.alpha = Mathf.Lerp(1, 0, titleIntensityCurve.Evaluate(time));
             time += Time.deltaTime / titleAnimationTime;
             yield return null;
         }
-        SceneTitle.gameObject.SetActive(false);
+        sceneTitle.gameObject.SetActive(false);
         
         time = 0;
         while (time < 1)
