@@ -19,8 +19,6 @@ public class MeleeEnemy : Enemy
     [Header("Attack Parameters")]
     [Tooltip("Attack range of the enemy.")]
     public float AttackRange = 10f;
-    [Tooltip("Damage inflicted by the enemy.")]
-    public float Damage = 10.0f;
     [Tooltip("Time between enemy attacks.")]
     public float TimeBetweenAttacks = 1.0f;
     [SerializeField] [Tooltip("Minimum distance from the player.")]

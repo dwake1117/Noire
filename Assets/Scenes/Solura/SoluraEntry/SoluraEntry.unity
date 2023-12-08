@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.17993979, g: 0.22529759, b: 0.30670077, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -21474,7 +21474,7 @@ PrefabInstance:
     - target: {fileID: 234933050872228997, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
       propertyPath: m_Name
-      value: PortalToCliffHouses
+      value: PortalToDam
       objectReference: {fileID: 0}
     - target: {fileID: 234933050872228997, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
@@ -21488,13 +21488,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6200712646836962573, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
+      propertyPath: destinationScene
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6200712646836962573, guid: b414c2737ca61184c81dad35ed19c01f,
+        type: 3}
       propertyPath: teleportPosition.x
-      value: 108.4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6200712646836962573, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}
       propertyPath: teleportPosition.z
-      value: 130.7
+      value: -22.5
       objectReference: {fileID: 0}
     - target: {fileID: 6393383170714618571, guid: b414c2737ca61184c81dad35ed19c01f,
         type: 3}

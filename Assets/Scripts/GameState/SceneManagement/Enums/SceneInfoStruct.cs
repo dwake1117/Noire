@@ -8,12 +8,9 @@ public struct SceneInfo
     // We also need to specify a default child if the scene is of Type = Parent
     public GameScene? ParentOrDefaultChild { get; private set; }
     
-    public Vector3 InitialPosition {get; private set;}
-
-    public SceneInfo(SceneType type, GameScene? parentOrDefaultChild, Vector3 initialPosition)
+    public SceneInfo(SceneType type, GameScene? parentOrDefaultChild)
     {
         Type = type;
         ParentOrDefaultChild = parentOrDefaultChild;
-        InitialPosition = initialPosition;
     }
 }
