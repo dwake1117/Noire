@@ -57,7 +57,7 @@ public class ParentSceneController : MonoBehaviour
         SceneTitle.gameObject.SetActive(false);
         UI.alpha = 0;
         yield return new WaitForSeconds(1);
-        
+        AudioManager.Instance.PlaySceneBegins();
         SceneTitle.gameObject.SetActive(true);
         float time = 0;
         while (time < 1)
