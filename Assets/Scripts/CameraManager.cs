@@ -16,7 +16,6 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float FOVmin;
     [SerializeField] private float FOVDefault;
     [SerializeField] private float zoomSpeed = 10f;
-    [SerializeField] private float shiftCameraPerspectiveSpeed = 20f;
 
     // only allow 3 camera turn angles: -1 for left, 0 middle, 1 right
     private int cameraPosition;
@@ -27,11 +26,7 @@ public class CameraManager : MonoBehaviour
     private Coroutine shakeCoroutine;
     private CinemachineBasicMultiChannelPerlin shakeNoise;
     
-    private const float EPS = .1f;
-
     private float targetFOV;
-    private bool isMoving;
-    private Quaternion targetCameraRotation;
 
     private void Awake()
     {
@@ -51,45 +46,16 @@ public class CameraManager : MonoBehaviour
         shakeNoise.m_AmplitudeGain = 0;
         virtualCamera.m_Lens.OrthographicSize = FOVDefault;
         targetFOV = virtualCamera.m_Lens.OrthographicSize;
-        targetCameraRotation = transform.rotation;
-        isMoving = false;
     }
 
     private void Start()
     {
-        GameInput.Instance.OnCameraTurn += GameInput_OnCameraTurn;
         virtualCamera.m_Lens.OrthographicSize = FOVDefault;
-    }
-
-    private void GameInput_OnCameraTurn(bool isRightTurn)
-    {
-        if ((isRightTurn && cameraPosition != 1) ||
-            (!isRightTurn && cameraPosition != -1))
-        {
-            isMoving = true;
-            Vector3 offset = new Vector3(0, isRightTurn ? 45 : -45, 0);
-            targetCameraRotation = Quaternion.Euler(targetCameraRotation.eulerAngles + offset);
-            cameraPosition = isRightTurn ? cameraPosition + 1 : cameraPosition - 1;
-        }
     }
 
     private void Update()
     {
-        HandleCameraAngle();
         HandleCameraZoom();
-    }
-
-    private void HandleCameraAngle()
-    {
-        if (isMoving)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetCameraRotation, Time.deltaTime * shiftCameraPerspectiveSpeed);
-            if (Mathf.Abs(transform.eulerAngles[1] - targetCameraRotation.eulerAngles[1]) < EPS)
-            {
-                transform.rotation = targetCameraRotation;
-                isMoving = false;
-            }
-        }
     }
 
     private void HandleCameraZoom() {
@@ -102,7 +68,6 @@ public class CameraManager : MonoBehaviour
         targetFOV = Mathf.Clamp(targetFOV, FOVmin, FOVmax);
         virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(virtualCamera.m_Lens.OrthographicSize, targetFOV, Time.deltaTime * zoomSpeed); ;
     }
-
 
     public void CameraShake(float duration=shakeDuration, float magnitude=shakeMagnitude)
     {

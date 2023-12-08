@@ -140,15 +140,15 @@ public partial class Player
         moveDir = (forward + right).normalized;
         
         // move
-        if (!GameInput.Instance.IsShiftModifierOn())
-        {
-            state = PlayerState.Walking;
-            Move(walkSpeed);
-        }
-        else
-        {
+        // if (!GameInput.Instance.IsShiftModifierOn())
+        // {
+        //     state = PlayerState.Walking;
+        //     Move(walkSpeed);
+        // }
+        // else
+        // {
             state = PlayerState.Running;
             Move(runSpeed);
-        }
+        // }
     }
 }

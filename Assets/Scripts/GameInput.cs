@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 public class GameInput : MonoBehaviour
 {
     public static GameInput Instance { get; private set; }
-    
-    public event Action<bool> OnCameraTurn; // true iff right turn
     public event Action OnPlayerMenuToggle;
     public event Action OnPauseToggle;
     public event Action OnInteract;
@@ -63,9 +61,6 @@ public class GameInput : MonoBehaviour
         gameInputActions.UI.Menu.performed += PlayerMenu_performed;
         gameInputActions.Menu.Pause.performed += Pause_performed;
         
-        gameInputActions.Player.CameraRight.performed += CameraRight_performed;
-        gameInputActions.Player.CameraLeft.performed += CameraLeft_performed;
-        
         gameInputActions.Player.LightAttack.performed += Attack1_performed;
         gameInputActions.Player.ChargedAttack.performed += ChargedAttack_performed;
         gameInputActions.Player.ChargedAttack.canceled += ChargedAttack_canceled;
@@ -95,9 +90,6 @@ public class GameInput : MonoBehaviour
         
         gameInputActions.UI.Menu.performed -= PlayerMenu_performed;
         gameInputActions.Menu.Pause.performed -= Pause_performed;
-        
-        gameInputActions.Player.CameraRight.performed -= CameraRight_performed;
-        gameInputActions.Player.CameraLeft.performed -= CameraLeft_performed;
         
         gameInputActions.Player.LightAttack.performed -= Attack1_performed;
         gameInputActions.Player.ChargedAttack.performed -= ChargedAttack_performed;
@@ -203,16 +195,6 @@ public class GameInput : MonoBehaviour
     
     private void Pause_performed(InputAction.CallbackContext obj) => OnPauseToggle?.Invoke();
 
-    private void CameraLeft_performed(InputAction.CallbackContext obj)
-    {
-        OnCameraTurn?.Invoke(true);
-    }
-
-    private void CameraRight_performed(InputAction.CallbackContext obj)
-    {
-        OnCameraTurn?.Invoke(false);
-    }
-    
     private void Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke();
     
     private void Attack1_performed(InputAction.CallbackContext obj)
