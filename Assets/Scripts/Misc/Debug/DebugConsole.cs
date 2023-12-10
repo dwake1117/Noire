@@ -30,7 +30,7 @@ public class DebugConsole : MonoBehaviour
     {
         DECREASE_HP = new DebugCommand<int>("dec_hp", "decreases player hp by x", "dec_hp <x>", (x) =>
         {
-            GameEventsManager.Instance.PlayerEvents.TakeDamage(x, Vector3.zero);
+            GameEventsManager.Instance.PlayerEvents.TakeDamage(x, Player.Instance.transform.position);
         });
         
         DECREASE_HP_CONTINUOUS = new DebugCommand<(int, float)>("dec_hp_cont", "decreases player hp by x every s seconds", "dec_hp <x> <s>", (x) =>
@@ -45,7 +45,7 @@ public class DebugConsole : MonoBehaviour
         
         KILL = new DebugCommand("kill", "kills the player", "kill", () =>
         {
-            GameEventsManager.Instance.PlayerEvents.TakeDamage(Int32.MaxValue, Vector3.zero);
+            GameEventsManager.Instance.PlayerEvents.TakeDamage(Int32.MaxValue, Player.Instance.transform.position);
         });
         
         SAVE = new DebugCommand("save", "saves the game", "save", () =>

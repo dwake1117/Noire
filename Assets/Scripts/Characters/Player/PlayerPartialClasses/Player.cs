@@ -17,14 +17,13 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CapsuleCollider))]
-public partial class Player : Damagable, IPlayer, IDataPersistence
+public partial class Player : Character, IDataPersistence
 {
     public static Player Instance { get; private set; }
     
     [Header("---------- Player Fields and Components ---------- ")]
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     private CharacterController controller;
-    private Animator animator;
     private CapsuleCollider capsuleCollider;
 
     [Header("Shader Properties")]
@@ -48,25 +47,17 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
 
     [Header("Player Items")] 
     [SerializeField] private InventorySO playerInventory;
-    
-    #region IPlayer
-    public bool IsWalking() => state == PlayerState.Walking;
-    public bool IsIdle() => state == PlayerState.Idle;
-    public bool IsCasting() => state == PlayerState.Casting;
-    public bool IsDead() => state == PlayerState.Dead;
-    public bool IsFalling() => state == PlayerState.Falling;
-    public bool IsRunning() => state == PlayerState.Running;
-    public bool IsKnockedBack() => state == PlayerState.KnockedBack;
+
+    #region Public Inline Functions
     public float GetPlayerHitBoxHeight() => playerHitBoxHeight;
     public Transform GetTargeter() => rangedTargeter;
     public bool AddItem(CollectableItemSO item) => playerInventory.Add(item);
     public bool RemoveItem(CollectableItemSO item) => playerInventory.Remove(item);
     public void SetMaxHP(int x) => playerHealthSO.SetMaxHP(x);
     public void SetMaxStamina(float x) => playerStaminaSO.SetMaxStamina(x);
-    
     #endregion
     
-    private void Awake()
+    private new void Awake()
     {
         if (Instance != null) 
         {
@@ -75,11 +66,11 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        base.Awake();
         
-        state = PlayerState.Idle;
         dreamState = DreamState.Neutral;
         
-        animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         
@@ -192,15 +183,15 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         bool isMoving = GameInput.Instance.GetMovementVectorNormalized() != Vector3.zero;
         if (!isMoving)
         {
-            state = PlayerState.Idle;
+            ChangeStateTo(CharacterState.Idle);
             return;
         }
 
         bool isRunning = GameInput.Instance.IsShiftModifierOn();
         if (isRunning)
-            state = PlayerState.Running;
+            ChangeStateTo(CharacterState.Running);
         else
-            state = PlayerState.Walking;
+            ChangeStateTo(CharacterState.Walking);
     }
     
     /// Waits for `time`, if realTime=True, then real waits for `time`. Then resets the state. 
@@ -268,7 +259,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
         GameEventsManager.Instance.PlayerEvents.DreamThreadsChangeFinished();
         DataPersistenceManager.Instance.OnDeath();
         
-        state = PlayerState.Dead;
+        ChangeStateTo(CharacterState.Dead);
         
         PlayDeathSound();
         PlayDeathAnimation();
@@ -277,7 +268,7 @@ public partial class Player : Damagable, IPlayer, IDataPersistence
     // TODO: play anims
     public void Respawn()
     {
-        // state = PlayerState.Idle;
+        ChangeStateTo(CharacterState.Idle);
     }
     
     #region IDataPersistence

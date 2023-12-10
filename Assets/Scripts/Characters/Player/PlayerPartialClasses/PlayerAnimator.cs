@@ -28,13 +28,6 @@ public partial class Player
     private const string RUN = "PlayerRun";
     private const string KNOCKBACK = "PlayerKnockback";
     private const string DIE = "PlayerDeath";
-    private int WALK_ID;
-    private int IDLE_ID;
-    private int FALL_ID;
-    private int RUN_ID;
-    private int KNOCKBACK_ID;
-    private int DIE_ID;
-    
     
     private void AnimatorAwake()
     {
@@ -44,16 +37,6 @@ public partial class Player
         RUN_ID = Animator.StringToHash(RUN);
         DIE_ID = Animator.StringToHash(DIE);
         KNOCKBACK_ID = Animator.StringToHash(KNOCKBACK);
-    }
-
-    private void AnimatorUpdate()
-    {
-        animator.SetBool(WALK_ID, IsWalking());
-        animator.SetBool(IDLE_ID, IsIdle());
-        animator.SetBool(FALL_ID, IsFalling());
-        animator.SetBool(RUN_ID, IsRunning());
-        animator.SetBool(KNOCKBACK_ID, IsKnockedBack());
-        animator.SetBool(DIE_ID, IsDead());
     }
     
     private void PlayDeathAnimation()

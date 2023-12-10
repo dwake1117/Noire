@@ -1,13 +1,17 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private CanvasGroup fadein;
     [SerializeField] private float fadeinTime = 5f;
     [SerializeField] private AnimationCurve fadeinCurve;
+
+    private void Awake()
+    {
+        if (KeepOnLoad.Instance)
+            Destroy(KeepOnLoad.Instance.gameObject);
+    }
 
     private void Start()
     {

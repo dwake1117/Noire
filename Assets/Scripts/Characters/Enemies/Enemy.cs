@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Serialization;
 
-public class Enemy : Damagable
+public class Enemy : Character
 {   
     [Header("Enemy Properties")]
     [SerializeField] private int maxHealth = 5;
@@ -45,9 +45,8 @@ public class Enemy : Damagable
 
     public virtual void Update() { }
     
-    public override void OnHit(int dmg, Vector3 source)
+    protected override void OnHit(int dmg, Vector3 source)
     {
-        
         PlayOnHitEffects(source);
         PlayOnHitSound();
         RecieveDamage(dmg);

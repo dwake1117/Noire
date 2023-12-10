@@ -53,7 +53,6 @@ public class PauseMenu : UI
     {
         ToggleButtons(false);
         TogglePauseGame();
-        Destroy(KeepOnLoad.Instance.gameObject); // temporary fix for destroying upon loading menu
         if (!Loader.Load(GameScene.MainMenuScene))
         {
             ToggleButtons(true);

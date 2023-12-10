@@ -17,9 +17,6 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float FOVDefault;
     [SerializeField] private float zoomSpeed = 10f;
 
-    // only allow 3 camera turn angles: -1 for left, 0 middle, 1 right
-    private int cameraPosition;
-
     [Header("Camera effects")] 
     private const float shakeDuration = .5f;
     private const float shakeMagnitude = 10f;
@@ -39,8 +36,6 @@ public class CameraManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         
-        cameraPosition = 0;
-
         shakeNoise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         
         shakeNoise.m_AmplitudeGain = 0;
@@ -74,10 +69,10 @@ public class CameraManager : MonoBehaviour
         if (shakeCoroutine != null)
             StopCoroutine(shakeCoroutine);
         
-        shakeCoroutine = StartCoroutine(Shake(duration, magnitude));
+        shakeCoroutine = StartCoroutine(ShakeCoroutine(duration, magnitude));
     }
     
-    private IEnumerator Shake(float duration, float magnitude)
+    private IEnumerator ShakeCoroutine(float duration, float magnitude)
     {
         shakeNoise.m_AmplitudeGain = magnitude;
 

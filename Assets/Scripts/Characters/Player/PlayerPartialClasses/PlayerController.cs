@@ -11,8 +11,7 @@ public partial class Player
 
     [SerializeField] private float fallTimerMax = 2f;
     private float fallTimer;
-
-    private PlayerState state;
+    
     private Vector3 moveDir;
     
     [SerializeField] private float gravity = 1f;
@@ -103,7 +102,7 @@ public partial class Player
             
             if (!IsFalling())
             {
-                state = PlayerState.Falling;
+                ChangeStateTo(CharacterState.Falling);
                 currentGravity = 0.01f;
                 fallTimer = 0;
             }
@@ -111,7 +110,7 @@ public partial class Player
             {
                 if (fallTimer > fallTimerMax)
                 {
-                    state = PlayerState.Dead;
+                    ChangeStateTo(CharacterState.Dead);
                     Die();
                 }
             }
@@ -127,7 +126,7 @@ public partial class Player
         if (inputVector == Vector3.zero)
         {
             if(!IsFalling())
-                state = PlayerState.Idle;
+                ChangeStateTo(CharacterState.Idle);
             return;
         }
         
@@ -140,15 +139,15 @@ public partial class Player
         moveDir = (forward + right).normalized;
         
         // move
-        // if (!GameInput.Instance.IsShiftModifierOn())
-        // {
-        //     state = PlayerState.Walking;
-        //     Move(walkSpeed);
-        // }
-        // else
-        // {
-            state = PlayerState.Running;
+        if (!GameInput.Instance.IsShiftModifierOn())
+        {
+            ChangeStateTo(CharacterState.Walking);
+            Move(walkSpeed);
+        }
+        else
+        {
+            ChangeStateTo(CharacterState.Running);
             Move(runSpeed);
-        // }
+        }
     }
 }

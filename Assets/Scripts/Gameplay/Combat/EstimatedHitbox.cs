@@ -9,7 +9,7 @@ public class EstimatedHitbox : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
-            other.GetComponent<Damagable>()?.ToggleCanBeHit(true);
+            other.GetComponent<Character>()?.ToggleCanBeHit(true);
         }
     }
 
@@ -17,7 +17,7 @@ public class EstimatedHitbox : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
-            other.GetComponent<Damagable>()?.ToggleCanBeHit(false);
+            other.GetComponent<Character>()?.ToggleCanBeHit(false);
         }
     }
 }

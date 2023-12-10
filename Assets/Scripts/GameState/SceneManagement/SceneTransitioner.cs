@@ -42,7 +42,7 @@ public class SceneTransitioner : MonoBehaviour
         SceneManager.sceneLoaded -= HandleSceneChange;
     }
 
-    // loads the next scene slow, using Single loading
+    /// loads the next scene slow, using Single loading
     public bool LoadSceneSingle(string scene)
     {
         if (isLoading)
@@ -58,8 +58,8 @@ public class SceneTransitioner : MonoBehaviour
         return true;
     }
     
-    // loads the next scene slow, using Single loading, and the its default child scene Additive.
-    // This function should only ever be called in LoaderCallback!
+    /// loads the next scene slow, using Single loading, and the its default child scene Additive.
+    /// This function should only ever be called in LoaderCallback!
     public bool LoadSceneParent(string scene)
     {
         if (isLoading)
@@ -83,7 +83,7 @@ public class SceneTransitioner : MonoBehaviour
         return true;
     }
     
-    // loads the next scene fast, using Additive loading, also unloads the current scene upon finishing.
+    /// loads the next scene fast, using Additive loading, also unloads the current scene upon finishing.
     public bool LoadSceneChild(string scene)
     {
         if (isLoading)
@@ -99,7 +99,10 @@ public class SceneTransitioner : MonoBehaviour
         
         return true;
     }
-
+    
+    /// Fade out of the next scene by calling transitionSO's Exit function.
+    /// If `parent` is specified, the child scene loading operation will be allowed to activate
+    /// If `unloadLast` is specified, the current scene will be unloaded upon loading the next scene.
     private IEnumerator Exit(TransitionSO transitionSO, bool parent = false, bool unloadLast = false)
     {
         // start fade out
@@ -122,16 +125,20 @@ public class SceneTransitioner : MonoBehaviour
         }
     }
     
+    /// Fade into the next scene by calling transitionSO's Enter function
     private IEnumerator Enter(TransitionSO transitionSO)
     {
         // start to fade in with next scene
         yield return StartCoroutine(transitionSO.Enter(transitionCanvas));
-        isLoading = false;
         
         // finished loading
+        isLoading = false;
         transitionCanvas.enabled = false;
         loadLevelOperation = null;
         loadChildOperation = null;
+        
+        // Invokes the loader scene callback, if specified at this instance of the Load() call
+        Loader.SceneLoadedCallback?.Invoke();
         
         GameEventsManager.Instance.GameStateEvents.LoadToggle(true);
     }

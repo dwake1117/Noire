@@ -136,7 +136,6 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void OnDeath()
     {
-        gameData.LastCheckPointScene = Loader.TargetScene;
         Player.Instance.SaveCurrencyAndInventory(gameData);
         
         // timestamp the data

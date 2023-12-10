@@ -152,7 +152,7 @@ public partial class Player
                 // here we activate the ability at last!
                 if (ability.Activate(status) && !ability.playerMovableDuringCast)
                 {
-                    state = PlayerState.Casting;
+                    ChangeStateTo(CharacterState.Casting);
                 }
             }
         }
@@ -209,7 +209,7 @@ public partial class Player
     }
     
     /// called when player takes direct damage from a certain `source`
-    private void OnHit(int dmg, Vector3 source)
+    protected override void OnHit(int dmg, Vector3 source)
     {
         if (invulnerableTimer > 0)
             return;
@@ -258,7 +258,7 @@ public partial class Player
         // knock back, and resets it back to idle after certain period of time
         MoveFor(20, .02f, transform.position - source, false);
         transform.LookAt(source);
-        state = PlayerState.KnockedBack;
+        ChangeStateTo(CharacterState.KnockedBack);
         StartCoroutine(WaitForAndReset(knockedBackAnimTime, true));
         
         // particle effects
