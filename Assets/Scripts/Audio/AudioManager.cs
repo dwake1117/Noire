@@ -130,8 +130,13 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlaySceneBegins ()
+    public void PlaySceneBegins()
     {
         RuntimeManager.PlayOneShot("event:/UI/NewScene");
+    }
+    
+    public void PlayOnClick()
+    {
+        RuntimeManager.PlayOneShot("event:/MainMenu/Click", transform.position);
     }
 }

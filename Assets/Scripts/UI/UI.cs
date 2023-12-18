@@ -34,25 +34,65 @@ public class UI : MonoBehaviour
     protected CanvasGroup canvasGroup;
     protected RectTransform rectTransform;
     protected bool alternativeGameObject = false;
-    private float animationTime = .5f;
+    private float animationTime = .3f;
+    
+    private Coroutine fadeCoroutine;
+
+    private bool CanAnimate => fadeCoroutine == null;
     
     protected virtual void Activate() { }
     protected virtual void Deactivate() { }
     protected virtual void LateActivate() { }
     protected virtual void LateDeactivate() { }
 
-    public virtual void Show()
+    public bool Show(bool activate=true)
     {
-        Activate();
-        Display(true);
-        StartCoroutine(Fade(0, 1));
+        if (CanAnimate)
+        {
+            if(activate)
+                Activate();
+            Display(true);
+            fadeCoroutine = StartCoroutine(Fade(0, 1));
+            return true;
+        }
+
+        return false;
     }
 
-    public virtual void Hide()
+    public void ForceShow(bool activate=true)
     {
-        Deactivate();
-        if(gameObject.activeSelf)
-            StartCoroutine(Fade(1, 0));
+        if(fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        
+        if(activate)
+            Activate();
+        Display(true);
+        fadeCoroutine = StartCoroutine(Fade(0, 1));
+    }
+
+    public bool Hide(bool deactivate=true)
+    {
+        if (CanAnimate)
+        {
+            if(deactivate)
+                Deactivate();
+            if (gameObject.activeSelf)
+                fadeCoroutine = StartCoroutine(Fade(1, 0));
+            return true;
+        }
+
+        return false;
+    }
+
+    public void ForceHide(bool deactivate = true)
+    {
+        if(fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        
+        if(deactivate)
+            Deactivate();
+        if (gameObject.activeSelf)
+            fadeCoroutine = StartCoroutine(Fade(1, 0));
     }
 
     protected IEnumerator Fade(float start, float end)
@@ -61,18 +101,19 @@ public class UI : MonoBehaviour
         while (time < animationTime)
         {
             time += Time.deltaTime;
+            float eval = time / animationTime;
 
             canvasGroup.alpha = Mathf.Lerp(
                 start, 
                 end, 
-                StaticInfoObjects.Instance.FADE_ANIM_CURVE.Evaluate(time * 2)
+                StaticInfoObjects.Instance.FADE_ANIM_CURVE.Evaluate(eval)
             );
             yield return null;
         }
         
         canvasGroup.alpha = end;
         
-        if (end == 0)
+        if (end == 0) // if the fade is an hide transition
         {
             Display(false);
             LateDeactivate();
@@ -81,6 +122,8 @@ public class UI : MonoBehaviour
         {
             LateActivate();
         }
+
+        fadeCoroutine = null;
     }
 
     private void Display(bool active)

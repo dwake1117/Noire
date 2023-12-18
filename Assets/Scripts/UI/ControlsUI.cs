@@ -22,6 +22,8 @@ public class ControlsUI : UI
     
     [SerializeField] private Transform pressToRebindKeyTransform;
     
+    [SerializeField] private ButtonUI backButton;
+    
     private void Awake()
     {
        Instance = this; 
@@ -30,6 +32,7 @@ public class ControlsUI : UI
 
     private void Start()
     {
+        
         moveUpButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveUp); });   
         moveDownButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveDown); });   
         moveLeftButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveLeft); });   
@@ -50,6 +53,9 @@ public class ControlsUI : UI
         UpdateVisual();
         HidePressToRebindKey();
         
+        backButton.AddListener(OnBackButtonClicked);
+        
+        backButton.gameObject.SetActive(false);
         gameObject.SetActive(false);
         
         GameInput.Instance.OnPauseToggle += GameInputOnPauseToggle;
@@ -60,9 +66,25 @@ public class ControlsUI : UI
         GameInput.Instance.OnPauseToggle -= GameInputOnPauseToggle;
     }
 
+    protected override void Activate()
+    {
+        backButton.gameObject.SetActive(true);
+    }
+
+    protected override void Deactivate()
+    {
+        backButton.gameObject.SetActive(false);
+    }
+
     private void GameInputOnPauseToggle()
     {
         Hide();
+    }
+    
+    private void OnBackButtonClicked()
+    {
+        Hide();
+        OptionsUI.Instance.Show();
     }
 
     private void UpdateVisual()

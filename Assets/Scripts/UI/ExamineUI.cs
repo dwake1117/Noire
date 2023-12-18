@@ -9,7 +9,7 @@ public class ExamineUI : UI
     public static ExamineUI Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI examineText;
-    [SerializeField] private UnityEngine.UI.RawImage examineImage;
+    [SerializeField] private RawImage examineImage;
     [SerializeField] private ButtonUI closeButton;
 
     private void Awake()
@@ -21,24 +21,18 @@ public class ExamineUI : UI
     private void Start()
     {
         gameObject.SetActive(false);
-        closeButton.AddListener(Hide);
+        closeButton.AddListener(() => Hide());
     }
 
     public void Display(string text, Texture2D image)
     {
         gameObject.SetActive(true);
-        examineText.text = '-' + text;
+        examineText.text = text;
         examineImage.texture = image;
-        int x =  image.width;
-        int y =  image.height;
-        examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(x, y);
+        
+        examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(image.width, image.height);
+        
         Show();
-        StartCoroutine(HideText());
-    }
-
-    IEnumerator HideText()
-    {
-        yield return new WaitForSeconds(10);
-        Hide();
+        Invoke(nameof(Hide), 10);
     }
 }

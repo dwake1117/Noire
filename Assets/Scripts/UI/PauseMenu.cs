@@ -32,9 +32,9 @@ public class PauseMenu : UI
         GameInput.Instance.OnPauseToggle -= TogglePauseGame;
     }
     
-    private void ToggleButtons(bool val)
+    private void ToggleButtons(bool enable)
     {
-        if (val)
+        if (enable)
         {
             resumeButton.Enable();
             mainMenuButton.Enable();
@@ -53,29 +53,38 @@ public class PauseMenu : UI
     {
         ToggleButtons(false);
         TogglePauseGame();
-        if (!Loader.Load(GameScene.MainMenuScene))
-        {
-            ToggleButtons(true);
-        }
+        Loader.Load(GameScene.MainMenuScene);
     }
     
     private void OnOptionsMenuClick()
     {
-        Hide();
+        Hide(false);
         OptionsUI.Instance.Show();
     }
-    
+
+    protected override void Activate()
+    {
+        AudioManager.Instance.PlayOnClick();
+        GameEventsManager.Instance.GameStateEvents.PauseToggle(true);
+        HUD.Instance.Hide();
+    }
+
+    protected override void Deactivate()
+    {
+        AudioManager.Instance.PlayOnClick();
+        GameEventsManager.Instance.GameStateEvents.PauseToggle(false);
+        HUD.Instance.Show();
+    }
+
     private void TogglePauseGame() 
     {
-        IsGamePaused = !IsGamePaused;
-        if (IsGamePaused)
+        if (IsGamePaused && Hide())
         {
-            Show();
+            IsGamePaused = false;
         }
-        else
+        else if(!IsGamePaused && Show())
         {
-            Hide();
+            IsGamePaused = true;
         }
-        GameEventsManager.Instance.GameStateEvents.PauseToggle(IsGamePaused);
     }
 }

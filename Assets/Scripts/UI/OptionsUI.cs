@@ -10,8 +10,8 @@ public class OptionsUI : UI
     [SerializeField] private ButtonUI musicButton;
     [SerializeField] private ButtonUI controlsButton;
     [SerializeField] private ButtonUI backButton;
-    private const string SOUND_TEXT = "Sound Effects: ";
-    private const string MUSIC_TEXT = "Music: ";
+    private string SOUND_TEXT => $"Sound Effects: {AudioManager.Instance.currSfxLevel}/{AudioManager.maxSounLevels}";
+    private string MUSIC_TEXT => $"Music: {AudioManager.Instance.currOstLevel}/{AudioManager.maxSounLevels}";
     
     private void Awake()
     {
@@ -21,6 +21,9 @@ public class OptionsUI : UI
 
     private void Start()
     {
+        soundEffectsButton.SetText(SOUND_TEXT);
+        musicButton.SetText(MUSIC_TEXT);
+        
         soundEffectsButton.AddListener(() => VolChange("Sfx"));
         musicButton.AddListener(() => VolChange("Ost"));
         controlsButton.AddListener(OnControlsButtonClicked);
@@ -44,7 +47,7 @@ public class OptionsUI : UI
     private void OnBackButtonClicked()
     {
         Hide();
-        PauseMenu.Instance.Show();
+        PauseMenu.Instance.Show(false);
     }
 
     private void OnControlsButtonClicked()
@@ -57,9 +60,9 @@ public class OptionsUI : UI
     {
         AudioManager.Instance.SetVolume(vcaType);
         if(vcaType == "Sfx")
-            soundEffectsButton.SetText(SOUND_TEXT + AudioManager.Instance.currSfxLevel);
+            soundEffectsButton.SetText(SOUND_TEXT);
         else
-            musicButton.SetText(MUSIC_TEXT + AudioManager.Instance.currOstLevel);
+            musicButton.SetText(MUSIC_TEXT);
     }
 }
 

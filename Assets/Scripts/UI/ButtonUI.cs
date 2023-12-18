@@ -29,7 +29,7 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         initialScale = transform.localScale;
         SetIndicatorAlphas(0);
-        button.onClick.AddListener(PlayOnClick);
+        button.onClick.AddListener(AudioManager.Instance.PlayOnClick);
     }
 
     public void Disable(bool setTransparent = true)
@@ -64,7 +64,6 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
-            FMODUnity.RuntimeManager.PlayOneShot("event:/MainMenu/Select", transform.position);
             SetIndicatorAlphas(1);
 
             Vector3 endScale = initialScale * scaleAmount;
@@ -82,11 +81,6 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         animateOnSelect = null;
-    }
-
-    private void PlayOnClick()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot("event:/MainMenu/Click", transform.position);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
