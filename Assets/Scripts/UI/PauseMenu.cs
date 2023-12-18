@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PauseMenu : UI 
@@ -18,13 +19,13 @@ public class PauseMenu : UI
     
     private void Start()
     {
-        GameInput.Instance.OnPauseToggle += TogglePauseGame;
-        
         resumeButton.AddListener(TogglePauseGame);
         mainMenuButton.AddListener(OnMainMenuClick);
         optionsButton.AddListener(OnOptionsMenuClick);
         
         gameObject.SetActive(false);
+        
+        GameInput.Instance.OnPauseToggle += TogglePauseGame;
     }
 
     private void OnDestroy()

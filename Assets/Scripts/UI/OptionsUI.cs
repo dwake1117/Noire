@@ -27,24 +27,24 @@ public class OptionsUI : UI
         soundEffectsButton.AddListener(() => VolChange("Sfx"));
         musicButton.AddListener(() => VolChange("Ost"));
         controlsButton.AddListener(OnControlsButtonClicked);
-        backButton.AddListener(OnBackButtonClicked);
+        backButton.AddListener(Back);
         
         gameObject.SetActive(false);
         
-        GameInput.Instance.OnPauseToggle += GameInputOnPauseToggle;
+        GameInput.Instance.OnPauseToggle += OnPause;
     }
-
+    
     private void OnDestroy()
     {
-        GameInput.Instance.OnPauseToggle -= GameInputOnPauseToggle;
+        GameInput.Instance.OnPauseToggle -= OnPause;
     }
 
-    private void GameInputOnPauseToggle()
+    private void OnPause()
     {
         Hide();
     }
     
-    private void OnBackButtonClicked()
+    private void Back()
     {
         Hide();
         PauseMenu.Instance.Show(false);

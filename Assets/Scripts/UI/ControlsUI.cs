@@ -23,6 +23,7 @@ public class ControlsUI : UI
     [SerializeField] private Transform pressToRebindKeyTransform;
     
     [SerializeField] private ButtonUI backButton;
+    [SerializeField] private UI container;
     
     private void Awake()
     {
@@ -55,28 +56,18 @@ public class ControlsUI : UI
         
         backButton.AddListener(OnBackButtonClicked);
         
-        backButton.gameObject.SetActive(false);
+        container.gameObject.SetActive(false);
         gameObject.SetActive(false);
         
-        GameInput.Instance.OnPauseToggle += GameInputOnPauseToggle;
+        GameInput.Instance.OnPauseToggle += OnPause;
     }
 
     private void OnDestroy()
     {
-        GameInput.Instance.OnPauseToggle -= GameInputOnPauseToggle;
+        GameInput.Instance.OnPauseToggle -= OnPause;
     }
 
-    protected override void Activate()
-    {
-        backButton.gameObject.SetActive(true);
-    }
-
-    protected override void Deactivate()
-    {
-        backButton.gameObject.SetActive(false);
-    }
-
-    private void GameInputOnPauseToggle()
+    private void OnPause()
     {
         Hide();
     }
@@ -85,6 +76,16 @@ public class ControlsUI : UI
     {
         Hide();
         OptionsUI.Instance.Show();
+    }
+
+    protected override void Activate()
+    {
+        container.Show();
+    }
+
+    protected override void Deactivate()
+    {
+        container.Hide();
     }
 
     private void UpdateVisual()

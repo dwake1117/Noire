@@ -45,6 +45,13 @@ public class UI : MonoBehaviour
     protected virtual void LateActivate() { }
     protected virtual void LateDeactivate() { }
 
+    protected virtual void Awake()
+    {
+        Init();
+    }
+
+    /// Shows an UI element by fading. If another fade coroutine is going at the same time,
+    /// this operation is canceled, and Activate will not be called. 
     public bool Show(bool activate=true)
     {
         if (CanAnimate)
@@ -59,6 +66,7 @@ public class UI : MonoBehaviour
         return false;
     }
 
+    /// Shows an UI element by fading. Stops and overwrites any concurrent coroutines.
     public void ForceShow(bool activate=true)
     {
         if(fadeCoroutine != null)
@@ -70,6 +78,8 @@ public class UI : MonoBehaviour
         fadeCoroutine = StartCoroutine(Fade(0, 1));
     }
 
+    /// Hides an UI element by fading. If another fade coroutine is going at the same time,
+    /// this operation is canceled, and Deactivate will not be called.
     public bool Hide(bool deactivate=true)
     {
         if (CanAnimate)
@@ -84,7 +94,8 @@ public class UI : MonoBehaviour
         return false;
     }
 
-    public void ForceHide(bool deactivate = true)
+    /// Hides an UI element by fading. Stops and overwrites any concurrent coroutines.
+    public void ForceHide(bool deactivate=true)
     {
         if(fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
@@ -95,6 +106,9 @@ public class UI : MonoBehaviour
             fadeCoroutine = StartCoroutine(Fade(1, 0));
     }
 
+    /// Fades the canvasGroup given a starting/ending alpha, and evaluates it along the FADE_ANIM_CURVE. 
+    /// <param name="start">The starting alpha</param>
+    /// <param name="end">The ending alpha</param>
     protected IEnumerator Fade(float start, float end)
     {
         float time = 0;

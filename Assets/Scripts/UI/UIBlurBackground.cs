@@ -29,9 +29,9 @@ public class UIBlurBackground : UI
     private void OnPause(bool paused)
     {
         if(paused)
-            Show();
+            ForceShow();
         else
-            Hide();
+            ForceHide();
     }
 
     protected override void LateActivate()
