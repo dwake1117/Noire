@@ -5,9 +5,8 @@ using UnityEngine.UI;
 public class OptionsUI : UI
 {
     public static OptionsUI Instance { get; private set; }
-
-    [SerializeField] private ButtonUI soundEffectsButton;
-    [SerializeField] private ButtonUI musicButton;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider musicSlider;
     [SerializeField] private ButtonUI controlsButton;
     [SerializeField] private ButtonUI backButton;
     private string SOUND_TEXT => $"Sound Effects: {AudioManager.Instance.currSfxLevel}/{AudioManager.maxSounLevels}";
@@ -21,11 +20,8 @@ public class OptionsUI : UI
 
     private void Start()
     {
-        soundEffectsButton.SetText(SOUND_TEXT);
-        musicButton.SetText(MUSIC_TEXT);
-        
-        soundEffectsButton.AddListener(() => VolChange("Sfx"));
-        musicButton.AddListener(() => VolChange("Ost"));
+        sfxSlider.onValueChanged.AddListener(delegate(float level) { VolChange("Sfx", level); });
+        musicSlider.onValueChanged.AddListener(delegate(float level) { VolChange("Ost", level); });
         controlsButton.AddListener(OnControlsButtonClicked);
         backButton.AddListener(Back);
         
@@ -41,17 +37,15 @@ public class OptionsUI : UI
     
     private void ToggleButtons(bool enable)
     {
+        musicSlider.enabled = enable;
+        sfxSlider.enabled = enable;
         if (enable)
         {
-            soundEffectsButton.Enable();
-            musicButton.Enable();
             controlsButton.Enable();
             backButton.Enable();
         }
         else
         {
-            soundEffectsButton.Disable();
-            musicButton.Disable();
             controlsButton.Disable();
             backButton.Disable();
         }
@@ -88,13 +82,10 @@ public class OptionsUI : UI
         ControlsUI.Instance.Show();
     }
 
-    private void VolChange(string vcaType)
+    private void VolChange(string vcaType, float level)
     {
-        AudioManager.Instance.SetVolume(vcaType);
-        if(vcaType == "Sfx")
-            soundEffectsButton.SetText(SOUND_TEXT);
-        else
-            musicButton.SetText(MUSIC_TEXT);
+        // TODO: play slider volume change sfx
+        AudioManager.Instance.SetVolume(vcaType, level);
     }
 }
 

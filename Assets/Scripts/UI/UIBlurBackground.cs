@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class UIBlurBackground : UI
 {
     [SerializeField] ScriptableRendererFeature kawaseBlur;
-
+    
     private void Awake()
     {
         Init();
@@ -34,12 +32,12 @@ public class UIBlurBackground : UI
             ForceHide();
     }
 
-    protected override void LateActivate()
+    protected override void Activate()
     {
         kawaseBlur.SetActive(true);
     }
 
-    protected override void LateDeactivate()
+    protected override void Deactivate()
     {
         kawaseBlur.SetActive(false);
     }

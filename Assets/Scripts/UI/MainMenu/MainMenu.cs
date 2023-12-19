@@ -30,9 +30,9 @@ public class MainMenu : UI
         Show();
     }
 
-    private void ToggleButtons(bool val)
+    private void ToggleButtons(bool enable)
     {
-        if (val)
+        if (enable)
         {
             newGameButton.Enable();
             continueGameButton.Enable();

@@ -79,7 +79,7 @@ public class AudioManager : MonoBehaviour
     }
     
     /// advances to the next volume gate. Resets to 0 if tries to advance it at max volume.
-    public void SetVolume(string vcaPath)
+    public void SetVolume(string vcaPath, float val)
     {
         var vca = RuntimeManager.GetVCA($"vca:/{vcaPath}VCA");
         if (!vca.isValid())
@@ -88,19 +88,17 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            int levelToSet;
+            float levelToSet = val;
             if (vcaPath == "Sfx")
             {
-                levelToSet = (currSfxLevel + 1) % (maxSounLevels + 1);
-                currSfxLevel = levelToSet;
+                currSfxLevel = (int)levelToSet;
             }
             else
             {
-                levelToSet = (currOstLevel + 1) % (maxSounLevels + 1);
-                currOstLevel = levelToSet;
+                currOstLevel = (int)levelToSet;
             }
             
-            float currSfxLevelNormalized = (float)levelToSet / maxSounLevels;
+            float currSfxLevelNormalized = levelToSet / maxSounLevels;
             
             float volumeToSet = volumeAnimationCurve.Evaluate(currSfxLevelNormalized);
             if (volumeToSet < 0 || volumeToSet > 1)

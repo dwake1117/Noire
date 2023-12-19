@@ -43,14 +43,17 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if(setTransparent)
             buttonText.color = textColorTransparent;
         
-        StopCoroutine(scaleOnSelect);
-        StopCoroutine(textAlphaCycleOnSelect);
+        if (scaleOnSelect != null)
+            StopCoroutine(scaleOnSelect);
+        if (textAlphaCycleOnSelect != null)
+            StopCoroutine(textAlphaCycleOnSelect);
     }
 
     public void Enable()
     {
         button.interactable = true;
         buttonText.color = textColorOpaque;
+        SetIndicatorAlphas(0);
     }
 
     public void AddListener(UnityAction call)
@@ -68,8 +71,19 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (!startAnimation)
         {
-            transform.localScale = initialScale;
             SetIndicatorAlphas(0);
+            
+            float time = 0;
+        
+            while (time < scaleAnimationTime)
+            {
+                time += Time.deltaTime;
+                
+                float eval = time / scaleAnimationTime;
+                transform.localScale = Vector3.Lerp(transform.localScale, initialScale, eval);
+                
+                yield return null;
+            }
         }
         else
         {
@@ -106,32 +120,45 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        eventData.selectedObject = gameObject;
+        if (button.interactable)
+        {
+            eventData.selectedObject = gameObject;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        eventData.selectedObject = null;
+        if (button.interactable)
+        {
+            eventData.selectedObject = null;
+        }
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        if (scaleOnSelect != null)
-            StopCoroutine(scaleOnSelect);
-        scaleOnSelect = StartCoroutine(ScaleSelection(true));
-        textAlphaCycleOnSelect = StartCoroutine(TextAlphaCycle());
+        if (button.interactable)
+        {
+            if (scaleOnSelect != null)
+                StopCoroutine(scaleOnSelect);
+            scaleOnSelect = StartCoroutine(ScaleSelection(true));
+
+            textAlphaCycleOnSelect = StartCoroutine(TextAlphaCycle());
+        }
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        if (scaleOnSelect != null)
-            StopCoroutine(scaleOnSelect);
-        scaleOnSelect = StartCoroutine(ScaleSelection(false));
-
-        if (textAlphaCycleOnSelect != null)
+        if (button.interactable)
         {
-            StopCoroutine(textAlphaCycleOnSelect);
-            buttonText.alpha = 1;
+            if (scaleOnSelect != null)
+                StopCoroutine(scaleOnSelect);
+            scaleOnSelect = StartCoroutine(ScaleSelection(false));
+
+            if (textAlphaCycleOnSelect != null)
+            {
+                StopCoroutine(textAlphaCycleOnSelect);
+                buttonText.alpha = 1;
+            }
         }
     }
 

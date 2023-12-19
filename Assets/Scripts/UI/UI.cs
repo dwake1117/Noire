@@ -34,7 +34,7 @@ public class UI : MonoBehaviour
     protected CanvasGroup canvasGroup;
     protected RectTransform rectTransform;
     protected bool alternativeGameObject = false;
-    private float animationTime = .4f;
+    protected float animationTime = .4f;
     
     private Coroutine fadeCoroutine;
 
@@ -56,9 +56,9 @@ public class UI : MonoBehaviour
     {
         if (CanAnimate)
         {
+            Display(true);
             if(activate)
                 Activate();
-            Display(true);
             fadeCoroutine = StartCoroutine(Fade(0, 1));
             return true;
         }
@@ -72,9 +72,9 @@ public class UI : MonoBehaviour
         if(fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
         
+        Display(true);
         if(activate)
             Activate();
-        Display(true);
         fadeCoroutine = StartCoroutine(Fade(0, 1));
     }
 
