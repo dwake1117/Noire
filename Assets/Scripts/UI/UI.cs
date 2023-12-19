@@ -34,7 +34,7 @@ public class UI : MonoBehaviour
     protected CanvasGroup canvasGroup;
     protected RectTransform rectTransform;
     protected bool alternativeGameObject = false;
-    private float animationTime = .3f;
+    private float animationTime = .4f;
     
     private Coroutine fadeCoroutine;
 
@@ -82,12 +82,11 @@ public class UI : MonoBehaviour
     /// this operation is canceled, and Deactivate will not be called.
     public bool Hide(bool deactivate=true)
     {
-        if (CanAnimate)
+        if (CanAnimate && gameObject.activeSelf)
         {
             if(deactivate)
                 Deactivate();
-            if (gameObject.activeSelf)
-                fadeCoroutine = StartCoroutine(Fade(1, 0));
+            fadeCoroutine = StartCoroutine(Fade(1, 0));
             return true;
         }
 

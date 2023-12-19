@@ -12,12 +12,15 @@ public class StaticInfoObjects : MonoBehaviour
 {
     public static StaticInfoObjects Instance { get; private set; }
 
-    [SerializeField] public AnimationCurve FADE_ANIM_CURVE;
+    [SerializeField] public AnimationCurve FADE_ANIM_CURVE; // UI fade animation curves
+    
     [SerializeField] public AnimationCurve CA_DEATH_CURVE; // chromatic aberration curve
     [SerializeField] public AnimationCurve LD_DEATH_CURVE; // lens distortion curve
     
     [SerializeField] public AnimationCurve CA_QUICK_IMPULSE; // chromatic aberration curve
     [SerializeField] public AnimationCurve LD_QUICK_IMPULSE; // lens distortion curve
+
+    [SerializeField] public AnimationCurve TEXT_ALPHA_CYCLE_CURVE; // button on hover alpha cycle
     
     private void Awake()
     {

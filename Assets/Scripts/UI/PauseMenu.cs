@@ -49,7 +49,6 @@ public class PauseMenu : UI
         }
     }
 
-
     private void OnMainMenuClick()
     {
         ToggleButtons(false);
@@ -65,6 +64,7 @@ public class PauseMenu : UI
 
     protected override void Activate()
     {
+        ToggleButtons(true);
         AudioManager.Instance.PlayOnClick();
         GameEventsManager.Instance.GameStateEvents.PauseToggle(true);
         HUD.Instance.Hide();
@@ -72,13 +72,17 @@ public class PauseMenu : UI
 
     protected override void Deactivate()
     {
+        ToggleButtons(false);
         AudioManager.Instance.PlayOnClick();
         GameEventsManager.Instance.GameStateEvents.PauseToggle(false);
         HUD.Instance.Show();
     }
 
-    private void TogglePauseGame() 
+    private void TogglePauseGame()
     {
+        if (OptionsUI.Instance.gameObject.activeSelf || ControlsUI.Instance.gameObject.activeSelf)
+            return;
+        
         if (IsGamePaused && Hide())
         {
             IsGamePaused = false;

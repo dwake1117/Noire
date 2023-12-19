@@ -33,7 +33,6 @@ public class ControlsUI : UI
 
     private void Start()
     {
-        
         moveUpButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveUp); });   
         moveDownButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveDown); });   
         moveLeftButton.AddListener(() => {RebindBinding(GameInput.Bindings.MoveLeft); });   
@@ -62,6 +61,44 @@ public class ControlsUI : UI
         GameInput.Instance.OnPauseToggle += OnPause;
     }
 
+    private void ToggleButtons(bool enable)
+    {
+        if (enable)
+        {
+            moveUpButton.Enable();
+            moveDownButton.Enable();
+            moveLeftButton.Enable();
+            moveRightButton.Enable();
+            cameraLeftButton.Enable();
+            cameraRightButton.Enable();
+            lightAttackButton.Enable();
+            strongAttackButton.Enable();
+            dashButton.Enable();
+            interactButton.Enable();
+            ability1Button.Enable();
+            ability2Button.Enable();
+            ability3Button.Enable();
+            backButton.Enable();
+        }
+        else
+        {
+            moveUpButton.Disable();
+            moveDownButton.Disable();
+            moveLeftButton.Disable();
+            moveRightButton.Disable();
+            cameraLeftButton.Disable();
+            cameraRightButton.Disable();
+            lightAttackButton.Disable();
+            strongAttackButton.Disable();
+            dashButton.Disable();
+            interactButton.Disable();
+            ability1Button.Disable();
+            ability2Button.Disable();
+            ability3Button.Disable();
+            backButton.Disable();
+        }
+    }
+
     private void OnDestroy()
     {
         GameInput.Instance.OnPauseToggle -= OnPause;
@@ -69,22 +106,27 @@ public class ControlsUI : UI
 
     private void OnPause()
     {
-        Hide();
+        if (OptionsUI.Instance.gameObject.activeSelf || PauseMenu.Instance.gameObject.activeSelf)
+            return;
+        if(Hide())
+            OptionsUI.Instance.Show();
     }
     
     private void OnBackButtonClicked()
     {
-        Hide();
-        OptionsUI.Instance.Show();
+        if(Hide())
+            OptionsUI.Instance.Show();
     }
 
     protected override void Activate()
     {
+        ToggleButtons(true);
         container.Show();
     }
 
     protected override void Deactivate()
     {
+        ToggleButtons(false);
         container.Hide();
     }
 

@@ -38,16 +38,48 @@ public class OptionsUI : UI
     {
         GameInput.Instance.OnPauseToggle -= OnPause;
     }
+    
+    private void ToggleButtons(bool enable)
+    {
+        if (enable)
+        {
+            soundEffectsButton.Enable();
+            musicButton.Enable();
+            controlsButton.Enable();
+            backButton.Enable();
+        }
+        else
+        {
+            soundEffectsButton.Disable();
+            musicButton.Disable();
+            controlsButton.Disable();
+            backButton.Disable();
+        }
+    }
+
+    protected override void Activate()
+    {
+        ToggleButtons(true);
+    }
+
+    protected override void Deactivate()
+    {
+        ToggleButtons(false);
+    }
 
     private void OnPause()
     {
-        Hide();
+        if (PauseMenu.Instance.gameObject.activeSelf || ControlsUI.Instance.gameObject.activeSelf)
+            return;
+        
+        if(Hide())
+            PauseMenu.Instance.Show(false);
     }
     
     private void Back()
     {
-        Hide();
-        PauseMenu.Instance.Show(false);
+        if(Hide())
+            PauseMenu.Instance.Show(false);
     }
 
     private void OnControlsButtonClicked()
