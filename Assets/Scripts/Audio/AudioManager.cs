@@ -15,8 +15,8 @@ public class AudioManager : MonoBehaviour
     public int currSfxLevel { get; private set; }
     public int currOstLevel { get; private set; }
     
-    public const int maxSounLevels = 5;
-    private const int defaultSoundLevel = 4;
+    public readonly int maxSounLevels = 5;
+    public readonly int defaultSoundLevel = 4;
     
     [Header("BGM")]
     private FMOD.Studio.EventInstance currBgmState;

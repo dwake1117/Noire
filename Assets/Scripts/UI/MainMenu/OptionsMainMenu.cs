@@ -1,10 +1,10 @@
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionsUI : UI
+public class OptionsMainMenu : UI
 {
-    public static OptionsUI Instance { get; private set; }
+    public static OptionsMainMenu Instance { get; private set; }
+    
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private ButtonUI controlsButton;
@@ -28,13 +28,6 @@ public class OptionsUI : UI
         backButton.AddListener(Back);
         
         gameObject.SetActive(false);
-        
-        GameInput.Instance.OnPauseToggle += OnPause;
-    }
-    
-    private void OnDestroy()
-    {
-        GameInput.Instance.OnPauseToggle -= OnPause;
     }
     
     private void ToggleButtons(bool enable)
@@ -62,26 +55,17 @@ public class OptionsUI : UI
     {
         ToggleButtons(false);
     }
-
-    private void OnPause()
-    {
-        if (PauseMenu.Instance.gameObject.activeSelf || ControlsUI.Instance.gameObject.activeSelf)
-            return;
-        
-        if(Hide())
-            PauseMenu.Instance.Show(false);
-    }
     
     private void Back()
     {
         if(Hide())
-            PauseMenu.Instance.Show(false);
+            MainMenu.Instance.Show(false);
     }
 
     private void OnControlsButtonClicked()
     {
         Hide();
-        ControlsUI.Instance.Show();
+        ControlsMainMenu.Instance.Show();
     }
 
     private void VolChange(string vcaType, float level)
@@ -90,4 +74,3 @@ public class OptionsUI : UI
         AudioManager.Instance.SetVolume(vcaType, level);
     }
 }
-

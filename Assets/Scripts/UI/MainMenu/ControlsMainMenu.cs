@@ -3,9 +3,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ControlsUI : UI
+public class ControlsMainMenu : UI
 {
-    public static ControlsUI Instance { get; private set; }
+    public static ControlsMainMenu Instance { get; private set; }
 
     [SerializeField] private ButtonUI moveUpButton;
     [SerializeField] private ButtonUI moveDownButton;
@@ -57,8 +57,6 @@ public class ControlsUI : UI
         
         container.gameObject.SetActive(false);
         gameObject.SetActive(false);
-        
-        GameInput.Instance.OnPauseToggle += OnPause;
     }
 
     private void ToggleButtons(bool enable)
@@ -95,30 +93,17 @@ public class ControlsUI : UI
         }
     }
 
-    private void OnDestroy()
-    {
-        GameInput.Instance.OnPauseToggle -= OnPause;
-    }
-
-    private void OnPause()
-    {
-        if (OptionsUI.Instance.gameObject.activeSelf || PauseMenu.Instance.gameObject.activeSelf)
-            return;
-        if(Hide())
-            OptionsUI.Instance.Show();
-    }
-    
     private void OnBackButtonClicked()
     {
         if(Hide())
-            OptionsUI.Instance.Show();
+            OptionsMainMenu.Instance.Show();
     }
 
     protected override void Activate()
     {
+        ToggleButtons(true);
         foreach (var t in layoutGroupTransformsInChildren)
             LayoutRebuilder.ForceRebuildLayoutImmediate(t);
-        ToggleButtons(true);
         container.Show();
     }
 
@@ -165,4 +150,3 @@ public class ControlsUI : UI
         }); 
     }
 }
-

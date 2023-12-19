@@ -44,13 +44,13 @@ public class SaveSlotsMenu : UI
         }
     }
 
-    public void NewGameMenu()
+    public void DisplayNewGameMenu()
     {
         IsLoadingView = false;
         Show();
     }
     
-    public void LoadGameMenu()
+    public void DisplayLoadGameMenu()
     {
         IsLoadingView = true;
         Show();

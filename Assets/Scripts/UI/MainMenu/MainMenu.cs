@@ -5,14 +5,11 @@ public class MainMenu : UI
 {
     public static MainMenu Instance { get; private set; }
     
-    [Header("Menu Navigation")]
-    [SerializeField] private SaveSlotsMenu saveSlotsMenu;
-    
-    [Header("Menu Buttons")]
     [SerializeField] private ButtonUI newGameButton;
     [SerializeField] private ButtonUI continueGameButton;
     [SerializeField] private ButtonUI loadGameButton;
     [SerializeField] private ButtonUI quitGameButton;
+    [SerializeField] private ButtonUI settingsButton;
 
     private void Awake()
     {
@@ -26,6 +23,7 @@ public class MainMenu : UI
         continueGameButton.AddListener(OnContinueGameClicked);
         loadGameButton.AddListener(OnLoadGameClicked);
         quitGameButton.AddListener(OnQuitGameClicked);
+        settingsButton.AddListener(OnSettingsClicked);
         
         Show();
     }
@@ -51,7 +49,7 @@ public class MainMenu : UI
     private void OnNewGameClicked()
     {
         Hide();
-        saveSlotsMenu.NewGameMenu();
+        SaveSlotsMenu.Instance.DisplayNewGameMenu();
     }
 
     private void OnContinueGameClicked()
@@ -64,13 +62,20 @@ public class MainMenu : UI
     private void OnLoadGameClicked() 
     {
         Hide();
-        saveSlotsMenu.LoadGameMenu();
+        SaveSlotsMenu.Instance.DisplayLoadGameMenu();
     }
 
     private void OnQuitGameClicked()
     {
+        Hide();
         ToggleButtons(false);
-        Application.Quit();
+        Invoke(nameof(Application.Quit), animationTime);
+    }
+
+    private void OnSettingsClicked()
+    {
+        Hide();
+        OptionsMainMenu.Instance.Show();
     }
     
     // UI baseclass
