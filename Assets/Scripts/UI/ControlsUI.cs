@@ -19,7 +19,7 @@ public class ControlsUI : UI
     [SerializeField] private ButtonUI ability2Button;
     [SerializeField] private ButtonUI ability3Button;
     
-    [SerializeField] private Transform pressToRebindKeyTransform;
+    [SerializeField] private UI rebindUI;
     
     [SerializeField] private ButtonUI backButton;
     [SerializeField] private UI container;
@@ -51,10 +51,10 @@ public class ControlsUI : UI
         ability3Button.AddListener(() => {RebindBinding(GameInput.Bindings.Ability3); });
 
         UpdateVisual();
-        HidePressToRebindKey();
         
         backButton.AddListener(OnBackButtonClicked);
         
+        rebindUI.gameObject.SetActive(false);
         container.gameObject.SetActive(false);
         gameObject.SetActive(false);
         
@@ -102,8 +102,9 @@ public class ControlsUI : UI
 
     private void OnPause()
     {
-        if (OptionsUI.Instance.gameObject.activeSelf || PauseMenu.Instance.gameObject.activeSelf)
+        if (UIManager.CurrentContext != gameObject)
             return;
+        
         if(Hide())
             OptionsUI.Instance.Show();
     }
@@ -120,6 +121,7 @@ public class ControlsUI : UI
             LayoutRebuilder.ForceRebuildLayoutImmediate(t);
         ToggleButtons(true);
         container.Show();
+        UIManager.CurrentContext = gameObject;
     }
 
     protected override void Deactivate()
@@ -143,26 +145,22 @@ public class ControlsUI : UI
         ability1Button.buttonText.text = GameInput.Instance.GetBindingText(GameInput.Bindings.Ability1);
         ability2Button.buttonText.text = GameInput.Instance.GetBindingText(GameInput.Bindings.Ability2);
         ability3Button.buttonText.text = GameInput.Instance.GetBindingText(GameInput.Bindings.Ability3);
-
-        LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
-    }
-
-    private void ShowPressToRebindKey()
-    {
-        pressToRebindKeyTransform.gameObject.SetActive(true);
-    }
-    private void HidePressToRebindKey()
-    {
-        pressToRebindKeyTransform.gameObject.SetActive(false);
     }
 
     private void RebindBinding(GameInput.Bindings binding)
     {
-        ShowPressToRebindKey();
-        GameInput.Instance.RebindBinding(binding, () => {
-            HidePressToRebindKey();
+        rebindUI.Show();
+        Hide();
+        
+        GameInput.Instance.RebindBinding(binding, () =>
+        {
             UpdateVisual();
-        }); 
+            Show();
+            rebindUI.Hide();
+        }, () =>
+        {
+            WarningText.Instance.ShowPopup(2, "You cannot rebind a key to an already existing binding");
+        });
     }
 }
 

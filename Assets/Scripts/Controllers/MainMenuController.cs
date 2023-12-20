@@ -17,6 +17,12 @@ public class MainMenuController : MonoBehaviour
     {
         ScriptableRendererFeatureManager.Instance.ToggleAllFog(false);
         StartCoroutine(FadeInCoroutine());
+        GameInput.Instance.ToggleAll(false);
+    }
+
+    private void OnDestroy()
+    {
+        GameInput.Instance.ToggleAll(true);
     }
 
     private IEnumerator FadeInCoroutine()

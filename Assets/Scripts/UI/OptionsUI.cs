@@ -56,6 +56,7 @@ public class OptionsUI : UI
     protected override void Activate()
     {
         ToggleButtons(true);
+        UIManager.CurrentContext = gameObject;
     }
 
     protected override void Deactivate()
@@ -65,7 +66,7 @@ public class OptionsUI : UI
 
     private void OnPause()
     {
-        if (PauseMenu.Instance.gameObject.activeSelf || ControlsUI.Instance.gameObject.activeSelf)
+        if (UIManager.CurrentContext != gameObject)
             return;
         
         if(Hide())

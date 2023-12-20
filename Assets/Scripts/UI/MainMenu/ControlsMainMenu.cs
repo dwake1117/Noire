@@ -18,8 +18,8 @@ public class ControlsMainMenu : UI
     [SerializeField] private ButtonUI ability1Button;
     [SerializeField] private ButtonUI ability2Button;
     [SerializeField] private ButtonUI ability3Button;
-    
-    [SerializeField] private Transform pressToRebindKeyTransform;
+
+    [SerializeField] private UI rebindUI;
     
     [SerializeField] private ButtonUI backButton;
     [SerializeField] private UI container;
@@ -51,11 +51,11 @@ public class ControlsMainMenu : UI
         ability3Button.AddListener(() => {RebindBinding(GameInput.Bindings.Ability3); });
 
         UpdateVisual();
-        HidePressToRebindKey();
         
         backButton.AddListener(OnBackButtonClicked);
         
         container.gameObject.SetActive(false);
+        rebindUI.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
@@ -129,24 +129,22 @@ public class ControlsMainMenu : UI
         ability2Button.buttonText.text = GameInput.Instance.GetBindingText(GameInput.Bindings.Ability2);
         ability3Button.buttonText.text = GameInput.Instance.GetBindingText(GameInput.Bindings.Ability3);
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
-    }
-
-    private void ShowPressToRebindKey()
-    {
-        pressToRebindKeyTransform.gameObject.SetActive(true);
-    }
-    private void HidePressToRebindKey()
-    {
-        pressToRebindKeyTransform.gameObject.SetActive(false);
+        foreach (var t in layoutGroupTransformsInChildren)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(t);
     }
 
     private void RebindBinding(GameInput.Bindings binding)
     {
-        ShowPressToRebindKey();
-        GameInput.Instance.RebindBinding(binding, () => {
-            HidePressToRebindKey();
+        rebindUI.Show();
+        Hide();
+        GameInput.Instance.RebindBinding(binding, () =>
+        {
+            Show();
+            rebindUI.Hide();
             UpdateVisual();
-        }); 
+        }, () =>
+        {
+            WarningText.Instance.ShowPopup(2, "You cannot rebind a key to an already existing binding");
+        });
     }
 }

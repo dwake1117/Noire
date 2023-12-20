@@ -25,7 +25,7 @@ public class SaveSlot : MonoBehaviour
 
     private void OnSaveSlotClicked() 
     {
-        SaveSlotsMenu.Instance.ToggleMenuButtons(false);
+        SaveSlotsMenu.Instance.Hide();
 
         if (!SaveSlotsMenu.Instance.IsLoadingView) 
         {
@@ -65,7 +65,7 @@ public class SaveSlot : MonoBehaviour
 
     private void OnClear()
     {
-        SaveSlotsMenu.Instance.ToggleMenuButtons(false);
+        SaveSlotsMenu.Instance.Hide();
         
         ConfirmationPopupMenu.Instance.ActivateMenu(
             "Are you sure you want to delete this saved data?",

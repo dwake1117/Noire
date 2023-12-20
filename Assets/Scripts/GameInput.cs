@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class GameInput : MonoBehaviour
 {
     public static GameInput Instance { get; private set; }
+    private InputActionRebindingExtensions.RebindingOperation m_RebindOperation;
+    
     public event Action OnPlayerMenuToggle;
     public event Action OnPauseToggle;
     public event Action OnInteract;
@@ -21,8 +23,6 @@ public class GameInput : MonoBehaviour
         MoveDown,
         MoveLeft,
         MoveRight,
-        CameraLeft,
-        CameraRight,
         Interact,
         Dash,
         LightAttack,
@@ -71,6 +71,8 @@ public class GameInput : MonoBehaviour
         gameInputActions.Player.Ability1.performed += Ability1_performed;
         gameInputActions.Player.Ability2.performed += Ability2_performed;
         gameInputActions.Player.Ability3.performed += Ability3_performed;
+        
+        LoadUserRebinds();
     }
 
     private void Start()
@@ -84,6 +86,8 @@ public class GameInput : MonoBehaviour
 
     private void OnDisable()
     {
+        SaveUserRebinds();
+        
         // debug
         gameInputActions.Debug.ToggleDebug.performed -= ToggleDebugConsole;
         gameInputActions.Debug.Execute.performed -= ExecuteDebugConsole;
@@ -143,6 +147,18 @@ public class GameInput : MonoBehaviour
             gameInputActions.Player.Disable();
             gameInputActions.Menu.Disable();
             gameInputActions.UI.Disable();
+        }
+    }
+    
+    public void ToggleAll(bool enable)
+    {
+        if (enable)
+        {
+            gameInputActions.Enable();
+        }
+        else
+        {
+            gameInputActions.Disable();
         }
     }
     
@@ -241,15 +257,13 @@ public class GameInput : MonoBehaviour
     public Vector3 GetMovementVectorNormalized()
     {
         Vector2 readVal = gameInputActions.Player.Move.ReadValue<Vector2>();
-        return new Vector3(readVal.x, 0, readVal.y);
+        return new Vector3(readVal.x, 0, readVal.y).normalized;
     }
 
     public bool IsShiftModifierOn()
     {
         return gameInputActions.Player.ShiftModifier.IsPressed();
     }
-    
-    
     #endregion
 
     public string GetBindingText(Bindings binding)
@@ -269,10 +283,6 @@ public class GameInput : MonoBehaviour
                 return gameInputActions.Player.LightAttack.bindings[0].ToDisplayString();
             case Bindings.StrongAttack:
                 return gameInputActions.Player.StrongAttack.bindings[0].ToDisplayString();
-            case Bindings.CameraLeft:
-                return gameInputActions.Player.CameraLeft.bindings[0].ToDisplayString();
-            case Bindings.CameraRight:
-                return gameInputActions.Player.CameraRight.bindings[0].ToDisplayString();
             case Bindings.Dash:
                 return gameInputActions.Player.Dash.bindings[0].ToDisplayString();
             case Bindings.Interact:
@@ -287,8 +297,8 @@ public class GameInput : MonoBehaviour
                 return gameInputActions.UI.Menu.bindings[0].ToDisplayString();
         }
     }
-
-    public void RebindBinding(Bindings binding, Action onActionRebound)
+    
+    public void RebindBinding(Bindings binding, Action onActionRebound, Action onDuplicateFound)
     {
         InputAction inputAction;
         int bindingIndex;
@@ -311,14 +321,6 @@ public class GameInput : MonoBehaviour
             case Bindings.MoveRight:
                 inputAction = gameInputActions.Player.Move;
                 bindingIndex = 4;
-                break;
-            case Bindings.CameraLeft:
-                inputAction = gameInputActions.Player.CameraLeft;
-                bindingIndex = 0;
-                break;
-            case Bindings.CameraRight:
-                inputAction = gameInputActions.Player.CameraRight;
-                bindingIndex = 0;
                 break;
             case Bindings.LightAttack:
                 inputAction = gameInputActions.Player.LightAttack;
@@ -350,13 +352,71 @@ public class GameInput : MonoBehaviour
                 break;
         }
 
-        inputAction.PerformInteractiveRebinding(bindingIndex)
-            .WithControlsExcluding("<Keyboard>/escape")
-            .OnComplete(callback =>
+        InteractiveRebind(inputAction, bindingIndex, onActionRebound, onDuplicateFound);
+    }
+
+    private void InteractiveRebind(InputAction action, int bindingIndex, Action onActionRebound, Action onDuplicateFound)
+    {
+        m_RebindOperation?.Cancel();
+
+        void CleanUp()
+        {
+            m_RebindOperation?.Dispose();
+            m_RebindOperation = null;
+        }
+        
+        m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+            .WithCancelingThrough("<Keyboard>/escape")
+            .OnCancel(operation =>
             {
-                callback.Dispose();
                 onActionRebound();
+                CleanUp();
+            })
+            .OnComplete(operation =>
+            {
+                if (CheckForDuplicateBindings(action, bindingIndex))
+                {
+                    action.RemoveBindingOverride(bindingIndex);
+                    onDuplicateFound();
+                    CleanUp();
+                    InteractiveRebind(action, bindingIndex, onActionRebound, onDuplicateFound);
+                }
+                else
+                {
+                    onActionRebound();
+                    CleanUp();
+                }
             })
             .Start();
+    }
+    
+    private bool CheckForDuplicateBindings(InputAction action, int bindingIndex)
+    {
+        InputBinding newBinding = action.bindings[bindingIndex];
+        
+        foreach (InputBinding oldBinding in action.actionMap.bindings)
+        {
+            if (oldBinding.action == newBinding.action)
+                continue;
+            if (oldBinding.effectivePath == newBinding.effectivePath)
+            {
+                Debug.Log("Duplicate Binding Found" + newBinding.effectivePath);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    void SaveUserRebinds()
+    {
+        var rebinds = gameInputActions.SaveBindingOverridesAsJson();
+        PlayerPrefs.SetString("rebinds", rebinds);
+    }
+ 
+    void LoadUserRebinds()
+    {
+        var rebinds = PlayerPrefs.GetString("rebinds");
+        gameInputActions.LoadBindingOverridesFromJson(rebinds);
     }
 }

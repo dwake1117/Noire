@@ -28,11 +28,14 @@ public class ExamineUI : UI
     {
         gameObject.SetActive(true);
         examineText.text = text;
-        examineImage.texture = image;
-        
-        examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(image.width, image.height);
-        
+
+        if (examineImage)
+        {
+            examineImage.texture = image;
+            examineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(image.width, image.height);
+        }
+
         Show();
-        Invoke(nameof(Hide), 10);
+        HideAfterDelay(10);
     }
 }

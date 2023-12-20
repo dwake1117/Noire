@@ -10,20 +10,19 @@ using UnityEngine.Events;
 /// Otherwise it will come with unnecessary overhead</remarks>
 /// 
 /// Inheritors have access to
-/// <code>Show()</code>
+/// <code>Show: {ForceShow, ShowAfterDelay}</code>
 /// Calls Activate() on the object, enables it, (or the container object if alternativeGameObject is toggled on),
 /// and begins the Fade transition.
-/// 
-/// <code>Hide()</code>
+/// <code>Hide: {ForceHide, HideAfterDelay}</code>
 /// Calls Deactivate() on the object, disables it, and begins the Fade out transition
-/// <code>Init()</code>
+/// <code>Init</code>
 /// Obtains the canvasGroup and rectTransform components from the gameObject.
 /// 
 /// NOTE: Inheritors should selectively implement the following event methods:
-/// <code>Activate</code> Called before Show()'s fade transitions
-/// <code>Deactivate</code> Called before Hide()'s fade transitions
-/// <code>LateActivate</code> Called after Show()'s fade transitions
-/// <code>LateDeactivate</code> Called after Hide()'s fade transitions
+/// <code>Activate</code> Called before Show()'s fade transitions. Can be toggled off with activate=false.
+/// <code>Deactivate</code> Called before Hide()'s fade transitions. Can be toggled off with deactivate=false.
+/// <code>LateActivate</code> Called after Show()'s fade transitions. Always Triggered.
+/// <code>LateDeactivate</code> Called after Hide()'s fade transitions. Always Triggered.
 /// 
 /// </summary>
 
@@ -37,6 +36,8 @@ public class UI : MonoBehaviour
     protected float animationTime = .4f;
     
     private Coroutine fadeCoroutine;
+    private Coroutine delayedShowCoroutine;
+    private Coroutine delayedHideCoroutine;
 
     private bool CanAnimate => fadeCoroutine == null;
     
@@ -77,7 +78,25 @@ public class UI : MonoBehaviour
             Activate();
         fadeCoroutine = StartCoroutine(Fade(0, 1));
     }
+    
+    /// Shows an UI element by fading after `delay`
+    /// Will refresh delay time if multiple calls are made before showing.
+    public void ShowAfterDelay(float delay, bool activate=true, bool force=false)
+    {
+        if(delayedShowCoroutine != null)
+            StopCoroutine(delayedShowCoroutine);
+        delayedShowCoroutine = StartCoroutine(DelayAndShow(delay, activate, force));
+    }
 
+    IEnumerator DelayAndShow(float delay, bool activate, bool force)
+    {
+        yield return new WaitForSeconds(delay);
+        if (force)
+            ForceShow(activate);
+        else
+            Show(activate);
+    }
+    
     /// Hides an UI element by fading. If another fade coroutine is going at the same time,
     /// this operation is canceled, and Deactivate will not be called.
     public bool Hide(bool deactivate=true)
@@ -105,6 +124,24 @@ public class UI : MonoBehaviour
             fadeCoroutine = StartCoroutine(Fade(1, 0));
     }
 
+    /// Hides an UI element by fading after `delay`
+    /// Will refresh delay time if multiple calls are made before hiding.
+    public void HideAfterDelay(float delay, bool activate=true, bool force=false)
+    {
+        if(delayedHideCoroutine != null)
+            StopCoroutine(delayedHideCoroutine);
+        delayedHideCoroutine = StartCoroutine(DelayAndHide(delay, activate, force));
+    }
+
+    IEnumerator DelayAndHide(float delay, bool activate, bool force)
+    {
+        yield return new WaitForSeconds(delay);
+        if (force)
+            ForceHide(activate);
+        else
+            Hide(activate);
+    }
+    
     /// Fades the canvasGroup given a starting/ending alpha, and evaluates it along the FADE_ANIM_CURVE. 
     /// <param name="start">The starting alpha</param>
     /// <param name="end">The ending alpha</param>

@@ -39,8 +39,7 @@ public class InteractUI : UI
 
         if (interactable != null && (!isShowing || interactable != lastInteractable))
         {
-            StopAllCoroutines();
-            Show();
+            ForceShow();
         }
         else if(interactable == null && isShowing)
         {

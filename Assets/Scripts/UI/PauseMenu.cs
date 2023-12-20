@@ -76,11 +76,17 @@ public class PauseMenu : UI
         AudioManager.Instance.PlayOnClick();
         GameEventsManager.Instance.GameStateEvents.PauseToggle(false);
         HUD.Instance.Show();
+        UIManager.CurrentContext = null;
+    }
+
+    protected override void LateActivate()
+    {
+        UIManager.CurrentContext = gameObject;
     }
 
     private void TogglePauseGame()
     {
-        if (OptionsUI.Instance.gameObject.activeSelf || ControlsUI.Instance.gameObject.activeSelf)
+        if (UIManager.CurrentContext != null && UIManager.CurrentContext != gameObject)
             return;
         
         if (IsGamePaused && Hide())

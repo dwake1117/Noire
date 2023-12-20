@@ -16,10 +16,12 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private CanvasGroup rightIndicator;
     private Button button;
     
-    private float scaleAmount = 1.07f;
-    private float scaleAnimationTime = .3f;
+    private float scaleAmount = 1.1f;
+    private float scaleAnimationTime = .1f;
     private Coroutine scaleOnSelect;
+    private Coroutine scaledownOnDeSelect;
     private Vector3 initialScale;
+    private Vector3 endScale;
     
     private float textAlphaPeriod = 1.5f;
     private float textAlphaMultiplier = 0.4f;
@@ -33,8 +35,14 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void Start()
     {
         initialScale = transform.localScale;
+        endScale = initialScale * scaleAmount;
+        
         SetIndicatorAlphas(0);
-        button.onClick.AddListener(AudioManager.Instance.PlayOnClick);
+        button.onClick.AddListener(() =>
+        {
+            transform.localScale = initialScale;
+            AudioManager.Instance.PlayOnClick();
+        });
     }
 
     public void Disable(bool setTransparent = true)
@@ -69,12 +77,12 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     /// animates a scaled up effect
     private IEnumerator ScaleSelection(bool startAnimation)
     {
-        if (!startAnimation)
+        float time = 0;
+        
+        if (!startAnimation) // scale down animation
         {
             SetIndicatorAlphas(0);
-            
-            float time = 0;
-        
+
             while (time < scaleAnimationTime)
             {
                 time += Time.deltaTime;
@@ -84,13 +92,12 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 
                 yield return null;
             }
+
+            scaledownOnDeSelect = null;
         }
         else
         {
             SetIndicatorAlphas(1);
-
-            Vector3 endScale = initialScale * scaleAmount;
-            float time = 0;
         
             while (time < scaleAnimationTime)
             {
@@ -100,10 +107,11 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 transform.localScale = Vector3.Lerp(transform.localScale, endScale, eval);
                 
                 yield return null;
-            }   
+            }
+            
+            scaleOnSelect = null;
         }
 
-        scaleOnSelect = null;
     }
 
     private IEnumerator TextAlphaCycle()
@@ -136,29 +144,36 @@ public class ButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnSelect(BaseEventData eventData)
     {
-        if (button.interactable)
-        {
-            if (scaleOnSelect != null)
-                StopCoroutine(scaleOnSelect);
-            scaleOnSelect = StartCoroutine(ScaleSelection(true));
+        if (!button.interactable || scaleOnSelect != null)
+            return;
 
-            textAlphaCycleOnSelect = StartCoroutine(TextAlphaCycle());
+        if (scaledownOnDeSelect != null)
+        {
+            StopCoroutine(scaledownOnDeSelect);
+            scaledownOnDeSelect = null;
         }
+
+        scaleOnSelect = StartCoroutine(ScaleSelection(true));
+        textAlphaCycleOnSelect = StartCoroutine(TextAlphaCycle());
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        if (button.interactable)
+        if (!button.interactable || scaledownOnDeSelect != null)
+            return;
+        
+        if (scaleOnSelect != null)
         {
-            if (scaleOnSelect != null)
-                StopCoroutine(scaleOnSelect);
-            scaleOnSelect = StartCoroutine(ScaleSelection(false));
+            StopCoroutine(scaleOnSelect);
+            scaleOnSelect = null;
+        }
 
-            if (textAlphaCycleOnSelect != null)
-            {
-                StopCoroutine(textAlphaCycleOnSelect);
-                buttonText.alpha = 1;
-            }
+        scaledownOnDeSelect = StartCoroutine(ScaleSelection(false));
+
+        if (textAlphaCycleOnSelect != null)
+        {
+            StopCoroutine(textAlphaCycleOnSelect);
+            buttonText.alpha = 1;
         }
     }
 
